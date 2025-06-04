@@ -8,6 +8,27 @@
       "when": 1748198734118,
       "tag": "0000_lively_hedge_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1748532565587,
+      "tag": "0001_typical_maginty",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1748532660419,
+      "tag": "0002_organic_aaron_stack",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1748715092177,
+      "tag": "0003_superb_gateway",
+      "breakpoints": true
     }
   ]
 }

@@ -5,10 +5,12 @@ import { json } from '@sveltejs/kit';
 import { and, asc, between, desc, eq, sql } from 'drizzle-orm';
 
 const amoutPerPage = 5;
+const maxItems = 50;
 
 export async function GET({ url }: { url: URL }) {
 	const page = parseInt(url.searchParams.get('page') as string);
 	const range = getDateRange();
+	if (maxItems <= page * amoutPerPage) return json({ hasMore: false, games: [] });
 	const games = await db
 		.select({
 			id: game.id,
@@ -23,7 +25,7 @@ export async function GET({ url }: { url: URL }) {
 		.innerJoin(
 			vote,
 			and(
-				eq(vote.gameName, game.name),
+				eq(vote.forId, game.id),
 				between(
 					vote.createdAt,
 					range.currentPeriod.startDate.toDateString(),
@@ -36,5 +38,5 @@ export async function GET({ url }: { url: URL }) {
 		.offset(page * amoutPerPage)
 		.limit(amoutPerPage);
 
-	return json({ hasMore: games.length <= amoutPerPage, games: games });
+	return json({ hasMore: games.length === amoutPerPage, games: games });
 }

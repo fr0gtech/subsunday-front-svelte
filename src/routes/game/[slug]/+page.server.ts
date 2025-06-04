@@ -19,6 +19,15 @@ export const load = async ({ params }) => {
 		.from(game)
 		.where(eq(game.id, parseInt(params.slug)))
 		.limit(1);
+	// const gameOnDb2 = await db.query.game.findFirst({
+	// 	where: eq(game.id, parseInt(params.slug))
+	// })
+	// const votes = await db
+	// .select()
+	// .from(vote)
+	// .where(eq(vote.forId, parseInt(params.slug))) // or eq(vote.gameName, gameOnDb.name)
+	// .orderBy(desc(vote.createdAt))
+	// .limit(6);
 
 	if (gameOnDb) {
 		return gameOnDb[0];

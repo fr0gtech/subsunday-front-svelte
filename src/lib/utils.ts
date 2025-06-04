@@ -89,3 +89,6 @@ export function getDateRange(options?: DateRangeOptions) {
 		}
 	};
 }
+export const getNowTZ = () => {
+	return new TZDate(new Date(), process.env.PUBLIC_TZ as string);
+};

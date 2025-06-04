@@ -2,5 +2,20 @@
 
 import type { game } from './schema';
 import type { InferSelectModel } from 'drizzle-orm';
+
 // For selecting (fetching) data
 export type Game = InferSelectModel<typeof game>;
+
+export type GamePrice = {
+	final: number;
+	initial: number;
+	currency: string;
+	final_formatted: string;
+	discount_percent: number;
+	initial_formatted: string;
+};
+
+export type GameCategories = {
+	id: number;
+	description: string;
+};

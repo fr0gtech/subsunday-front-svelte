@@ -2,15 +2,18 @@
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import { buttonVariants } from '$lib/components/ui/button/index.js';
 	import { layout } from '$lib/shared.svelte';
+	import LayoutIcon from '@lucide/svelte/icons/layout';
 </script>
 
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger class={buttonVariants({ variant: 'outline' })}>Open</DropdownMenu.Trigger>
+	<DropdownMenu.Trigger class={buttonVariants({ variant: 'outline', size: 'sm' })}
+		><LayoutIcon /></DropdownMenu.Trigger
+	>
 	<DropdownMenu.Content class="w-56">
 		<DropdownMenu.Group>
 			<DropdownMenu.Label>Layout</DropdownMenu.Label>
 			<DropdownMenu.Separator />
-			<DropdownMenu.RadioGroup bind:value={layout.type}>
+			<DropdownMenu.RadioGroup bind:value={$layout.type}>
 				<DropdownMenu.RadioItem value="icon">Icon View</DropdownMenu.RadioItem>
 				<DropdownMenu.RadioItem value="list">List View</DropdownMenu.RadioItem>
 			</DropdownMenu.RadioGroup>

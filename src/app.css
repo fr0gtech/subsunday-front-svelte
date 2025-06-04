@@ -3,7 +3,13 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-
+.infinite-loader-wrapper{
+		display: grid;
+		width: 100vw;
+		height: 100%;
+		gap: 3em;
+		grid-template-columns: repeat(auto-fit, minmax(clamp(330px, 100%, 330px), 1fr));
+}
 :root {
  --radius: 0.625rem;
  --background: oklch(1 0 0);

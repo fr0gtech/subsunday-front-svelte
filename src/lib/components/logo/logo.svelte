@@ -7,7 +7,7 @@
 	height="257"
 	viewBox="0 0 216 257"
 	fill="currentColor"
-	class="h-7 w-7"
+	class="h-5 w-5"
 >
 	<path
 		fill-rule="evenodd"
