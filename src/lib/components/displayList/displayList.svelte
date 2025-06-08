@@ -6,7 +6,7 @@
 </script>
 
 <DropdownMenu.Root>
-	<DropdownMenu.Trigger class={buttonVariants({ variant: 'outline', size: 'sm' })}
+	<DropdownMenu.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}
 		><LayoutIcon /></DropdownMenu.Trigger
 	>
 	<DropdownMenu.Content class="w-56">

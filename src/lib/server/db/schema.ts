@@ -21,6 +21,7 @@ export const user = pgTable('User', {
 	updatedAt: timestamp({ precision: 3, mode: 'string' }).notNull(),
 	streak: integer().default(0).notNull()
 });
+
 export const game = pgTable(
 	'Game',
 	{

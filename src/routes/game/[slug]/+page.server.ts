@@ -30,7 +30,7 @@ export const load = async ({ params }) => {
 	// .limit(6);
 
 	if (gameOnDb) {
-		return gameOnDb[0];
+		return { ...gameOnDb[0], id: params.slug };
 	}
 
 	error(404, 'Not found');

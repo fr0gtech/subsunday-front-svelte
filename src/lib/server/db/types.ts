@@ -1,10 +1,12 @@
 // src/lib/db/types.ts
 
-import type { game } from './schema';
+import type { game, user, vote } from './schema';
 import type { InferSelectModel } from 'drizzle-orm';
 
 // For selecting (fetching) data
 export type Game = InferSelectModel<typeof game>;
+export type User = InferSelectModel<typeof user>;
+export type Vote = InferSelectModel<typeof vote>;
 
 export type GamePrice = {
 	final: number;

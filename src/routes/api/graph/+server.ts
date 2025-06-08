@@ -3,14 +3,16 @@ import { db } from '$lib/server/db';
 import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
 import { TZDate } from '@date-fns/tz';
 import { addDays, isSameDay, subDays } from 'date-fns';
+import { json } from '@sveltejs/kit';
 
-export const load = async () => {
+export async function GET({ url }: { url: URL }) {
+	const game = parseInt(url.searchParams.get('game') as string) || 0;
+
 	const today = new TZDate(Date.now(), process.env.NEXT_PUBLIC_TZ as string);
-	const game = 0;
 	const votesLast7Days = await getVotesBetween(subDays(today, 7), 7, game);
 	const voteLastWeek = await getVotesBetween(subDays(today, 14), 7, game);
 
-	return {
+	return json({
 		votes: votesLast7Days.map((e, i) => {
 			return {
 				date: new Date(e.date),
@@ -18,8 +20,8 @@ export const load = async () => {
 				votesLastWeek: parseInt(voteLastWeek[i].count as unknown as string)
 			};
 		})
-	};
-};
+	});
+}
 
 const getVotesBetween = async (from: TZDate, daysBack: number, game: number) => {
 	let result;
