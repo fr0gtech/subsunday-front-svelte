@@ -1,14 +1,14 @@
 import { vote } from '$lib/server/db/schema';
 import { db } from '$lib/server/db';
 import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
-import { TZDate } from '@date-fns/tz';
 import { addDays, isSameDay, subDays } from 'date-fns';
+import { getDateRange } from '@/utils';
 
 export const load = async () => {
-	const today = new TZDate(Date.now(), process.env.NEXT_PUBLIC_TZ as string);
 	const game = 0;
-	const votesLast7Days = await getVotesBetween(subDays(today, 7), 7, game);
-	const voteLastWeek = await getVotesBetween(subDays(today, 14), 7, game);
+	const range = getDateRange();
+	const votesLast7Days = await getVotesBetween(range.currentPeriod.startDate, 7, game);
+	const voteLastWeek = await getVotesBetween(subDays(range.currentPeriod.startDate, 14), 7, game);
 
 	return {
 		votes: votesLast7Days.map((e, i) => {
@@ -21,7 +21,7 @@ export const load = async () => {
 	};
 };
 
-const getVotesBetween = async (from: TZDate, daysBack: number, game: number) => {
+const getVotesBetween = async (from: Date, daysBack: number, game: number) => {
 	let result;
 	if (game > 0) {
 		result = await db
@@ -30,8 +30,8 @@ const getVotesBetween = async (from: TZDate, daysBack: number, game: number) => 
 			.where(
 				and(
 					eq(vote.forId, game),
-					gte(vote.createdAt, from.toISOString()),
-					lte(vote.createdAt, addDays(from, daysBack).toISOString())
+					gte(vote.createdAt, from),
+					lte(vote.createdAt, addDays(from, daysBack))
 				)
 			)
 			.groupBy(sql`DATE(${vote.createdAt})`)
@@ -40,12 +40,7 @@ const getVotesBetween = async (from: TZDate, daysBack: number, game: number) => 
 		result = await db
 			.select({ count: count(), date: sql`DATE(${vote.createdAt})`.as('createdAt') })
 			.from(vote)
-			.where(
-				and(
-					gte(vote.createdAt, from.toISOString()),
-					lte(vote.createdAt, addDays(from, daysBack).toISOString())
-				)
-			)
+			.where(and(gte(vote.createdAt, from), lte(vote.createdAt, addDays(from, daysBack))))
 			.groupBy(sql`DATE(${vote.createdAt})`)
 			.orderBy(sql`DATE(${vote.createdAt})`);
 	}

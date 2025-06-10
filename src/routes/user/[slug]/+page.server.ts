@@ -32,7 +32,17 @@ export const load = async ({ params }) => {
 	// .limit(6);
 
 	if (userDb) {
-		return { user: userDb };
+		return {
+			user: userDb,
+			meta: [
+				{ name: 'title', content: `Sub-Sunday.com - ${userDb.name}` },
+				{
+					name: 'description',
+					content:
+						"A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
+				}
+			]
+		};
 	}
 
 	error(404, 'Not found');

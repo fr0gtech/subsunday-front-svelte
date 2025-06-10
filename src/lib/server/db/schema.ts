@@ -15,10 +15,8 @@ export const user = pgTable('User', {
 	id: integer().primaryKey().notNull(),
 	name: text().notNull(),
 	sub: boolean().default(false).notNull(),
-	createdAt: timestamp({ precision: 3, mode: 'string' })
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull(),
-	updatedAt: timestamp({ precision: 3, mode: 'string' }).notNull(),
+	createdAt: timestamp({ precision: 6, withTimezone: true }).notNull(),
+	updatedAt: timestamp({ precision: 6, withTimezone: true }).notNull(),
 	streak: integer().default(0).notNull()
 });
 
@@ -29,10 +27,8 @@ export const game = pgTable(
 		id: serial().primaryKey().notNull(),
 		picture: text().default('').notNull(),
 		link: text().default('').notNull(),
-		createdAt: timestamp({ precision: 3, mode: 'string' })
-			.default(sql`CURRENT_TIMESTAMP`)
-			.notNull(),
-		updatedAt: timestamp({ precision: 3, mode: 'string' }).notNull(),
+		createdAt: timestamp({ precision: 6, withTimezone: true }).notNull(),
+		updatedAt: timestamp({ precision: 6, withTimezone: true }).notNull(),
 		categories: jsonb().default({}).notNull(),
 		description: text().default('').notNull(),
 		dev: text().array().default(["RAY[''::tex"]),
@@ -56,10 +52,8 @@ export const vote = pgTable(
 		fromId: integer().notNull(),
 		forId: integer().notNull(),
 		voteText: text().notNull(),
-		createdAt: timestamp({ precision: 3, mode: 'string' })
-			.default(sql`CURRENT_TIMESTAMP`)
-			.notNull(),
-		updatedAt: timestamp({ precision: 3, mode: 'string' }).notNull()
+		createdAt: timestamp({ precision: 6, withTimezone: true }).notNull(),
+		updatedAt: timestamp({ precision: 6, withTimezone: true }).notNull()
 	},
 	(table) => [
 		foreignKey({

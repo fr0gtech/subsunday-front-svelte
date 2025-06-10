@@ -44,7 +44,7 @@
  --sidebar-border: oklch(0.922 0 0);
  --sidebar-ring: oklch(0.708 0 0);
 }
- 
+
 .dark {
  --background: oklch(0.145 0 0);
  --foreground: oklch(0.985 0 0);
@@ -125,3 +125,38 @@
     @apply bg-background text-foreground;
   }
 }
+	.bb_img {
+		width: 100%;
+    border-radius: 1em;
+	}
+
+	.bb_tag {
+		margin-top: 18px;
+		margin-bottom: 0px;
+		background-image: none;
+		font-size: 21px;
+
+		text-transform: none;
+		letter-spacing: 0px;
+	}
+
+	.bb_tag strong {
+		font-family: 'Motiva Sans', Sans-serif;
+		font-weight: 500; /* medium */
+	}
+	.bb_paragraph {
+		min-height: 0.15em;
+		line-height: 1.5em;
+		margin: 0.5em 0;
+	}
+  .bb_ul {
+    list-style-type: disc;
+    margin-left: 1em;
+  }
+  .detailContent br{
+    margin-top: .8em
+  }
+  .detailContent h1{
+    font-size: 1.4em;
+    font-weight: 800;
+  }

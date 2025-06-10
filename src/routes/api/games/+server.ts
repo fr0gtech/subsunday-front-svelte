@@ -1,6 +1,6 @@
 import { db } from '$lib/server/db';
 import { game, vote } from '$lib/server/db/schema';
-import { getDateRange } from '$lib/utils';
+import { getDateRange, getNowTZ } from '$lib/utils';
 import { json } from '@sveltejs/kit';
 import { and, asc, between, desc, eq, sql } from 'drizzle-orm';
 
@@ -9,7 +9,8 @@ const maxItems = 50;
 
 export async function GET({ url }: { url: URL }) {
 	const page = parseInt(url.searchParams.get('page') as string);
-	const range = getDateRange();
+	const periodStart = url.searchParams.get('period');
+	const range = getDateRange({ offset: periodStart ? new Date(periodStart) : getNowTZ() });
 	if (maxItems <= page * amoutPerPage) return json({ hasMore: false, games: [] });
 	const games = await db
 		.select({
@@ -26,15 +27,11 @@ export async function GET({ url }: { url: URL }) {
 			vote,
 			and(
 				eq(vote.forId, game.id),
-				between(
-					vote.createdAt,
-					range.currentPeriod.startDate.toDateString(),
-					range.currentPeriod.endDate.toDateString()
-				)
+				between(vote.createdAt, range.currentPeriod.startDate, range.currentPeriod.endDate)
 			)
 		)
 		.groupBy(game.id)
-		.orderBy(desc(sql`COUNT(${vote.id})`), asc(game.name))
+		.orderBy(desc(sql`COUNT(${vote.id})`), asc(game.id))
 		.offset(page * amoutPerPage)
 		.limit(amoutPerPage);
 

@@ -6,10 +6,14 @@
 	import Logo from '../logo/logo.svelte';
 	import DisplayList from '../displayList/displayList.svelte';
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
-	import { getWeek, getYear } from 'date-fns';
+	import InfoIcon from '@lucide/svelte/icons/info';
+
 	import Badge from '../ui/badge/badge.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
-	import Calendar from '../calendar/calendar.svelte';
+	import CustomCalendar from '../customcalendar/customcalendar.svelte';
+	import { wsVotes } from '@/shared.svelte';
+	import VoteStats from '../voteStats/voteStats.svelte';
+
 	const getVotes = async () => {
 		const res = await fetch(`/api/votestats`);
 		return await res.json();
@@ -21,7 +25,7 @@
 </script>
 
 <div
-	class="bg-primary-foreground/80 fixed flex w-full items-center justify-between gap-5 p-2 backdrop-blur"
+	class="bg-primary-foreground/80 fixed z-50 flex w-full items-center justify-between gap-5 p-2 backdrop-blur"
 >
 	<div class="flex items-center gap-2">
 		<a href="/" class="flex items-center gap-2">
@@ -31,18 +35,24 @@
 		<a href="/about">
 			<Button variant="secondary" size={'sm'} class="ml-5">How to vote</Button>
 		</a>
+		<a href="/info">
+			<Button variant="link" size={'sm'} class="ml-5"><InfoIcon /></Button>
+		</a>
 	</div>
 
-	<div class="flex gap-10 font-mono text-xs">
+	<VoteStats gameVotes={$query.data} />
+	<!-- <div class="flex gap-10 font-mono text-xs">
 		<span>
 			Votes this Weeks <Badge variant="secondary"
-				>{$query.data ? $query.data.votesThisPeriod : 0}</Badge
+				>{$query.data ? $query.data.votesThisPeriod + $wsVotes.length : 0}</Badge
 			>
 		</span>
 		<span>
-			Votes today <Badge variant="secondary">{$query.data ? $query.data.votesToday : 0}</Badge>
+			Votes today <Badge variant="secondary"
+				>{$query.data ? $query.data.votesToday + $wsVotes.length : 0}</Badge
+			>
 		</span>
-	</div>
+	</div> -->
 	<div>
 		<Popover.Root>
 			<Popover.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}
@@ -53,7 +63,7 @@
 			>
 				<!-- <Calendar type="single" bind:value class="rounded-md border" /> -->
 
-				<Calendar />
+				<CustomCalendar />
 			</Popover.Content>
 		</Popover.Root>
 		<DisplayList />

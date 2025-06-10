@@ -6,11 +6,13 @@
 	import Nav from '$lib/components/nav/nav.svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import Price from '$lib/components/priceCalc/price.svelte';
-	import { layout } from '$lib/shared.svelte';
+	import { layout, selectedPeriod, wsVotes } from '$lib/shared.svelte';
 	import type { Game, GameCategories, GamePrice } from '$lib/server/db/types';
 	import { InfiniteLoader, LoaderState } from 'svelte-infinite';
 	import { fade } from 'svelte/transition';
-
+	import NumberFlow from '@number-flow/svelte';
+	import { getNowTZ } from '@/utils';
+	import { toast } from 'svelte-sonner';
 	let page = -1;
 	let hasMore = $state(true);
 	const loaderState = new LoaderState();
@@ -21,7 +23,9 @@
 			return;
 		}
 		page++;
-		const response = await fetch(`/api/games?page=${page}`);
+		const response = await fetch(
+			`/api/games?page=${page}&period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`
+		);
 		let data = await response.json();
 		hasMore = data.hasMore;
 		if (!hasMore) {
@@ -39,18 +43,37 @@
 		}
 	}
 	function isOverflowing() {
-		return document.documentElement.scrollHeight > window.innerHeight + 200;
+		return document.documentElement.scrollHeight > window.innerHeight;
 	}
-
+	let lastPeriodStart = $state(getNowTZ().getTime());
+	const newPeriod = () => {
+		if (lastPeriodStart !== $selectedPeriod.currentPeriod.startDate.getTime()) {
+			allGames = [];
+			page = 0;
+			hasMore = true;
+			loaderState.reset();
+			fetchUntilFilled();
+		}
+		lastPeriodStart = $selectedPeriod.currentPeriod.startDate.getTime();
+	};
+	$effect(() => {
+		if ($selectedPeriod) {
+			newPeriod();
+		}
+	});
 	onMount(async () => {
 		await fetchUntilFilled();
 	});
 </script>
 
-<div class="flex flex-col">
-	<div class="z-10 h-[50px]">
-		<Nav />
-	</div>
+<svelte:head>
+	<title>Sub-sunday.com - Tracking votes for lirik's sub sunday.</title>
+	<meta
+		name="description"
+		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
+	/>
+</svelte:head>
+<div class="flex flex-col pt-12">
 	{#if $layout.type === 'icon'}
 		<div class="mt-5 w-full items-center justify-center">
 			<div class="flex w-full px-5">
@@ -94,34 +117,36 @@
 								</div>
 								<div class="absolute top-0 left-0 h-full w-full overflow-clip rounded-xl">
 									<Badge
-										class="bg-primary-foreground text-primary-background absolute -top-[1px] -left-[1px] z-10 flex rounded-tl-xl  rounded-tr-none rounded-bl-none "
-										variant="default"
+										class=" absolute -top-[1px] -left-[1px] z-10 flex rounded-tl-xl  rounded-tr-none rounded-bl-none "
+										variant="secondary"
 									>
 										<span class="text-base font-bold">
-											<span class="mr-1 text-sm font-normal">#{i + 1}</span>{game.name}
+											<span class="mr-1 text-sm font-normal">#{i + 1}</span>{game.name.slice(0, 25)}
 										</span>
 									</Badge>
 									<Badge
-										class="bg-primary-foreground text-primary-background absolute -top-[1px] -right-[1px] z-10 flex rounded-tl-none rounded-tr-md  rounded-br-none text-sm "
-										variant="default"
+										class="absolute -top-[1px] -right-[1px] z-10 flex rounded-tl-none rounded-tr-md  rounded-br-none text-sm "
+										variant="secondary"
 									>
 										<Price price={(game.price as GamePrice).final} />
 									</Badge>
 									<Badge
-										class="bg-primary-foreground text-primary-background absolute -right-[1px] -bottom-[1px] z-10 flex rounded-tl-md rounded-tr-none rounded-bl-none   text-sm  "
-										variant="default"
+										class="absolute -right-[1px] -bottom-[1px] z-10 z-50 flex rounded-tl-md rounded-tr-none rounded-bl-none   text-sm  "
+										variant="secondary"
 									>
-										{game.voteCount} votes
+										<NumberFlow
+											value={game.voteCount +
+												$wsVotes.filter((e) => parseInt(e.game.id) === parseInt(game.id)).length}
+										/> votes
 									</Badge>
 									<div class="absolute bottom-1 left-1 z-20 flex gap-1 opacity-90">
-										{#each game.categories as GameCategories[] as category}
-											<Badge
-												variant="default"
-												class="bg-primary-foreground text-primary-background "
-											>
-												{category.description}
-											</Badge>
-										{/each}
+										{#if game.categories.length > 0}
+											{#each game.categories.slice(0, 3) as GameCategories[] as category}
+												<Badge variant="secondary">
+													{category.description}
+												</Badge>
+											{/each}
+										{/if}
 									</div>
 								</div>
 							</Card>

@@ -1,7 +1,7 @@
 import { db } from '$lib/server/db';
 import { vote } from '$lib/server/db/schema';
 import { json } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 
 export async function GET({ url }: { url: URL }) {
 	const game = parseInt(url.searchParams.get('game') as string) || 0;
@@ -23,7 +23,8 @@ export async function GET({ url }: { url: URL }) {
 					}
 				}
 			},
-			limit: 10
+			limit: 10,
+			orderBy: desc(vote.createdAt)
 		});
 	} else {
 		votes = await db.query.vote.findMany({
@@ -41,7 +42,8 @@ export async function GET({ url }: { url: URL }) {
 					}
 				}
 			},
-			limit: 10
+			limit: 10,
+			orderBy: desc(vote.createdAt)
 		});
 	}
 

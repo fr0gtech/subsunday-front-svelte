@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { CalendarDate } from '@internationalized/date';
-	import { RangeCalendar } from '../ui/range-calendar';
-	import { getDateRange } from '$lib/utils';
+	import { RangeCalendar } from '$lib/components/ui/range-calendar/index.js';
+	import { getDateRange, getNowTZ } from '$lib/utils';
 	import { selectedPeriod } from '$lib/shared.svelte';
 	import { Card } from '../ui/card';
 	// Function to get the start (Sunday) and end (Saturday) of the week
@@ -22,7 +22,6 @@
 	function isSameRange(a: CalendarDate, b: CalendarDate) {
 		return a.toDate('America/New_York').getTime() === b.toDate('America/New_York').getTime();
 	}
-	const today = new Date();
 	let value = $state(toCalendar(getDateRange().currentPeriod));
 
 	function handleSelect(date: CalendarDate) {
@@ -37,9 +36,9 @@
 	<RangeCalendar
 		{value}
 		readonly
+		class="m-0 rounded-md bg-transparent p-3"
 		onStartValueChange={(e: any) => {
 			handleSelect(e);
 		}}
-		class="m-0 rounded-md p-3"
 	/>
 </Card>

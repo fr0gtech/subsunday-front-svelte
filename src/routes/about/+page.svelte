@@ -8,19 +8,38 @@
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import CheckIcon from '@lucide/svelte/icons/check';
 	import XIcon from '@lucide/svelte/icons/x';
-	import Calendar from '$lib/components/calendar/calendar.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { formatDistance } from 'date-fns';
-
+	import { wsVotes } from '$lib/shared.svelte';
+	import Customcalendar from '$lib/components/customcalendar/customcalendar.svelte';
+	import { fade, fly } from 'svelte/transition';
+	import VoteStats from '@/components/voteStats/voteStats.svelte';
+	import { getNowTZ } from '@/utils.js';
 	const { data } = $props();
-	const getVotes = async () => {
+
+	const getVoteStats = async () => {
+		const res = await fetch(`/api/votestats`);
+		return await res.json();
+	};
+	const voteStats = createQuery({
+		queryKey: ['votestats'],
+		queryFn: () => getVoteStats()
+	});
+	const getLastVotes = async () => {
 		const res = await fetch(`/api/lastvotes`);
 		return await res.json();
 	};
+
 	const votes = createQuery({
 		queryKey: ['lastvotesabout'],
-		queryFn: () => getVotes()
+		queryFn: () => getLastVotes()
 	});
+	const allVotes = $derived(
+		$votes.data &&
+			[...($votes.data.votes || []), ...$wsVotes]
+				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+				.slice(0, 10)
+	);
 	const chartConfig = {
 		votesLast7Days: { label: 'This Week', color: 'var(--chart-1)' },
 		votesLastWeek: { label: 'Last Week', color: 'var(--chart-2)' }
@@ -72,7 +91,9 @@
 		</Card>
 	</div>
 	<div class="flex gap-5">
-		<Card class="h-fit w-1/2 p-5">
+		<Card class="h-fit w-5/12 p-5">
+			<VoteStats gameVotes={$voteStats.data} />
+
 			<Chart.Container config={chartConfig}>
 				<AreaChart
 					data={data.votes}
@@ -130,17 +151,17 @@
 				<pre>Sunday 00:00 - Saturday 22:00 GMT-4</pre>
 			</Card>
 			<div>
-				<Calendar />
+				<Customcalendar />
 			</div>
 		</div>
 		<Card class="p-5 text-xs">
-			{#if $votes.data}
-				{#each $votes.data.votes as vote}
-					<span class="leading-relaxed">
+			{#if allVotes}
+				{#each allVotes as vote (vote.id)}
+					<span class="leading-relaxed" in:fly out:fade>
 						<Badge variant="secondary" href={`/user/${vote.user.id}`}>{vote.user.name}</Badge> voted
 						for
 						<Badge variant="secondary" href={`/game/${vote.game.id}`}>{vote.game.name}</Badge>
-						{formatDistance(vote.createdAt, new Date(), { addSuffix: true })}
+						{formatDistance(vote.createdAt, getNowTZ(), { addSuffix: true })}
 					</span>
 				{/each}
 			{/if}

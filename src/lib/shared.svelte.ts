@@ -1,4 +1,5 @@
 /* eslint-disable prefer-const */
+import type { Vote } from './server/db/types';
 import { getDateRange } from './utils';
 import { writable } from 'svelte/store';
 
@@ -19,9 +20,13 @@ type RangePeriod = {
 		nextStartDate: Date;
 	};
 };
+export type VoteForFrom = Vote & { updated: boolean } & { user: { name: string; id: number } } & {
+	game: { name: string; id: number };
+};
 export type VoteAmount = { votesThisPeriod: number; votesToday: number };
 
 export let selectedPeriod = writable(getDateRange());
+export let wsVotes = writable([]);
 
 export const staleTime = writable(1000);
 export const gcTime = writable(3000);

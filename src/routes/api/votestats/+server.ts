@@ -16,11 +16,7 @@ export async function GET({ url }: { url: URL }) {
 				voteCount: db.$count(
 					vote,
 					and(
-						between(
-							vote.createdAt,
-							range.currentPeriod.startDate.toDateString(),
-							range.currentPeriod.endDate.toDateString()
-						),
+						between(vote.createdAt, range.currentPeriod.startDate, range.currentPeriod.endDate),
 						eq(vote.forId, game)
 					)
 				)
@@ -32,11 +28,7 @@ export async function GET({ url }: { url: URL }) {
 			.select({
 				voteCount: db.$count(
 					vote,
-					between(
-						vote.createdAt,
-						range.currentPeriod.startDate.toDateString(),
-						range.currentPeriod.endDate.toDateString()
-					)
+					between(vote.createdAt, range.currentPeriod.startDate, range.currentPeriod.endDate)
 				)
 			})
 			.from(vote)
@@ -48,10 +40,7 @@ export async function GET({ url }: { url: URL }) {
 	if (game > 0) {
 		votesToday = await db
 			.select({
-				voteCount: db.$count(
-					vote,
-					between(vote.createdAt, startOfDay(today).toDateString(), endOfDay(today).toDateString())
-				)
+				voteCount: db.$count(vote, between(vote.createdAt, startOfDay(today), endOfDay(today)))
 			})
 			.from(vote)
 			.limit(1);
@@ -60,14 +49,7 @@ export async function GET({ url }: { url: URL }) {
 			.select({
 				voteCount: db.$count(
 					vote,
-					and(
-						between(
-							vote.createdAt,
-							startOfDay(today).toDateString(),
-							endOfDay(today).toDateString()
-						),
-						eq(vote.forId, game)
-					)
+					and(between(vote.createdAt, startOfDay(today), endOfDay(today)), eq(vote.forId, game))
 				)
 			})
 			.from(vote)

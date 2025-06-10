@@ -35,7 +35,6 @@ export type WithoutChild<T> = T extends { child?: any } ? Omit<T, 'child'> : T;
 export type WithoutChildren<T> = T extends { children?: any } ? Omit<T, 'children'> : T;
 export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
-
 export function getDateRange(options?: DateRangeOptions) {
 	const { _fromDay, _fromTime, _toDay, _toTime, offset } = options || {};
 	const fromDay = (_fromDay || PUBLIC_FROM_DAY) as Day;
@@ -90,5 +89,5 @@ export function getDateRange(options?: DateRangeOptions) {
 	};
 }
 export const getNowTZ = () => {
-	return new TZDate(new Date(), process.env.PUBLIC_TZ as string);
+	return new TZDate(new Date(), PUBLIC_TZ as string);
 };

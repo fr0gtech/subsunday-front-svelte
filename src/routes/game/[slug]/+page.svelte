@@ -9,29 +9,35 @@
 	import * as Chart from '$lib/components/ui/chart/index.js';
 	import Card from '$lib/components/ui/card/card.svelte';
 	import { formatDistance, formatRelative } from 'date-fns';
+	import { wsVotes } from '$lib/shared.svelte';
+	import { fade, fly } from 'svelte/transition';
+	import VoteStats from '@/components/voteStats/voteStats.svelte';
+	import { TZDate } from '@date-fns/tz';
+	import { env } from '$env/dynamic/public';
+	import Steamicon from '@/components/icons/steamicon.svelte';
 
-	let { data }: { data: Game } = $props();
+	let { data }: { data: { gameData: Game } } = $props();
 
 	const getVotes = async () => {
-		const res = await fetch(`/api/lastvotes?game=${data.id}`);
+		const res = await fetch(`/api/lastvotes?game=${data.gameData.id}`);
 		return await res.json();
 	};
 	const votes = createQuery({
-		queryKey: [`lastvotes${data.id}`],
+		queryKey: [`lastvotes${data.gameData.id}`],
 		queryFn: () => getVotes()
 	});
 	const getVoteStats = async () => {
-		const res = await fetch(`/api/votestats?game=${data.id}`);
+		const res = await fetch(`/api/votestats?game=${data.gameData.id}`);
 		return await res.json();
 	};
 
 	const gameVotes = createQuery({
-		queryKey: [`votestats${data.id}`],
+		queryKey: [`votestats${data.gameData.id}`],
 		queryFn: () => getVoteStats()
 	});
 
 	const getGraph = async () => {
-		const res = await fetch(`/api/graph?game=${data.id}`);
+		const res = await fetch(`/api/graph?game=${data.gameData.id}`);
 		return await res.json();
 	};
 
@@ -40,53 +46,81 @@
 		queryFn: () => getGraph()
 	});
 
+	const allVotes = $derived(
+		$votes.data &&
+			[
+				...($votes.data.votes || []),
+				...$wsVotes.filter((e) => parseInt(e.game.id) === parseInt(data.gameData.id as string))
+			]
+				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+				.slice(0, 10)
+	);
+
 	const chartConfig = {
 		votesLast7Days: { label: 'This Week', color: 'var(--chart-1)' },
 		votesLastWeek: { label: 'Last Week', color: 'var(--chart-2)' }
 	} satisfies Chart.ChartConfig;
 </script>
 
+<!-- <svelte:head>
+	{#if $page.data.meta}
+		{#each $page.data.meta as { name, content }}
+			<meta {name} {content} />
+		{/each}
+	{/if}
+</svelte:head> -->
+
 <div class="mx-auto max-w-screen-xl space-y-5 pt-16">
-	<div class="flex gap-5">
-		<div class="space-y-5">
+	<div class="flex justify-center gap-5">
+		<div class="w-8/12 space-y-5">
 			<Card class="pt-3">
 				<div class="space-y-2 px-4">
 					<div class=" flex items-center gap-2">
-						<h1 class="text-xl font-bold">{data.name}</h1>
-						<div class="text-xs">reviews: {data.recommendations}</div>
+						<h1 class="text-xl font-bold">{data.gameData.name}</h1>
+						<div class="text-xs">reviews: {data.gameData.recommendations}</div>
 					</div>
 					<div class="flex gap-5">
-						<img
-							alt={`Cover image for ${data.name}`}
-							src={data.picture}
-							class="max-w-[250px] rounded-2xl object-cover"
-						/>
+						{#if data.gameData.picture !== 'default'}
+							<img
+								alt={`Cover image for ${data.gameData.name}`}
+								src={data.gameData.picture}
+								class="max-w-[250px] rounded-2xl object-cover"
+							/>
+						{/if}
 						<div class="space-y-2">
 							<p class="">
-								{data.description}
+								{data.gameData.description}
 							</p>
-							<div class="flex gap-1">
-								{#each data.categories as any as category}
-									<Badge>{category.description}</Badge>
+							<div class="flex items-center gap-1">
+								{#each data.gameData.categories as any as category}
+									<Badge variant="secondary">{category.description}</Badge>
 								{/each}
-								<div>
-									<Price price={(data.price as any).final} />
-								</div>
-								steam
+								<Badge>
+									<Price price={(data.gameData.price as any).final} />
+								</Badge>
+								<a
+									href={`https://store.steampowered.com/app/${data.gameData.steamId}`}
+									target="_blank"
+								>
+									<Steamicon size={20} />
+								</a>
 							</div>
 						</div>
 					</div>
 				</div>
 			</Card>
 			<div class="flex gap-5">
-				<Card class="grow px-4">
-					{@html (data.detailedDescription as any).html}
-				</Card>
+				{#if data.gameData.detailedDescription && (data.gameData.detailedDescription as any).html}
+					<Card class="detailContent grow px-4">
+						{@html (data.gameData.detailedDescription as any).html}
+					</Card>
+				{/if}
 			</div>
 		</div>
-		<div class="w-full space-y-5">
-			<Card class="pr-4">
-				<div class="flex flex-row justify-center gap-5 font-mono text-xs">
+		<div class="w-4/12 space-y-5">
+			<Card class="p-5">
+				<VoteStats gameVotes={$gameVotes.data} />
+				<!-- <div class="flex flex-row justify-center gap-5 font-mono text-xs">
 					<span>
 						Votes this week: <Badge variant="secondary"
 							>{$gameVotes.data ? $gameVotes.data.votesThisPeriod : 0}</Badge
@@ -97,7 +131,7 @@
 							>{$gameVotes.data ? $gameVotes.data.votesToday : 0}</Badge
 						>
 					</span>
-				</div>
+				</div> -->
 				{#if $graph.data}
 					<Chart.Container config={chartConfig}>
 						<AreaChart
@@ -123,13 +157,17 @@
 							]}
 							seriesLayout="stack"
 							props={{
+								highlight: {
+									points: {
+										display: 'none'
+									}
+								},
 								area: {
 									curve: curveBasis,
 									'fill-opacity': 0.4,
 									line: { class: 'stroke-1' }
 								},
 								xAxis: {
-									ticks: 7,
 									format: (v) => {
 										return v.toLocaleDateString('en-US', {
 											month: 'short',
@@ -137,7 +175,6 @@
 										});
 									}
 								},
-
 								yAxis: { format: () => '' }
 							}}
 						>
@@ -157,12 +194,14 @@
 				{/if}
 			</Card>
 			<Card class=" flex gap-7 p-3 text-xs">
-				{#if $votes.data}
-					{#each $votes.data.votes as vote}
-						<p>
+				{#if allVotes}
+					{#each allVotes as vote (vote.id)}
+						<p in:fly out:fade>
 							<Badge variant="secondary" href={`/user/${vote.user.id}`} class="mr-2 "
 								>{vote.user.name}</Badge
-							> voted {formatDistance(vote.createdAt, new Date(), { addSuffix: true })}
+							> voted {formatDistance(vote.createdAt, new TZDate(new Date(), env.PUBLIC_TZ), {
+								addSuffix: true
+							})}
 						</p>
 					{/each}
 				{/if}
@@ -170,3 +209,6 @@
 		</div>
 	</div>
 </div>
+
+<style>
+</style>
