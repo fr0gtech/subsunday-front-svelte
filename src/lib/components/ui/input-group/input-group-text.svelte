@@ -7,17 +7,16 @@
 		class: className,
 		children,
 		...restProps
-	}: WithElementRef<HTMLAttributes<HTMLTableRowElement>> = $props();
+	}: WithElementRef<HTMLAttributes<HTMLSpanElement>> = $props();
 </script>
 
-<tr
+<span
 	bind:this={ref}
-	data-slot="table-row"
 	class={cn(
-		"hover:[&,&>svelte-css-wrapper]:[&>th,td]:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors",
+		"text-muted-foreground flex items-center gap-2 text-sm [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none",
 		className
 	)}
 	{...restProps}
 >
 	{@render children?.()}
-</tr>
+</span>
