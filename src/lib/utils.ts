@@ -1,3 +1,4 @@
+import { replaceState } from '$app/navigation';
 import {
 	PUBLIC_FROM_DAY,
 	PUBLIC_FROM_TIME,
@@ -6,6 +7,7 @@ import {
 	PUBLIC_TZ
 } from '$env/static/public';
 import { tz, TZDate } from '@date-fns/tz';
+import type { Page } from '@sveltejs/kit';
 import { clsx, type ClassValue } from 'clsx';
 import {
 	getDay,
@@ -18,6 +20,8 @@ import {
 	subDays,
 	type Day
 } from 'date-fns';
+import { tick } from 'svelte';
+import type { Writable } from 'svelte/store';
 import { twMerge } from 'tailwind-merge';
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -35,6 +39,21 @@ export type WithoutChild<T> = T extends { child?: any } ? Omit<T, 'child'> : T;
 export type WithoutChildren<T> = T extends { children?: any } ? Omit<T, 'children'> : T;
 export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & { ref?: U | null };
+
+export type PeriodSelection = {
+	currentPeriod: {
+		startDate: Date;
+		endDate: Date;
+		nextStartDate: Date;
+	};
+	isSunday: boolean;
+	lastPeriod: {
+		startDate: Date;
+		endDate: Date;
+		nextStartDate: Date;
+	};
+};
+
 export function getDateRange(options?: DateRangeOptions) {
 	const { _fromDay, _fromTime, _toDay, _toTime, offset } = options || {};
 	const fromDay = (_fromDay || PUBLIC_FROM_DAY) as Day;
@@ -86,8 +105,17 @@ export function getDateRange(options?: DateRangeOptions) {
 			endDate: subDays(endDate, 7),
 			nextStartDate: subDays(nextStartDate, 7)
 		}
-	};
+	} as PeriodSelection;
 }
 export const getNowTZ = () => {
 	return new TZDate(new Date(), PUBLIC_TZ as string);
+};
+
+export const setURLparams = async (
+	page: Page<Record<string, string>, string | null>,
+	selectedPeriod: PeriodSelection
+) => {
+	page.url.searchParams.set('period', selectedPeriod.currentPeriod.startDate.getTime());
+	await tick();
+	replaceState(page.url, page.state);
 };

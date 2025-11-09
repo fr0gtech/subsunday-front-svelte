@@ -1,32 +1,33 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
 import type { Vote } from './server/db/types';
-import { getDateRange } from './utils';
+import { type PeriodSelection } from './utils';
 import { writable } from 'svelte/store';
 
 export let layout = writable({
 	type: 'icon'
 });
 
-type RangePeriod = {
-	currentPeriod: {
-		startDate: Date;
-		endDate: Date;
-		nextStartDate: Date;
-	};
-	isSunday: boolean;
-	lastPeriod: {
-		startDate: Date;
-		endDate: Date;
-		nextStartDate: Date;
-	};
-};
 export type VoteForFrom = Vote & { updated: boolean } & { user: { name: string; id: number } } & {
 	game: { name: string; id: number };
 };
 export type VoteAmount = { votesThisPeriod: number; votesToday: number };
 
-export let selectedPeriod = writable(getDateRange());
+export let selectedPeriod = writable<PeriodSelection>({
+	currentPeriod: {
+		startDate: null,
+		endDate: null,
+		nextStartDate: null
+	},
+	isSunday: false,
+	lastPeriod: {
+		startDate: null,
+		endDate: null,
+		nextStartDate: null
+	}
+} as any);
 export let wsVotes = writable([]);
+export let votestats = writable([]);
 
 export const staleTime = writable(1000);
 export const gcTime = writable(3000);

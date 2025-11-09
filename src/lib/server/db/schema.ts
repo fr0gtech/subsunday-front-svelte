@@ -12,7 +12,7 @@ import {
 import { sql } from 'drizzle-orm';
 
 export const user = pgTable('User', {
-	id: integer().primaryKey().notNull(),
+	id: serial().primaryKey(),
 	name: text().notNull(),
 	sub: boolean().default(false).notNull(),
 	createdAt: timestamp({ precision: 6, withTimezone: true }).notNull(),
@@ -24,7 +24,7 @@ export const game = pgTable(
 	'Game',
 	{
 		name: text().notNull(),
-		id: serial().primaryKey().notNull(),
+		id: serial().primaryKey(),
 		picture: text().default('').notNull(),
 		link: text().default('').notNull(),
 		createdAt: timestamp({ precision: 6, withTimezone: true }).notNull(),
@@ -40,15 +40,19 @@ export const game = pgTable(
 		recommendations: integer().default(0).notNull(),
 		screenshots: jsonb().default({}).notNull()
 	},
-	(table) => [
-		index('name_search_index').using('gin', sql`plainto_tsquery('english', ${table.name})`)
-	]
+	() => {
+		const string = `to_tsvector('english', 'Game.name')`;
+		return [
+			index('name_search_index').using('gin', sql.raw(string))
+			// index('name_search_index').using('gin', sql`plainto_tsquery('english', ${table.name})`)
+		];
+	}
 );
 
 export const vote = pgTable(
 	'Vote',
 	{
-		id: serial().primaryKey().notNull(),
+		id: serial().primaryKey(),
 		fromId: integer().notNull(),
 		forId: integer().notNull(),
 		voteText: text().notNull(),

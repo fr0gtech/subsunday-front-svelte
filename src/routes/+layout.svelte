@@ -6,17 +6,16 @@
 	import { browser } from '$app/environment';
 	import WebSockets from '$lib/components/webSockets/webSockets.svelte';
 	import { Toaster } from '@/components/ui/sonner';
-	let { children } = $props();
+	import { page } from '$app/state'; // use this
 
-	const queryClient = new QueryClient({
+	let { data, children } = $props();
+	export const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
 				enabled: browser
 			}
 		}
 	});
-	import { page } from '$app/state'; // use this
-	$inspect(page.data);
 </script>
 
 <svelte:head>
@@ -34,6 +33,6 @@
 	<ModeWatcher />
 	<Toaster />
 	<WebSockets />
-	<Nav />
+	<Nav data />
 	{@render children?.()}
 </QueryClientProvider>

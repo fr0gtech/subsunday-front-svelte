@@ -7,7 +7,10 @@ import { and, between, eq } from 'drizzle-orm';
 
 export async function GET({ url }: { url: URL }) {
 	const game = parseInt(url.searchParams.get('game') as string) || 0;
-	const range = getDateRange();
+
+	const periodStart = url.searchParams.get('period');
+
+	const range = getDateRange({ offset: periodStart ? new Date(periodStart) : getNowTZ() });
 	let votes;
 
 	if (game > 0) {
@@ -55,5 +58,8 @@ export async function GET({ url }: { url: URL }) {
 			.from(vote)
 			.limit(1);
 	}
-	return json({ votesThisPeriod: votes[0].voteCount, votesToday: votesToday[0].voteCount });
+	return json({
+		votesThisPeriod: votes[0] ? votes[0].voteCount : 0,
+		votesToday: votesToday[0] ? votesToday[0].voteCount : 0
+	});
 }

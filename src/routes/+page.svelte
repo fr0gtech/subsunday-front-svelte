@@ -6,59 +6,115 @@
 	import Nav from '$lib/components/nav/nav.svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import Price from '$lib/components/priceCalc/price.svelte';
-	import { layout, selectedPeriod, wsVotes } from '$lib/shared.svelte';
+	import { layout, selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
 	import type { Game, GameCategories, GamePrice } from '$lib/server/db/types';
 	import { InfiniteLoader, LoaderState } from 'svelte-infinite';
 	import { fade } from 'svelte/transition';
 	import NumberFlow from '@number-flow/svelte';
-	import { getNowTZ } from '@/utils';
-	import { toast } from 'svelte-sonner';
-	let page = -1;
+	import { getDateRange, getNowTZ, setURLparams } from '@/utils';
+	import { page } from '$app/state';
+	import { formatDistance, getWeek, getYear, isAfter, isSunday, subDays } from 'date-fns';
+	import VoteStats from '@/components/voteStats/voteStats.svelte';
+	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
+	import Button, { buttonVariants } from '@/components/ui/button/button.svelte';
+	import * as Popover from '$lib/components/ui/popover/index.js';
+	import CalendarIcon from '@lucide/svelte/icons/calendar';
+	import LeftArrow from '@lucide/svelte/icons/step-back';
+	import CustomCalendar from '$lib/components/customcalendar/customcalendar.svelte';
+	import RightArrow from '@lucide/svelte/icons/step-forward';
+
+	let periodKey = $state(0);
+	let pageNumber = -1;
+	const { data } = $props();
+	let container = $state<HTMLDivElement | null>(null);
 	let hasMore = $state(true);
-	const loaderState = new LoaderState();
-	let allGames: (Game & { voteCount: number })[] = $state([]);
+	const loaderState = $state(new LoaderState());
+	let allGames: (Game & { voteCount: string })[] = $state([]);
+	let allGamesWithWsVotes: (Game & { voteCount: string })[] = $state([]);
+
+	$effect(() => {
+		allGamesWithWsVotes = allGames
+			.map((game) => {
+				const additionalVotes = $wsVotes.filter(
+					(e: any) => parseInt(e.game.id) === parseInt(game.id as any)
+				).length;
+				return {
+					...game,
+					voteCount: (parseInt(game.voteCount) + additionalVotes).toString()
+				};
+			})
+			.sort((a, b) => parseInt(b.voteCount) - parseInt(a.voteCount) || a.id - b.id);
+	});
+
 	const loadMore = async () => {
 		if (!hasMore) {
 			loaderState.complete();
 			return;
 		}
-		page++;
+		pageNumber++;
 		const response = await fetch(
-			`/api/games?page=${page}&period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`
+			`/api/games?page=${pageNumber}&period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`
 		);
 		let data = await response.json();
 		hasMore = data.hasMore;
+		allGames = [...allGames, ...data.games].sort(
+			// should get sorted data from api but cant get drizzle to do that
+			// so sort by and and vote amount
+			(a, b) => b.voteCount - a.voteCount || a.id - b.id
+		);
 		if (!hasMore) {
 			loaderState.complete();
 			return;
 		}
-		allGames.push(...data.games);
+
+		await tick();
+
 		loaderState.loaded();
 	};
-
 	async function fetchUntilFilled() {
 		while (hasMore && !isOverflowing()) {
 			await loadMore();
 			await tick();
 		}
 	}
+	async function periodNext() {
+		$selectedPeriod = getDateRange({
+			offset: $selectedPeriod.currentPeriod.nextStartDate
+		});
+		await setURLparams(page, $selectedPeriod);
+	}
+	async function periodPrev() {
+		$selectedPeriod = getDateRange({
+			offset: subDays($selectedPeriod.currentPeriod.startDate, 1)
+		});
+		await setURLparams(page, $selectedPeriod);
+	}
 	function isOverflowing() {
 		return document.documentElement.scrollHeight > window.innerHeight;
 	}
-	let lastPeriodStart = $state(getNowTZ().getTime());
-	const newPeriod = () => {
-		if (lastPeriodStart !== $selectedPeriod.currentPeriod.startDate.getTime()) {
-			allGames = [];
-			page = 0;
-			hasMore = true;
-			loaderState.reset();
-			fetchUntilFilled();
-		}
-		lastPeriodStart = $selectedPeriod.currentPeriod.startDate.getTime();
-	};
-	$effect(() => {
+
+	async function fetchNewPeriod() {
 		if ($selectedPeriod) {
-			newPeriod();
+			loaderState.reset();
+			allGames = [];
+			hasMore = true;
+			await tick();
+			await new Promise((resolve) => setTimeout(resolve, 50));
+			await fetchUntilFilled();
+		}
+	}
+	async function onPeriodChange() {
+		pageNumber = -1;
+		await setURLparams(page, $selectedPeriod);
+		await fetchNewPeriod();
+	}
+
+	$effect(() => {
+		const test = async () => {
+			await onPeriodChange();
+		};
+		if ($selectedPeriod) {
+			test();
 		}
 	});
 	onMount(async () => {
@@ -73,21 +129,59 @@
 		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
 	/>
 </svelte:head>
-<div class="flex flex-col pt-12">
+<div class=" flex max-h-screen flex-col overflow-hidden">
 	{#if $layout.type === 'icon'}
-		<div class="mt-5 w-full items-center justify-center">
-			<div class="flex w-full px-5">
-				<!-- loop things are to prevent "loop detected" from this lib -->
+		<div class=" w-full overflow-y-scroll p-5 pt-15" bind:this={container}>
+			<div class="mx-auto mb-10 flex flex-col gap-5 pt-10 lg:hidden">
+				<div class=" w-full text-center text-xl font-bold">
+					{#if $selectedPeriod && isAfter(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
+						voting ended {formatDistance($selectedPeriod.currentPeriod.endDate, getNowTZ())} ago
+					{:else if $selectedPeriod && isAfter($selectedPeriod.currentPeriod.endDate, getNowTZ())}
+						voting ends in {formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
+					{/if}
+				</div>
+				<VoteStats gameVotes={$votestats} />
+				<div class="flex items-center justify-center gap-5">
+					<div>
+						<span class="text-sm">
+							<NumberFlow
+								value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
+							/> -
+							{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+						</span>
+					</div>
+					<div>
+						<ButtonGroup.Root>
+							<Button size={'sm'} onclick={periodPrev} variant="secondary"><LeftArrow /></Button>
+							<Popover.Root>
+								<Popover.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}
+									><CalendarIcon /></Popover.Trigger
+								>
+								<Popover.Content
+									class=" m-0 flex !w-fit flex-col  items-center justify-center border-none p-0"
+								>
+									<!-- <Calendar type="single" bind:value class="rounded-md border" /> -->
+
+									<CustomCalendar />
+								</Popover.Content>
+							</Popover.Root>
+							<Button size={'sm'} onclick={periodNext} variant="secondary"><RightArrow /></Button>
+						</ButtonGroup.Root>
+					</div>
+				</div>
+			</div>
+			{#key periodKey}
 				<InfiniteLoader
+					intersectionOptions={{ rootMargin: '200px', root: container }}
 					loopTimeout={500}
 					loopDetectionTimeout={1000}
 					loopMaxCalls={200}
 					{loaderState}
 					triggerLoad={loadMore}
 				>
-					{#each allGames as game, i (game.id)}
+					{#each allGamesWithWsVotes as game, i (game.id)}
 						<a href={`game/${game.id}`} in:fade class="z-0">
-							<Card class="grid-item relative !py-0">
+							<Card class="grid-item relative h-full max-w-[400px] border-0 !py-0">
 								<div
 									class="rounded-large relative !max-w-full rounded-xl shadow-none shadow-black/5"
 									style="max-width: fit-content;"
@@ -115,33 +209,37 @@
 										</div>
 									{/if}
 								</div>
-								<div class="absolute top-0 left-0 h-full w-full overflow-clip rounded-xl">
+								<div class="absolute top-0 left-0 h-full w-full">
 									<Badge
-										class=" absolute -top-[1px] -left-[1px] z-10 flex rounded-tl-xl  rounded-tr-none rounded-bl-none "
+										class=" absolute -top-[0px] -left-[0px] z-10 flex rounded-tl-md  rounded-tr-none rounded-bl-none "
 										variant="secondary"
 									>
 										<span class="text-base font-bold">
-											<span class="mr-1 text-sm font-normal">#{i + 1}</span>{game.name.slice(0, 25)}
+											<span class="text-sm font-normal">#</span><span class="mr-1 text-xl"
+												>{i + 1}</span
+											>{game.name.slice(0, 25)}
 										</span>
 									</Badge>
 									<Badge
-										class="absolute -top-[1px] -right-[1px] z-10 flex rounded-tl-none rounded-tr-md  rounded-br-none text-sm "
+										class="absolute -top-[0px] -right-[0px] z-10 flex rounded-tl-none rounded-tr-md rounded-br-none text-sm font-normal "
 										variant="secondary"
 									>
 										<Price price={(game.price as GamePrice).final} />
 									</Badge>
 									<Badge
-										class="absolute -right-[1px] -bottom-[1px] z-10 z-50 flex rounded-tl-md rounded-tr-none rounded-bl-none   text-sm  "
+										class="absolute -right-[0px] -bottom-[0px] z-50 flex rounded-tl-md rounded-tr-none rounded-bl-none   text-sm  "
 										variant="secondary"
 									>
 										<NumberFlow
-											value={game.voteCount +
-												$wsVotes.filter((e) => parseInt(e.game.id) === parseInt(game.id)).length}
+											value={parseInt(game.voteCount) +
+												$wsVotes.filter(
+													(e: any) => parseInt(e.game.id) === parseInt(game.id as any)
+												).length}
 										/> votes
 									</Badge>
 									<div class="absolute bottom-1 left-1 z-20 flex gap-1 opacity-90">
-										{#if game.categories.length > 0}
-											{#each game.categories.slice(0, 3) as GameCategories[] as category}
+										{#if (game.categories as any).length > 0}
+											{#each (game.categories as any).slice(0, 3) as GameCategories[] as category}
 												<Badge variant="secondary">
 													{category.description}
 												</Badge>
@@ -161,74 +259,54 @@
 						<button onclick={load}>Retry</button>
 					{/snippet}
 				</InfiniteLoader>
-			</div>
+			{/key}
 		</div>
 	{:else}
-		<div class="mt-5 w-full items-center justify-center">
-			<div class="flex w-full px-5">
-				<div class="grid-container">
-					{#each allGames as game, i}
-						<a href={`game/${game.id}`}>
-							<Card class="grid-item relative flex flex-row overflow-clip !py-0">
-								<div class=" h-[50px] w-[100px]">
-									{#if game.picture !== 'default'}
-										<div class="relative w-full">
-											<img
-												class="absolute top-0 object-cover"
-												alt={`${game.name} image`}
-												src={game.picture}
-											/>
-										</div>
-									{:else}
-										<div class="flex h-full w-full flex-col items-center justify-center">
-											<Logo />
-											<p class="text-center text-xs">no image</p>
-										</div>
-									{/if}
+		<div class=" flex w-full flex-col items-start gap-2 overflow-y-scroll pt-12">
+			{#each allGames as game, i}
+				<a href={`game/${game.id}`} class="w-full px-3">
+					<Card class="relative flex w-full flex-row items-start gap-0 overflow-clip !py-0">
+						<div class=" h-[40px] w-[100px]">
+							{#if game.picture !== 'default'}
+								<div class="relative w-full">
+									<img
+										class="absolute top-0 object-cover"
+										alt={`${game.name} image`}
+										src={game.picture}
+									/>
 								</div>
-								<div>
-									<Badge
-										class=" bg-primary-foreground text-primary-background  z-10"
-										variant="default"
-									>
-										# {i + 1}
-										{game.name}
-									</Badge>
-									<Badge
-										class="bg-primary-foreground text-primary-background  z-10 "
-										variant="default"
-									>
-										<Price price={(game.price as GamePrice).final} />
-									</Badge>
-									<Badge
-										class="bg-primary-foreground text-primary-background z-10 "
-										variant="default"
-									>
-										votes: {game.voteCount}
-									</Badge>
-									<div class="z-20 flex gap-1 opacity-90">
-										{#each game.categories as GameCategories[] as category}
-											<Badge
-												variant="default"
-												class="bg-primary-foreground text-primary-background "
-											>
-												{category.description}
-											</Badge>
-										{/each}
-									</div>
+							{:else}
+								<div class="flex h-full w-full flex-col items-center justify-center">
+									<Logo />
+									<p class="text-center text-xs">no image</p>
 								</div>
-							</Card>
-						</a>
-					{/each}
-				</div>
-			</div>
+							{/if}
+						</div>
+						<div>
+							<Badge
+								class="bg-primary-foreground text-primary-background z-10  text-xl"
+								variant="default"
+							>
+								# {i + 1}
+								{game.name}
+							</Badge>
+							<Badge class="bg-primary-foreground text-primary-background  z-10 " variant="default">
+								<Price price={(game.price as GamePrice).final} />
+							</Badge>
+							<Badge class="bg-primary-foreground text-primary-background z-10 " variant="default">
+								votes: {game.voteCount}
+							</Badge>
+							<div class="z-20 flex gap-1 opacity-90">
+								{#each game.categories as GameCategories[] as category}
+									<Badge variant="default" class="bg-primary-foreground text-primary-background ">
+										{category.description}
+									</Badge>
+								{/each}
+							</div>
+						</div>
+					</Card>
+				</a>
+			{/each}
 		</div>
 	{/if}
 </div>
-
-<style>
-	.grid-item {
-		display: flex;
-		justify-content: center;
-	}
-</style>

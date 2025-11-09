@@ -4,6 +4,7 @@
 	import { getDateRange, getNowTZ } from '$lib/utils';
 	import { selectedPeriod } from '$lib/shared.svelte';
 	import { Card } from '../ui/card';
+	import { addWeeks, isAfter } from 'date-fns';
 	// Function to get the start (Sunday) and end (Saturday) of the week
 	function toCalendar(data: { startDate: Date; endDate: Date; nextStartDate: Date }) {
 		const start = new CalendarDate(
@@ -35,6 +36,9 @@
 <Card class=" m-0 flex flex-col items-center justify-start gap-0 p-0">
 	<RangeCalendar
 		{value}
+		isDateDisabled={(date) => {
+			return isAfter(date.toDate('America/New_York'), addWeeks(getNowTZ(), 1));
+		}}
 		readonly
 		class="m-0 rounded-md bg-transparent p-3"
 		onStartValueChange={(e: any) => {

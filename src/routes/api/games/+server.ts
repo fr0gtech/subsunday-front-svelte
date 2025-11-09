@@ -12,6 +12,8 @@ export async function GET({ url }: { url: URL }) {
 	const periodStart = url.searchParams.get('period');
 	const range = getDateRange({ offset: periodStart ? new Date(periodStart) : getNowTZ() });
 	if (maxItems <= page * amoutPerPage) return json({ hasMore: false, games: [] });
+	const voteCountExpr = sql<number>`CAST(COUNT(${vote.id}) AS INT)`;
+
 	const games = await db
 		.select({
 			id: game.id,
@@ -20,7 +22,7 @@ export async function GET({ url }: { url: URL }) {
 			picture: game.picture,
 			categories: game.categories,
 			price: game.price,
-			voteCount: sql<number>`COUNT(${vote.id})`.as('voteCount')
+			voteCount: voteCountExpr.as('voteCount')
 		})
 		.from(game)
 		.innerJoin(
@@ -31,9 +33,10 @@ export async function GET({ url }: { url: URL }) {
 			)
 		)
 		.groupBy(game.id)
-		.orderBy(desc(sql`COUNT(${vote.id})`), asc(game.id))
+		.orderBy(desc(voteCountExpr), asc(game.id))
 		.offset(page * amoutPerPage)
 		.limit(amoutPerPage);
+	// cant get this to reliably return ordered data by vote....
 
 	return json({ hasMore: games.length === amoutPerPage, games: games });
 }
