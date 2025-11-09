@@ -1,6 +1,6 @@
 {
-  "id": "a000291c-35cf-45f2-a1bb-cfb7dcb9091b",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "61eeaf6e-5140-4fac-8e75-50a34be35a70",
+  "prevId": "7f88b6bc-548c-4053-a1b9-cf25ccabe118",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -36,14 +36,13 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp(3)",
+          "type": "timestamp (6) with time zone",
           "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "notNull": true
         },
         "updatedAt": {
           "name": "updatedAt",
-          "type": "timestamp(3)",
+          "type": "timestamp (6) with time zone",
           "primaryKey": false,
           "notNull": true
         },
@@ -118,7 +117,23 @@
           "default": "'{}'::jsonb"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "name_search_index": {
+          "name": "name_search_index",
+          "columns": [
+            {
+              "expression": "to_tsvector('english', Game)",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "gin",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
@@ -133,7 +148,7 @@
         "id": {
           "name": "id",
           "type": "integer",
-          "primaryKey": false,
+          "primaryKey": true,
           "notNull": true
         },
         "name": {
@@ -151,14 +166,13 @@
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp(3)",
+          "type": "timestamp (6) with time zone",
           "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "notNull": true
         },
         "updatedAt": {
           "name": "updatedAt",
-          "type": "timestamp(3)",
+          "type": "timestamp (6) with time zone",
           "primaryKey": false,
           "notNull": true
         },
@@ -196,20 +210,25 @@
         },
         "forId": {
           "name": "forId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "voteText": {
+          "name": "voteText",
           "type": "text",
           "primaryKey": false,
           "notNull": true
         },
         "createdAt": {
           "name": "createdAt",
-          "type": "timestamp(3)",
+          "type": "timestamp (6) with time zone",
           "primaryKey": false,
-          "notNull": true,
-          "default": "CURRENT_TIMESTAMP"
+          "notNull": true
         },
         "updatedAt": {
           "name": "updatedAt",
-          "type": "timestamp(3)",
+          "type": "timestamp (6) with time zone",
           "primaryKey": false,
           "notNull": true
         }

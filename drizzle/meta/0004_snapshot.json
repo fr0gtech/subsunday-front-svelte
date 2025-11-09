@@ -1,6 +1,6 @@
 {
-  "id": "70aaee67-6113-4114-9a3c-3880a6c24bab",
-  "prevId": "71859da5-eafe-4838-9923-0e3a6e450379",
+  "id": "c22818e2-3778-4e02-b028-20584b46e5aa",
+  "prevId": "9cdaf1d8-ce65-4064-8f04-ec698a1e9dd9",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -122,7 +122,7 @@
           "name": "name_search_index",
           "columns": [
             {
-              "expression": "plainto_tsquery('english', \"name\")",
+              "expression": "to_tsvector('english', 'Game.name')",
               "asc": true,
               "isExpression": true,
               "nulls": "last"
@@ -147,7 +147,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "integer",
+          "type": "serial",
           "primaryKey": true,
           "notNull": true
         },

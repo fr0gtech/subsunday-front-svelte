@@ -1,1 +1,0 @@
-ALTER TABLE "Vote" ALTER COLUMN "forId" SET DATA TYPE integer;
