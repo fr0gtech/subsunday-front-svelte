@@ -112,7 +112,7 @@
 						<h2 class="text-xl font-bold">{data.user.name}</h2>
 					</a>
 					<span>votes<Badge variant="secondary">{data.user.votes.length}</Badge></span>
-					<span>streak<Badge variant="secondary">{data.user.votes.length}</Badge></span>
+					<span>streak<Badge variant="secondary">{data.user.streak}</Badge></span>
 				</div>
 			</div>
 		</div>
