@@ -1,5 +1,5 @@
 import ioClient from 'socket.io-client';
-const ENDPOINT = process.env.DATABASE_URL;
+const ENDPOINT = process.env.SOCKET;
 
 const socket = ioClient(ENDPOINT);
 
