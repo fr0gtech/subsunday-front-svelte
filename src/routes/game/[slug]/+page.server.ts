@@ -2,7 +2,6 @@ import { error } from '@sveltejs/kit';
 import { game } from '$lib/server/db/schema';
 import { db } from '$lib/server/db';
 import { eq } from 'drizzle-orm';
-import { Description } from '@/components/ui/alert';
 
 export const load = async ({ params }) => {
 	const gameOnDb = await db
