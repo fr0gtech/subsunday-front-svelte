@@ -73,17 +73,13 @@ export function getDateRange(options?: DateRangeOptions) {
 	const [toHour, toMinute] = toTime.split(':').map(Number);
 
 	// relative from start we get the next day
-	const periodEndDate = nextDay(periodStart, toDay, {
-		in: tz(PUBLIC_TZ as string)
-	});
+	const periodEndDate = nextDay(periodStart, toDay);
 	const endDate = setMilliseconds(
 		setSeconds(setMinutes(setHours(periodEndDate, toHour), toMinute), 0),
 		0
 	);
 
-	const nextStart = nextDay(periodEndDate, fromDay, {
-		in: tz(PUBLIC_TZ as string)
-	});
+	const nextStart = nextDay(periodEndDate, fromDay);
 
 	const nextStartDate = setMilliseconds(
 		setSeconds(setMinutes(setHours(nextStart, fromHour), fromMinute), 0),
