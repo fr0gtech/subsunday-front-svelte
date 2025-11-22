@@ -60,10 +60,11 @@ export function getDateRange(options?: DateRangeOptions) {
 	const toDay = (_toDay || PUBLIC_TO_DAY) as Day;
 	const toTime = (_toTime || PUBLIC_TO_TIME) as string;
 
-	const now = offset || new Date();
+	const now = new TZDate(offset || new Date(), PUBLIC_TZ as string);
 	const [fromHour, fromMinute] = fromTime.split(':').map(Number);
 
-	const periodStart = getDay(now) == fromDay ? now : previousDay(now, fromDay);
+	const periodStart =
+		getDay(now) == fromDay ? now : previousDay(now, fromDay, { in: tz(PUBLIC_TZ as string) });
 
 	const startDate = setMilliseconds(
 		setSeconds(setMinutes(setHours(periodStart, fromHour), fromMinute), 0),
@@ -73,13 +74,17 @@ export function getDateRange(options?: DateRangeOptions) {
 	const [toHour, toMinute] = toTime.split(':').map(Number);
 
 	// relative from start we get the next day
-	const periodEndDate = nextDay(periodStart, toDay);
+	const periodEndDate = nextDay(periodStart, toDay, {
+		in: tz(PUBLIC_TZ as string)
+	});
 	const endDate = setMilliseconds(
 		setSeconds(setMinutes(setHours(periodEndDate, toHour), toMinute), 0),
 		0
 	);
 
-	const nextStart = nextDay(periodEndDate, fromDay);
+	const nextStart = nextDay(periodEndDate, fromDay, {
+		in: tz(PUBLIC_TZ as string)
+	});
 
 	const nextStartDate = setMilliseconds(
 		setSeconds(setMinutes(setHours(nextStart, fromHour), fromMinute), 0),
