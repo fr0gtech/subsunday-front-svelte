@@ -55,111 +55,122 @@
 		<div class=" flex flex-col space-y-5">
 			<Card class="w-full p-5 ">
 				<h1 class="text-2xl font-bold">Sub Sunday</h1>
-				Sub Sunday is a weekly event where viewer of the channel can vote for games they'd like to see
-				Lirik play.<br />
-				<b>This does not mean that the most voted game will be played.</b> This website is a non official
-				vote tracker and is not able to provide accurate data.
+				<p>
+					Sub Sunday is a weekly event where viewer of the channel can vote for games they'd like to
+					see Lirik play.
+					<br /><b>This does not mean that the most voted game will be played.</b> This website is a
+					non official vote tracker and is not able to provide accurate data.
+				</p>
+			</Card>
+			<Card class="w-full p-5 ">
+				<h1 class="text-2xl font-bold">Github</h1>
+				Open a github issue if you have any questions or want to contribute/share ideas.
+				<p class="text-base">
+					The code for the website you are on right now.
+					<a class="text-blue-500" href="https://github.com/fr0gtech/subsunday-front-svelte"
+						>fr0gtech/subsunday-front-svelte</a
+					><br />
+					The code for the server reading chat to track votes
+					<a class="text-blue-500" href="https://github.com/fr0gtech/subsunday-back-drizzle"
+						>fr0gtech/subsunday-back-drizzle</a
+					>
+				</p>
 			</Card>
 			<div class="flex grow flex-col gap-5 lg:flex-row">
-				<Card class="w-full p-5 ">
-					<h1 class="text-2xl font-bold">Info</h1>
-					Open a github issue if you have any questions or want to contribute/share ideas.
-				</Card>
 				<Card class="p-5">
 					<h2 class="text-xl font-bold">Supported Games</h2>
 					Only steam games have images, price and so on but we also track non steam games just without
 					any metadata. We may look at another source of info in the future to support more games.
+
+					<h2 class="text-xl font-bold">Credit</h2>
+					<p>
+						Here some sources used to create this website:<br />
+						<a class="text-blue-500" href="https://ragnapixel.itch.io/particle-fx">ragnapixel</a>:
+						images<br />
+						<a class="text-blue-500" href="https://steam.com/">Steam</a>: images, Prices,
+						Descriptions<br />
+						<a class="text-blue-500" href="https://lirikker.com/">lirikker.com</a>: Info about Sub
+						Sunday<br />
+					</p>
+				</Card>
+				<Card class="w-full grow p-5">
+					<h2 class="text-xl font-bold">Recent Votes</h2>
+					{#if allVotes}
+						{#each allVotes as vote (vote.id)}
+							<span class="-ml-1 text-sm leading-relaxed" in:fly out:fade>
+								<Badge class="text-sm" variant="secondary" href={`/user/${vote.user.id}`}
+									>{vote.user.name}</Badge
+								> voted for
+								<Badge class="text-sm" variant="secondary" href={`/game/${vote.game.id}`}
+									>{vote.game.name}</Badge
+								>
+								{formatDistance(vote.createdAt, getNowTZ(), { addSuffix: true })}
+							</span>
+						{/each}
+					{/if}
 				</Card>
 			</div>
 		</div>
 		<div class="space-y-5">
 			<Card class="p-4 text-xs">
 				<h3 class="text-base font-bold">Voting period</h3>
-				<pre>Sunday 00:00 - Saturday 22:00 GMT-4</pre>
+				<pre>Sunday 00:00 - Saturday 22:00 America/New_York</pre>
 			</Card>
 			<Customcalendar />
-		</div>
-	</div>
-	<div class="flex flex-col gap-5 lg:flex-row">
-		<Card class="grow p-5">
-			<h2 class="text-xl font-bold">Credit</h2>
-			<p>
-				Here some sources used to create this website:<br />
-				<a class="text-blue-500" href="https://ragnapixel.itch.io/particle-fx">ragnapixel</a>:
-				images<br />
-				<a class="text-blue-500" href="https://steam.com/">Steam</a>: images, Prices, Descriptions<br
-				/>
-				<a class="text-blue-500" href="https://lirikker.com/">lirikker.com</a>: Info about Sub
-				Sunday<br />
-			</p>
-		</Card>
-
-		<Card class=" p-5 text-xs">
-			<h2 class="text-xl font-bold">Github</h2>
-			<p class="text-base">
-				The code for the website you are on right now.<br />
-				<a class="text-blue-500" href="https://github.com/fr0gtech/subsunday-front"
-					>fr0gtech/subsunday-front</a
-				><br />
-				The code for the server reading chat to track votes<br />
-				<a class="text-blue-500" href="https://github.com/fr0gtech/subsunday-back"
-					>fr0gtech/subsunday-back</a
-				>
-			</p>
-		</Card>
-		<Card class="h-fit w-full p-5 lg:w-5/12">
-			<h1>Votes this week vs votes last week</h1>
-			<Chart.Container config={chartConfig}>
-				<AreaChart
-					data={data.thisWeekVsLastWeek}
-					x="date"
-					xScale={scaleUtc()}
-					series={[
-						{
-							key: 'votesLast7Days',
-							label: 'This Week',
-							color: chartConfig.votesLast7Days.color
-						},
-						{
-							key: 'votesLastWeek',
-							label: 'Last Week',
-							color: chartConfig.votesLastWeek.color
-						}
-					]}
-					seriesLayout="stack"
-					props={{
-						area: {
-							curve: curveNatural,
-							'fill-opacity': 0.4,
-							line: { class: 'stroke-1' }
-						},
-						xAxis: {
-							ticks: 7,
-							format: (v) => {
-								return v.toLocaleDateString('en-US', {
-									month: 'short',
-									day: 'numeric'
-								});
+			<Card class="mt-5 p-5">
+				<h1>Votes this week vs votes last week</h1>
+				<Chart.Container config={chartConfig}>
+					<AreaChart
+						data={data.thisWeekVsLastWeek}
+						x="date"
+						xScale={scaleUtc()}
+						series={[
+							{
+								key: 'votesLast7Days',
+								label: 'This Week',
+								color: chartConfig.votesLast7Days.color
+							},
+							{
+								key: 'votesLastWeek',
+								label: 'Last Week',
+								color: chartConfig.votesLastWeek.color
 							}
-						},
+						]}
+						seriesLayout="stack"
+						props={{
+							area: {
+								curve: curveNatural,
+								'fill-opacity': 0.4,
+								line: { class: 'stroke-1' }
+							},
+							xAxis: {
+								ticks: 7,
+								format: (v) => {
+									return v.toLocaleDateString('en-US', {
+										month: 'short',
+										day: 'numeric'
+									});
+								}
+							},
 
-						yAxis: { format: () => '' }
-					}}
-				>
-					{#snippet tooltip()}
-						<Chart.Tooltip
-							labelFormatter={(v: Date) => {
-								return v.toLocaleDateString('en-US', {
-									month: 'short',
-									day: 'numeric'
-								});
-							}}
-							indicator="line"
-						/>
-					{/snippet}
-				</AreaChart>
-			</Chart.Container>
-		</Card>
+							yAxis: { format: () => '' }
+						}}
+					>
+						{#snippet tooltip()}
+							<Chart.Tooltip
+								labelFormatter={(v: Date) => {
+									return v.toLocaleDateString('en-US', {
+										month: 'short',
+										day: 'numeric'
+									});
+								}}
+								indicator="line"
+							/>
+						{/snippet}
+					</AreaChart>
+				</Chart.Container>
+			</Card>
+		</div>
 	</div>
 	<!-- <div class="w-full">
 		<Card class=" w-full p-5 ">
@@ -216,20 +227,4 @@
 			</Chart.Container>
 		</Card>
 	</div> -->
-	<Card class="w-fit flex-wrap p-4">
-		<h2 class="text-xl font-bold">Recent Votes</h2>
-		{#if allVotes}
-			{#each allVotes as vote (vote.id)}
-				<span class="-ml-1 text-sm leading-relaxed" in:fly out:fade>
-					<Badge class="text-sm" variant="secondary" href={`/user/${vote.user.id}`}
-						>{vote.user.name}</Badge
-					> voted for
-					<Badge class="text-sm" variant="secondary" href={`/game/${vote.game.id}`}
-						>{vote.game.name}</Badge
-					>
-					{formatDistance(vote.createdAt, getNowTZ(), { addSuffix: true })}
-				</span>
-			{/each}
-		{/if}
-	</Card>
 </div>
