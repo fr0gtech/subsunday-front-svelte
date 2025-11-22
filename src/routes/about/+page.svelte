@@ -10,12 +10,13 @@
 	import CheckIcon from '@lucide/svelte/icons/check';
 	import XIcon from '@lucide/svelte/icons/x';
 	import { formatDistance } from 'date-fns';
-	import { selectedPeriod, wsVotes } from '$lib/shared.svelte';
+	import { selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
 	import { fade, fly } from 'svelte/transition';
 	import VoteStats from '@/components/voteStats/voteStats.svelte';
 	import { getDateRange, getNowTZ } from '@/utils.js';
 	import { createQuery } from '@tanstack/svelte-query';
 	import Customcalendar from '@/components/customcalendar/customcalendar.svelte';
+	import { Spinner } from '@/components/ui/spinner/index.js';
 	let context = $state<any>(null);
 	const { data } = $props();
 
@@ -53,6 +54,35 @@
 	</Alert.Root>
 	<div class="flex gap-5">
 		<div class=" flex flex-col space-y-5">
+			<Alert.Root variant="default" class="text-xl">
+				<Alert.Description class=" block text-base"
+					><p class="flex items-center gap-2">
+						<Spinner />Votes are currently being synchronized
+					</p></Alert.Description
+				>
+			</Alert.Root>
+			<Card>
+				<div class="flex justify-center gap-10">
+					<div>
+						<p>
+							Total Votes:
+							<Badge class="text-xl">{$votestats.totalVotes}</Badge>
+						</p>
+					</div>
+					<div>
+						<p>
+							Tracked Games:
+							<Badge class="text-xl">{$votestats.totalGames}</Badge>
+						</p>
+					</div>
+					<div>
+						<p>
+							Users:
+							<Badge class="text-xl">{$votestats.totalUsers}</Badge>
+						</p>
+					</div>
+				</div>
+			</Card>
 			<Card class="w-full p-5 ">
 				<h1 class="text-2xl font-bold">Sub Sunday</h1>
 				<p>
