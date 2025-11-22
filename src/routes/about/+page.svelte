@@ -122,23 +122,23 @@
 		</div>
 		<div class="space-y-5">
 			<Card>
-				<div class="flex items-center justify-center gap-5">
+				<div class="flex items-center justify-center gap-5 text-center">
 					<div>
 						<p>
-							Votes:
-							<Badge class="text-lg">{$votestats.totalVotes}</Badge>
+							Votes
+							<Badge variant="secondary" class="text-lg">{$votestats.totalVotes * 1000}</Badge>
 						</p>
 					</div>
 					<div>
 						<p>
-							Games:
-							<Badge class="text-lg">{$votestats.totalGames}</Badge>
+							Games
+							<Badge variant="secondary" class="text-lg">{$votestats.totalGames * 1000}</Badge>
 						</p>
 					</div>
 					<div>
 						<p>
-							Users:
-							<Badge class="text-lg">{$votestats.totalUsers}</Badge>
+							Users
+							<Badge variant="secondary" class="text-lg">{$votestats.totalUsers * 1000}</Badge>
 						</p>
 					</div>
 				</div>
