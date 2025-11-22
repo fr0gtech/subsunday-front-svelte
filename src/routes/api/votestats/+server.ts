@@ -7,14 +7,14 @@ import { and, between, count, eq } from 'drizzle-orm';
 
 export async function GET({ url }: { url: URL }) {
 	const gameParam = parseInt(url.searchParams.get('game') as string) || 0;
-
 	const periodStart = url.searchParams.get('period');
-
 	const range = getDateRange({ offset: periodStart ? new Date(periodStart) : getNowTZ() });
+
 	let votes;
 	let totalVotes;
 	let totalGames;
 	let totalUsers;
+
 	if (gameParam > 0) {
 		votes = await db
 			.select({
@@ -48,13 +48,6 @@ export async function GET({ url }: { url: URL }) {
 	if (gameParam > 0) {
 		votesToday = await db
 			.select({
-				voteCount: db.$count(vote, between(vote.createdAt, startOfDay(today), endOfDay(today)))
-			})
-			.from(vote)
-			.limit(1);
-	} else {
-		votesToday = await db
-			.select({
 				voteCount: db.$count(
 					vote,
 					and(
@@ -62,6 +55,13 @@ export async function GET({ url }: { url: URL }) {
 						eq(vote.forId, gameParam)
 					)
 				)
+			})
+			.from(vote)
+			.limit(1);
+	} else {
+		votesToday = await db
+			.select({
+				voteCount: db.$count(vote, and(between(vote.createdAt, startOfDay(today), endOfDay(today))))
 			})
 			.from(vote)
 			.limit(1);

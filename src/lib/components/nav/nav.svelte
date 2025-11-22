@@ -188,7 +188,7 @@
 		</div>
 	</div>
 	<div class="flex items-center justify-start gap-10">
-		<VoteStats class="mr-1 hidden whitespace-nowrap lg:flex" />
+		<VoteStats gameVotes={query.data} class="mr-1 hidden whitespace-nowrap lg:flex" />
 
 		<div>
 			<ButtonGroup.Root>

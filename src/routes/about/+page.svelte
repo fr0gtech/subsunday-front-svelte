@@ -61,28 +61,7 @@
 					</p></Alert.Description
 				>
 			</Alert.Root>
-			<Card>
-				<div class="flex justify-center gap-10">
-					<div>
-						<p>
-							Total Votes:
-							<Badge class="text-xl">{$votestats.totalVotes}</Badge>
-						</p>
-					</div>
-					<div>
-						<p>
-							Tracked Games:
-							<Badge class="text-xl">{$votestats.totalGames}</Badge>
-						</p>
-					</div>
-					<div>
-						<p>
-							Users:
-							<Badge class="text-xl">{$votestats.totalUsers}</Badge>
-						</p>
-					</div>
-				</div>
-			</Card>
+
 			<Card class="w-full p-5 ">
 				<h1 class="text-2xl font-bold">Sub Sunday</h1>
 				<p>
@@ -142,6 +121,28 @@
 			</div>
 		</div>
 		<div class="space-y-5">
+			<Card>
+				<div class="flex items-center justify-center gap-5">
+					<div>
+						<p>
+							Votes:
+							<Badge class="text-lg">{$votestats.totalVotes}</Badge>
+						</p>
+					</div>
+					<div>
+						<p>
+							Games:
+							<Badge class="text-lg">{$votestats.totalGames}</Badge>
+						</p>
+					</div>
+					<div>
+						<p>
+							Users:
+							<Badge class="text-lg">{$votestats.totalUsers}</Badge>
+						</p>
+					</div>
+				</div>
+			</Card>
 			<Card class="p-4 text-xs">
 				<h3 class="text-base font-bold">Voting period</h3>
 				<pre>Sunday 00:00 - Saturday 22:00 America/New_York</pre>

@@ -12,9 +12,9 @@
 	<div class="flex items-start gap-2">
 		<div class="h-full leading-5">Votes this week:</div>
 		<div>
-			{#if $votestats}
+			{#if props.gameVotes}
 				<Badge class="bg-[#4627646e] !text-current" variant="secondary">
-					<NumberFlow value={$votestats ? $votestats.votesThisPeriod : 0} />
+					<NumberFlow value={props.gameVotes ? props.gameVotes.votesThisPeriod : 0} />
 				</Badge>
 			{:else}
 				<Spinner class="mx-3" />
@@ -28,9 +28,9 @@
 	<div class="flex items-start gap-2">
 		<div class="h-full leading-5">Votes today:</div>
 		<div>
-			{#if $votestats}
+			{#if props.gameVotes}
 				<Badge class="bg-[#084d2671] !text-current" variant="secondary">
-					<NumberFlow value={$votestats ? $votestats.votesToday + $wsVotes.length : 0} />
+					<NumberFlow value={props.gameVotes ? props.gameVotes.votesToday : 0} />
 				</Badge>
 			{:else}
 				<Spinner class="mx-3" />
