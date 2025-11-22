@@ -13,7 +13,7 @@
 	import NumberFlow from '@number-flow/svelte';
 	import { page } from '$app/state';
 	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
-	import { createQuery, useQueryClient } from '@tanstack/svelte-query';
+	import { createQuery } from '@tanstack/svelte-query';
 	import CustomCalendar from '../customcalendar/customcalendar.svelte';
 	import { selectedPeriod, votestats } from '@/shared.svelte';
 	import VoteStats from '../voteStats/voteStats.svelte';
@@ -26,24 +26,18 @@
 	import { formatDistance, getWeek, getYear, isAfter, isSunday, subDays } from 'date-fns';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { onMount } from 'svelte';
-	const queryClient = useQueryClient();
 	let isOpen = $state(false);
 	let search = $state('');
 	const { data } = $props();
 
-	const getVotes = async () => {
-		const res = await fetch(
-			`/api/votestats?period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`
-		);
-		return await res.json();
-	};
-
 	const query = createQuery(() => ({
 		queryKey: ['votestats', $selectedPeriod],
-		queryFn: () => getVotes()
+		queryFn: async () => await fetch(`/api/votestats?period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`).then((r) => r.json()),
 	}));
 
 	$effect(() => {
+		console.log(query.data);
+		
 		if (query.data) {
 			votestats.set(query.data);
 		}
@@ -188,8 +182,7 @@
 		</div>
 	</div>
 	<div class="flex items-center justify-start gap-10">
-		<VoteStats gameVotes={query.data} class="mr-1 hidden whitespace-nowrap lg:flex" />
-
+			<VoteStats gameVotes={query.data} class="mr-1 hidden whitespace-nowrap lg:flex" />
 		<div>
 			<ButtonGroup.Root>
 				<Button size={'sm'} onclick={periodPrev} variant="secondary"><LeftArrow /></Button>

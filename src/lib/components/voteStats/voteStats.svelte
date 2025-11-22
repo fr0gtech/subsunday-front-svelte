@@ -1,20 +1,24 @@
 <script>
 	import NumberFlow from '@number-flow/svelte';
 	import Badge from '../ui/badge/badge.svelte';
-	import { votestats, wsVotes } from '@/shared.svelte';
 	import Spinner from '../ui/spinner/spinner.svelte';
-	import { cn } from 'tailwind-variants';
 
 	let props = $props();
+	let gameVotes = $state()
+	$effect(()=>{
+		if (props.gameVotes){
+			gameVotes = props.gameVotes
+		}
+	})
 </script>
 
 <div class={['flex flex-row gap-5 text-xs lowercase', props.class]}>
 	<div class="flex items-start gap-2">
 		<div class="h-full leading-5">Votes this week:</div>
 		<div>
-			{#if props.gameVotes}
+			{#if gameVotes}
 				<Badge class="bg-[#4627646e] !text-current" variant="secondary">
-					<NumberFlow value={props.gameVotes ? props.gameVotes.votesThisPeriod : 0} />
+					<NumberFlow value={gameVotes ? gameVotes.votesThisPeriod : 0} />
 				</Badge>
 			{:else}
 				<Spinner class="mx-3" />
@@ -28,9 +32,9 @@
 	<div class="flex items-start gap-2">
 		<div class="h-full leading-5">Votes today:</div>
 		<div>
-			{#if props.gameVotes}
+			{#if gameVotes}
 				<Badge class="bg-[#084d2671] !text-current" variant="secondary">
-					<NumberFlow value={props.gameVotes ? props.gameVotes.votesToday : 0} />
+					<NumberFlow value={gameVotes ? gameVotes.votesToday : 0} />
 				</Badge>
 			{:else}
 				<Spinner class="mx-3" />
