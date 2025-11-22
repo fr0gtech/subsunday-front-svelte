@@ -23,22 +23,14 @@
 
 	let selectedItem = $state<any>(null);
 
-	const getVotes = async () => {
-		const res = await fetch(`/api/lastvotes?game=${data.gameData.id}`);
-		return await res.json();
-	};
 	const votes = createQuery(() => ({
 		queryKey: [`lastvotes${data.gameData.id}`],
-		queryFn: () => getVotes()
+		queryFn: async () => await fetch(`/api/lastvotes?game=${data.gameData.id}`).then((r)=>r.json())
 	}));
-	const getVoteStats = async () => {
-		const res = await fetch(`/api/votestats?game=${data.gameData.id}`);
-		return await res.json();
-	};
 
 	const gameVotes = createQuery(() => ({
 		queryKey: [`votestats${data.gameData.id}`],
-		queryFn: () => getVoteStats()
+		queryFn: async () => await fetch(`/api/votestats?game=${data.gameData.id}`).then((r)=>r.json())
 	}));
 
 	const getGraph = async () => {

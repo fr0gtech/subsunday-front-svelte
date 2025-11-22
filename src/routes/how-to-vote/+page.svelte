@@ -1,41 +1,9 @@
 <script lang="ts">
-	import { scaleUtc } from 'd3-scale';
-	import { AreaChart } from 'layerchart';
-	import { curveBasis } from 'd3-shape';
-	import * as Chart from '$lib/components/ui/chart/index.js';
 	import Card from '$lib/components/ui/card/card.svelte';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import CheckIcon from '@lucide/svelte/icons/check';
 	import XIcon from '@lucide/svelte/icons/x';
-	import { createQuery } from '@tanstack/svelte-query';
-	import { formatDistance } from 'date-fns';
-	import { votestats, wsVotes } from '$lib/shared.svelte';
-	import Customcalendar from '$lib/components/customcalendar/customcalendar.svelte';
-	import { fade, fly } from 'svelte/transition';
-	import { getNowTZ } from '@/utils.js';
-	import VoteStats from '@/components/voteStats/voteStats.svelte';
-	const { data } = $props();
-
-	const getLastVotes = async () => {
-		const res = await fetch(`/api/lastvotes`);
-		return await res.json();
-	};
-
-	const votes = createQuery(() => ({
-		queryKey: ['lastvotesabout'],
-		queryFn: () => getLastVotes()
-	}));
-	const allVotes = $derived(
-		votes.data &&
-			[...(votes.data.votes || []), ...$wsVotes]
-				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-				.slice(0, 10)
-	);
-	const chartConfig = {
-		votesLast7Days: { label: 'This Week', color: 'var(--chart-1)' },
-		votesLastWeek: { label: 'Last Week', color: 'var(--chart-2)' }
-	} satisfies Chart.ChartConfig;
 </script>
 
 <div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:p-0 lg:pt-16">

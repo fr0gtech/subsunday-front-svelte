@@ -3,30 +3,21 @@
 	import Card from '$lib/components/ui/card/card.svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { scaleUtc } from 'd3-scale';
-	import { AreaChart, type ChartContextValue } from 'layerchart';
-	import { curveBasis, curveNatural } from 'd3-shape';
-	import * as Table from '$lib/components/ui/table/index.js';
+	import { AreaChart } from 'layerchart';
+	import { curveNatural } from 'd3-shape';
 	import { Badge } from '$lib/components/ui/badge/index.js';
-	import CheckIcon from '@lucide/svelte/icons/check';
-	import XIcon from '@lucide/svelte/icons/x';
 	import { formatDistance } from 'date-fns';
-	import { selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
+	import { votestats, wsVotes } from '$lib/shared.svelte';
 	import { fade, fly } from 'svelte/transition';
-	import VoteStats from '@/components/voteStats/voteStats.svelte';
-	import { getDateRange, getNowTZ } from '@/utils.js';
+	import { getNowTZ } from '@/utils.js';
 	import { createQuery } from '@tanstack/svelte-query';
 	import Customcalendar from '@/components/customcalendar/customcalendar.svelte';
 	import { Spinner } from '@/components/ui/spinner/index.js';
-	let context = $state<any>(null);
 	const { data } = $props();
 
-	const getVotes = async () => {
-		const res = await fetch(`/api/lastvotes`);
-		return await res.json();
-	};
 	const votes = createQuery(() => ({
 		queryKey: ['lastvotesabout'],
-		queryFn: () => getVotes()
+		queryFn: async () => await fetch(`/api/lastvotes`).then((r)=>r.json())
 	}));
 
 	const allVotes = $derived(
@@ -40,9 +31,11 @@
 		votesLast7Days: { label: 'This Week', color: 'var(--chart-1)' },
 		votesLastWeek: { label: 'Last Week', color: 'var(--chart-2)' }
 	} satisfies Chart.ChartConfig;
+
 	const chartConfigAll = {
 		count: { label: 'Amount of votes', color: 'var(--chart-1)' }
 	} satisfies Chart.ChartConfig;
+	
 </script>
 
 <div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">

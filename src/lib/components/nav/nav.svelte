@@ -28,7 +28,6 @@
 	import { onMount } from 'svelte';
 	let isOpen = $state(false);
 	let search = $state('');
-	const { data } = $props();
 
 	const query = createQuery(() => ({
 		queryKey: ['votestats', $selectedPeriod],
@@ -36,11 +35,7 @@
 	}));
 
 	$effect(() => {
-		console.log(query.data);
-		
-		if (query.data) {
-			votestats.set(query.data);
-		}
+		if (query.data) votestats.set(query.data);
 	});
 
 	async function periodNext() {

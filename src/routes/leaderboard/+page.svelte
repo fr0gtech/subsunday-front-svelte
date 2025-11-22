@@ -1,8 +1,6 @@
 <script lang="ts">
-	import * as Chart from '$lib/components/ui/chart/index.js';
 	import Card from '$lib/components/ui/card/card.svelte';
 	import { createQuery } from '@tanstack/svelte-query';
-	import * as Alert from '$lib/components/ui/alert/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { onMount } from 'svelte';
 	import { selectedPeriod } from '$lib/shared.svelte';
@@ -11,14 +9,11 @@
 
 	const { props } = $props();
 
-	const getTop = async () => {
-		const res = await fetch(`/api/top`);
-		return await res.json();
-	};
 	const votes = createQuery(() => ({
 		queryKey: ['topVotes'],
-		queryFn: () => getTop()
+		queryFn: async () => await fetch(`/api/top`).then((r)=>r.json())
 	}));
+	
 	onMount(async () => {
 		if ($selectedPeriod === null) {
 			if (props && parseInt(props.period as string) > 0) {
