@@ -126,19 +126,19 @@
 					<div>
 						<p>
 							Votes
-							<Badge variant="secondary" class="text-lg">{$votestats.totalVotes * 1000}</Badge>
+							<Badge variant="secondary" class="text-lg">{$votestats.totalVotes}</Badge>
 						</p>
 					</div>
 					<div>
 						<p>
 							Games
-							<Badge variant="secondary" class="text-lg">{$votestats.totalGames * 1000}</Badge>
+							<Badge variant="secondary" class="text-lg">{$votestats.totalGames}</Badge>
 						</p>
 					</div>
 					<div>
 						<p>
 							Users
-							<Badge variant="secondary" class="text-lg">{$votestats.totalUsers * 1000}</Badge>
+							<Badge variant="secondary" class="text-lg">{$votestats.totalUsers}</Badge>
 						</p>
 					</div>
 				</div>
