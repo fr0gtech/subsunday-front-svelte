@@ -32,7 +32,7 @@
 		votes.data &&
 			[...(votes.data.votes || []), ...$wsVotes]
 				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-				.slice(0, 10)
+				.slice(0, 5)
 	);
 
 	const chartConfig = {
@@ -77,7 +77,7 @@
 				</p>
 			</Card>
 			<div class="flex grow flex-col gap-5 lg:flex-row">
-				<Card class="p-5">
+				<Card class="w-1/2 p-5">
 					<h2 class="text-xl font-bold">Supported Games</h2>
 					Only steam games have images, price and so on but we also track non steam games just without
 					any metadata. We may look at another source of info in the future to support more games.
