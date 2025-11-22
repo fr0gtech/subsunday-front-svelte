@@ -34,5 +34,6 @@
 	<Toaster />
 	<WebSockets />
 	<Nav data />
+
 	{@render children?.()}
 </QueryClientProvider>

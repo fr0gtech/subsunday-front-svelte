@@ -13,9 +13,9 @@
 	import NumberFlow from '@number-flow/svelte';
 	import { page } from '$app/state';
 	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
-	import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
+	import { createQuery, useQueryClient } from '@tanstack/svelte-query';
 	import CustomCalendar from '../customcalendar/customcalendar.svelte';
-	import { selectedPeriod, votestats, wsVotes } from '@/shared.svelte';
+	import { selectedPeriod, votestats } from '@/shared.svelte';
 	import VoteStats from '../voteStats/voteStats.svelte';
 	import * as InputGroup from '$lib/components/ui/input-group/index.js';
 	import SearchIcon from '@lucide/svelte/icons/search';
@@ -23,17 +23,8 @@
 	import { cn, getDateRange, getNowTZ, setURLparams } from '@/utils';
 	import Badge from '../ui/badge/badge.svelte';
 
-	import {
-		formatDate,
-		formatDistance,
-		getWeek,
-		getYear,
-		isAfter,
-		isSunday,
-		subDays
-	} from 'date-fns';
+	import { formatDistance, getWeek, getYear, isAfter, isSunday, subDays } from 'date-fns';
 	import type { HTMLAttributes } from 'svelte/elements';
-	import { replaceState } from '$app/navigation';
 	import { onMount } from 'svelte';
 	const queryClient = useQueryClient();
 	let isOpen = $state(false);
@@ -46,12 +37,16 @@
 		);
 		return await res.json();
 	};
-	const query = createQuery({
-		queryKey: ['votestats'],
+
+	const query = createQuery(() => ({
+		queryKey: ['votestats', $selectedPeriod],
 		queryFn: () => getVotes()
-	});
+	}));
+
 	$effect(() => {
-		votestats.set($query.data);
+		if (query.data) {
+			votestats.set(query.data);
+		}
 	});
 
 	async function periodNext() {
@@ -66,14 +61,6 @@
 		});
 		await setURLparams(page, $selectedPeriod);
 	}
-	$effect(() => {
-		const test = async () => {
-			if ($selectedPeriod.currentPeriod.startDate) {
-				queryClient.invalidateQueries({ queryKey: ['votestats'] });
-			}
-		};
-		test();
-	});
 
 	const links: { title: string; href: string; description: string; warning?: boolean }[] = [
 		{
@@ -101,8 +88,6 @@
 		warning?: boolean;
 	};
 	onMount(async () => {
-		console.log(data);
-
 		if (data.period && parseInt(data.period as string) > 0) {
 			$selectedPeriod = getDateRange({ offset: new Date(parseInt(data.period as string)) });
 		} else {
@@ -137,7 +122,7 @@
 					? 'after:absolute after:top-0 after:right-0 after:ml-1 after:text-red-400 after:content-["*"]'
 					: ''
 			)}
-			{...restProps}
+			{...restProps as any}
 		>
 			<div class="text-sm leading-none font-medium">{title}</div>
 		</a>
@@ -198,7 +183,7 @@
 		</div>
 	</div>
 	<div class="flex items-center justify-start gap-10">
-		<VoteStats gameVotes={$query.data} class="mr-1 hidden whitespace-nowrap lg:flex" />
+		<VoteStats class="mr-1 hidden whitespace-nowrap lg:flex" />
 
 		<div>
 			<ButtonGroup.Root>

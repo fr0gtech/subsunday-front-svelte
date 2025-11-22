@@ -27,7 +27,7 @@ export let selectedPeriod = writable<PeriodSelection>({
 	}
 } as any);
 export let wsVotes = writable([]);
-export let votestats = writable([]);
+export let votestats = writable<any>([]);
 
 export const staleTime = writable(1000);
 export const gcTime = writable(3000);

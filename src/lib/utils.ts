@@ -102,7 +102,7 @@ export function getDateRange(options?: DateRangeOptions) {
 	} as PeriodSelection;
 }
 export const getNowTZ = () => {
-	return new Date();
+	return new TZDate(new Date(), PUBLIC_TZ as string);
 };
 
 export const setURLparams = async (

@@ -27,34 +27,34 @@
 		const res = await fetch(`/api/lastvotes?game=${data.gameData.id}`);
 		return await res.json();
 	};
-	const votes = createQuery({
+	const votes = createQuery(() => ({
 		queryKey: [`lastvotes${data.gameData.id}`],
 		queryFn: () => getVotes()
-	});
+	}));
 	const getVoteStats = async () => {
 		const res = await fetch(`/api/votestats?game=${data.gameData.id}`);
 		return await res.json();
 	};
 
-	const gameVotes = createQuery({
+	const gameVotes = createQuery(() => ({
 		queryKey: [`votestats${data.gameData.id}`],
 		queryFn: () => getVoteStats()
-	});
+	}));
 
 	const getGraph = async () => {
 		const res = await fetch(`/api/graph?game=${data.gameData.id}`);
 		return await res.json();
 	};
 
-	const graph = createQuery({
+	const graph = createQuery(() => ({
 		queryKey: ['graph'],
 		queryFn: () => getGraph()
-	});
+	}));
 
 	const allVotes = $derived(
-		$votes.data &&
+		votes.data &&
 			[
-				...($votes.data.votes || []),
+				...(votes.data.votes || []),
 				...$wsVotes.filter((e: any) => parseInt(e.game.id) === data.gameData.id)
 			]
 				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
@@ -192,12 +192,12 @@
 		</div>
 		<div class="m-3 w-full space-y-5 lg:m-0 lg:w-4/12">
 			<Card class="p-5">
-				<VoteStats gameVotes={$gameVotes.data} />
+				<VoteStats gameVotes={gameVotes.data} />
 
-				{#if $graph.data}
+				{#if graph.data}
 					<Chart.Container config={chartConfig}>
 						<AreaChart
-							data={$graph.data.votes.map((e: { date: Date }) => {
+							data={graph.data.votes.map((e: { date: Date }) => {
 								return {
 									...e,
 									date: new Date(e.date)

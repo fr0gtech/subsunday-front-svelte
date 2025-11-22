@@ -1,7 +1,7 @@
 <script>
 	import NumberFlow from '@number-flow/svelte';
 	import Badge from '../ui/badge/badge.svelte';
-	import { wsVotes } from '@/shared.svelte';
+	import { votestats, wsVotes } from '@/shared.svelte';
 	import Spinner from '../ui/spinner/spinner.svelte';
 	import { cn } from 'tailwind-variants';
 
@@ -12,11 +12,9 @@
 	<div class="flex items-start gap-2">
 		<div class="h-full leading-5">Votes this week:</div>
 		<div>
-			{#if props.gameVotes}
+			{#if $votestats}
 				<Badge class="bg-[#4627646e] !text-current" variant="secondary">
-					<NumberFlow
-						value={props.gameVotes ? props.gameVotes.votesThisPeriod + $wsVotes.length : 0}
-					/>
+					<NumberFlow value={$votestats ? $votestats.votesThisPeriod : 0} />
 				</Badge>
 			{:else}
 				<Spinner class="mx-3" />
@@ -30,9 +28,9 @@
 	<div class="flex items-start gap-2">
 		<div class="h-full leading-5">Votes today:</div>
 		<div>
-			{#if props.gameVotes}
+			{#if $votestats}
 				<Badge class="bg-[#084d2671] !text-current" variant="secondary">
-					<NumberFlow value={props.gameVotes ? props.gameVotes.votesToday + $wsVotes.length : 0} />
+					<NumberFlow value={$votestats ? $votestats.votesToday + $wsVotes.length : 0} />
 				</Badge>
 			{:else}
 				<Spinner class="mx-3" />

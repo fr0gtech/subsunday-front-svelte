@@ -15,16 +15,16 @@
 		const res = await fetch(`/api/top`);
 		return await res.json();
 	};
-	const votes = createQuery({
+	const votes = createQuery(() => ({
 		queryKey: ['topVotes'],
 		queryFn: () => getTop()
-	});
+	}));
 	onMount(async () => {
 		if ($selectedPeriod === null) {
 			if (props && parseInt(props.period as string) > 0) {
-				$selectedPeriod = getDateRange({ offset: new Date(parseInt(props.period as string)) });
+				selectedPeriod.set(getDateRange({ offset: new Date(parseInt(props.period as string)) }));
 			} else {
-				$selectedPeriod = getDateRange();
+				selectedPeriod.set(getDateRange());
 			}
 		}
 	});
@@ -32,7 +32,7 @@
 
 <div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
 	<div class="flex flex-col justify-center gap-5 lg:flex-row">
-		{#if $votes.data}
+		{#if votes.data}
 			<Card>
 				<Table.Root class="flex w-full flex-col">
 					<Table.Caption class="mt-0 mb-3 text-base font-bold text-current"
@@ -46,7 +46,7 @@
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{#each $votes.data.topGames as game, i}
+						{#each votes.data.topGames as game, i}
 							<Table.Row>
 								<a href={`/game/${game.id}`}>
 									<Table.Cell class="font-medium"># {i + 1}</Table.Cell>
@@ -77,7 +77,7 @@
 							</Table.Row>
 						</Table.Header>
 						<Table.Body>
-							{#each $votes.data.topUsers as vote, i}
+							{#each votes.data.topUsers as vote, i}
 								<Table.Row class="block w-full ">
 									<a href={`/user/${vote.id}`}>
 										<Table.Cell class="font-medium"># {i + 1}</Table.Cell>
@@ -102,7 +102,7 @@
 							</Table.Row>
 						</Table.Header>
 						<Table.Body>
-							{#each $votes.data.topStreak as vote, i}
+							{#each votes.data.topStreak as vote, i}
 								<Table.Row class="block w-full">
 									<a href={`/user/${vote.id}`}>
 										<Table.Cell class="font-medium"># {i + 1}</Table.Cell>

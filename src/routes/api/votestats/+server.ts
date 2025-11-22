@@ -3,7 +3,7 @@ import { vote } from '$lib/server/db/schema';
 import { getDateRange, getNowTZ } from '$lib/utils';
 import { json } from '@sveltejs/kit';
 import { endOfDay, startOfDay } from 'date-fns';
-import { and, between, eq } from 'drizzle-orm';
+import { and, between, count, eq } from 'drizzle-orm';
 
 export async function GET({ url }: { url: URL }) {
 	const game = parseInt(url.searchParams.get('game') as string) || 0;
@@ -12,7 +12,7 @@ export async function GET({ url }: { url: URL }) {
 
 	const range = getDateRange({ offset: periodStart ? new Date(periodStart) : getNowTZ() });
 	let votes;
-
+	let totalVotes;
 	if (game > 0) {
 		votes = await db
 			.select({
@@ -36,6 +36,7 @@ export async function GET({ url }: { url: URL }) {
 			})
 			.from(vote)
 			.limit(1);
+		totalVotes = await db.select({ count: count() }).from(vote);
 	}
 
 	const today = getNowTZ();
@@ -60,6 +61,7 @@ export async function GET({ url }: { url: URL }) {
 	}
 	return json({
 		votesThisPeriod: votes[0] ? votes[0].voteCount : 0,
-		votesToday: votesToday[0] ? votesToday[0].voteCount : 0
+		votesToday: votesToday[0] ? votesToday[0].voteCount : 0,
+		totalVotes: totalVotes ? totalVotes[0].count : 0
 	});
 }
