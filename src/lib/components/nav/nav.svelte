@@ -88,8 +88,13 @@
 		warning?: boolean;
 	};
 	onMount(async () => {
-		if (data.period && parseInt(data.period as string) > 0) {
-			$selectedPeriod = getDateRange({ offset: new Date(parseInt(data.period as string)) });
+		if (
+			page.url.searchParams.get('period') &&
+			parseInt(page.url.searchParams.get('period') as string) > 0
+		) {
+			$selectedPeriod = getDateRange({
+				offset: new Date(parseInt(page.url.searchParams.get('period') as string))
+			});
 		} else {
 			if (isSunday(getNowTZ())) {
 				$selectedPeriod = getDateRange({ offset: subDays(getNowTZ(), 1) });
