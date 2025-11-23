@@ -22,6 +22,7 @@
 	import LeftArrow from '@lucide/svelte/icons/step-back';
 	import CustomCalendar from '$lib/components/customcalendar/customcalendar.svelte';
 	import RightArrow from '@lucide/svelte/icons/step-forward';
+	import { Skeleton } from '@/components/ui/skeleton/index.js';
 
 
 
@@ -81,7 +82,7 @@
 		});
 		await setURLparams(page, $selectedPeriod);
 	}
-	
+
 	async function periodPrev() {
 		$selectedPeriod = getDateRange({
 			offset: subDays($selectedPeriod.currentPeriod.startDate, 1)
@@ -187,7 +188,6 @@
 									style="max-width: fit-content;"
 								>
 									{#if game.picture !== 'default'}
-										<!-- this just a bunch of shit to create the bg blur on the main card in icon view -->
 										<img
 											class="transition-transform-opacity rounded-large border-success relative z-10 w-full !max-w-full rounded-xl border-0 opacity-0 shadow-none shadow-black/5 !duration-300 data-[loaded=true]:opacity-100 motion-reduce:transition-none"
 											alt="Backseat Drivers"
@@ -250,8 +250,11 @@
 							</Card>
 						</a>
 					{/each}
+					
 					{#snippet loading()}
-						Loading...
+						{#each Array(20).fill(0) as skeleton }
+							<Skeleton class="w-full h-40 max-w-[400px] border-0 !py-0" />
+						{/each}
 					{/snippet}
 					{#snippet noData()}{/snippet}
 					{#snippet error(load)}
