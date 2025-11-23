@@ -44,7 +44,7 @@
 			happens to your vote.</Alert.Description
 		>
 	</Alert.Root>
-	<div class="flex flex-wrap gap-5">
+	<div class="flex flex-wrap gap-5 lg:flex-nowrap">
 		<div class=" flex flex-col space-y-5">
 			<Alert.Root variant="default" class="text-xl">
 				<Alert.Description class=" block text-base"

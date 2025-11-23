@@ -6,14 +6,16 @@
 	import { selectedPeriod } from '$lib/shared.svelte';
 	import { getDateRange } from '@/utils';
 	import ImageWithFallback from '@/components/imageWithFallback/imageWithFallback.svelte';
+	import * as Alert from '$lib/components/ui/alert/index.js';
+	import { Spinner } from '@/components/ui/spinner';
 
 	const { props } = $props();
 
 	const votes = createQuery(() => ({
 		queryKey: ['topVotes'],
-		queryFn: async () => await fetch(`/api/top`).then((r)=>r.json())
+		queryFn: async () => await fetch(`/api/top`).then((r) => r.json())
 	}));
-	
+
 	onMount(async () => {
 		if ($selectedPeriod === null) {
 			if (props && parseInt(props.period as string) > 0) {
@@ -26,6 +28,24 @@
 </script>
 
 <div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
+	<div class="mx-auto flex max-w-xl flex-wrap justify-center gap-5 lg:flex-nowrap">
+		<div class=" grow">
+			<Alert.Root variant="default" class="w-full text-xl">
+				<Alert.Description class=" block text-base whitespace-nowrap"
+					><p class="flex items-center gap-2">
+						<Spinner />Votes are currently being synchronized
+					</p></Alert.Description
+				>
+			</Alert.Root>
+		</div>
+		<div class="w-full">
+			<Alert.Root variant="destructive" class="mx-auto  text-xl whitespace-nowrap">
+				<Alert.Description class="block text-base"
+					>*inaccurate until syncing is done</Alert.Description
+				>
+			</Alert.Root>
+		</div>
+	</div>
 	<div class="flex flex-col justify-center gap-5 lg:flex-row">
 		{#if votes.data}
 			<Card>
@@ -61,9 +81,9 @@
 			<div class="flex flex-col gap-5">
 				<Card>
 					<Table.Root class="flex w-full flex-col ">
-						<Table.Caption class="mt-0 mb-3  font-bold text-current"
-							>Top Users by votes</Table.Caption
-						>
+						<Table.Caption class="mt-0 mb-3 text-base font-bold text-current"
+							>Top Users by votes
+						</Table.Caption>
 						<Table.Header class="min-w-[300px] ">
 							<Table.Row>
 								<Table.Head class="">Rank</Table.Head>
