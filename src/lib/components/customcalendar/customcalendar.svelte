@@ -1,4 +1,5 @@
 <script lang="ts">
+	export const ssr = false;
 	import { CalendarDate } from '@internationalized/date';
 	import { RangeCalendar } from '$lib/components/ui/range-calendar/index.js';
 	import { getDateRange, getNowTZ } from '$lib/utils';

@@ -6,18 +6,23 @@
 	import { AreaChart } from 'layerchart';
 	import { curveNatural } from 'd3-shape';
 	import { Badge } from '$lib/components/ui/badge/index.js';
-	import { formatDistance } from 'date-fns';
-	import { votestats, wsVotes } from '$lib/shared.svelte';
+	import { formatDistance, getWeek, getYear } from 'date-fns';
+	import { selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
 	import { fade, fly } from 'svelte/transition';
-	import { getNowTZ } from '@/utils.js';
+	import { getDateRange, getNowTZ } from '@/utils.js';
 	import { createQuery } from '@tanstack/svelte-query';
 	import Customcalendar from '@/components/customcalendar/customcalendar.svelte';
 	import { Spinner } from '@/components/ui/spinner/index.js';
 	const { data } = $props();
+	let context = $state<any>(null);
 
 	const votes = createQuery(() => ({
 		queryKey: ['lastvotesabout'],
 		queryFn: async () => await fetch(`/api/lastvotes`).then((r) => r.json())
+	}));
+	const history = createQuery(() => ({
+		queryKey: ['history'],
+		queryFn: async () => await fetch(`/api/history`).then((r) => r.json())
 	}));
 
 	const allVotes = $derived(
@@ -33,7 +38,7 @@
 	} satisfies Chart.ChartConfig;
 
 	const chartConfigAll = {
-		count: { label: 'Amount of votes', color: 'var(--chart-1)' }
+		count: { label: 'Votes', color: 'var(--chart-1)' }
 	} satisfies Chart.ChartConfig;
 </script>
 
@@ -77,6 +82,7 @@
 					>
 				</p>
 			</Card>
+			<div class="w-full"></div>
 			<div class="flex grow flex-col gap-5 lg:flex-row">
 				<Card class="p-5 lg:w-1/2">
 					<h2 class="text-xl font-bold">Supported Games</h2>
@@ -135,11 +141,6 @@
 					</div>
 				</div>
 			</Card>
-			<Card class="p-4 text-xs">
-				<h3 class="text-base font-bold">Voting period</h3>
-				<pre>Sunday 00:00 - Saturday 22:00 America/New_York</pre>
-			</Card>
-			<Customcalendar />
 			<Card class="mt-5 p-5">
 				<h1>Votes this week vs votes last week</h1>
 				<Chart.Container config={chartConfig}>
@@ -175,7 +176,6 @@
 									});
 								}
 							},
-
 							yAxis: { format: () => '' }
 						}}
 					>
@@ -193,61 +193,65 @@
 					</AreaChart>
 				</Chart.Container>
 			</Card>
+			<Card class=" w-full p-5 ">
+				<h1>Amount of votes by week</h1>
+				{#if history.data && history.data.sorted}
+					<Chart.Container config={chartConfigAll} class="h-40">
+						<AreaChart
+							bind:context
+							onTooltipClick={() =>
+								selectedPeriod.set(getDateRange({ offset: context.tooltip.data.date }))}
+							data={history.data.sorted.map((d: { date: string | number | Date }) => ({
+								...d,
+								date: new Date(d.date)
+							}))}
+							x="date"
+							xScale={scaleUtc()}
+							series={[
+								{
+									key: 'count',
+									color: chartConfigAll.count.color
+								}
+							]}
+							seriesLayout="stack"
+							props={{
+								xAxis: {
+									ticks: 7,
+									format: (v) =>
+										getWeek(v) +
+										'-' +
+										v.toLocaleDateString('en-US', {
+											year: '2-digit'
+										})
+								},
+
+								area: {
+									curve: curveNatural,
+									'fill-opacity': 0.4,
+									line: { class: 'stroke-1' }
+								}
+							}}
+						>
+							{#snippet tooltip()}
+								<Chart.Tooltip
+									labelFormatter={(v: Date) =>
+										getWeek(v) +
+										'-' +
+										v.toLocaleDateString('en-US', {
+											year: '2-digit'
+										})}
+									indicator="line"
+								/>
+							{/snippet}
+						</AreaChart>
+					</Chart.Container>
+				{/if}
+			</Card>
+			<Card class="p-4 text-xs">
+				<h3 class="text-base font-bold">Voting period</h3>
+				<pre>Sunday 00:00 - Saturday 22:00 America/New_York</pre>
+			</Card>
+			<Customcalendar />
 		</div>
 	</div>
-	<!-- <div class="w-full">
-		<Card class=" w-full p-5 ">
-			<h1>All</h1>
-
-			<Chart.Container config={chartConfigAll} class="h-40">
-				<AreaChart
-					bind:context
-					onTooltipClick={() => {
-						selectedPeriod.set(getDateRange({ offset: context.tooltip.data.date }));
-					}}
-					data={data.historical}
-					x="date"
-					xScale={scaleUtc()}
-					series={[
-						{
-							key: 'count',
-							color: chartConfigAll.count.color
-						}
-					]}
-					seriesLayout="stack"
-					props={{
-						area: {
-							curve: curveNatural,
-							'fill-opacity': 0.4,
-							line: { class: 'stroke-1' }
-						},
-						xAxis: {
-							ticks: 7,
-							format: (v) => {
-								return v.toLocaleDateString('en-US', {
-									month: 'short',
-									day: 'numeric'
-								});
-							}
-						},
-
-						yAxis: { format: () => '' }
-					}}
-				>
-					{#snippet tooltip()}
-						<Chart.Tooltip
-							labelFormatter={(v: Date) => {
-								return v.toLocaleDateString('en-US', {
-									month: 'short',
-									day: 'numeric',
-									year: '2-digit'
-								});
-							}}
-							indicator="line"
-						/>
-					{/snippet}
-				</AreaChart>
-			</Chart.Container>
-		</Card>
-	</div> -->
 </div>
