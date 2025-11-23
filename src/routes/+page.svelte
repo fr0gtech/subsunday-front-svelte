@@ -141,7 +141,9 @@
 						voting ends in {formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
 					{/if}
 				</div>
-				<VoteStats gameVotes={$votestats} />
+				<div class="flex justify-center">
+					<VoteStats gameVotes={$votestats} />
+				</div>
 				<div class="flex items-center justify-center gap-5">
 					<div>
 						<span class="text-sm">
@@ -250,7 +252,7 @@
 							</Card>
 						</a>
 					{/each}
-						
+
 					<!-- {#snippet loading()}
 						<div class="infinite-loader-wrapper">
 							{#each Array(20).fill(0) as skeleton}

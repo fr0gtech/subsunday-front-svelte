@@ -31,7 +31,10 @@
 
 	const query = createQuery(() => ({
 		queryKey: ['votestats', $selectedPeriod],
-		queryFn: async () => await fetch(`/api/votestats?period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`).then((r) => r.json()),
+		queryFn: async () =>
+			await fetch(
+				`/api/votestats?period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`
+			).then((r) => r.json())
 	}));
 
 	$effect(() => {
@@ -177,8 +180,8 @@
 		</div>
 	</div>
 	<div class="flex items-center justify-start gap-10">
-			<VoteStats gameVotes={query.data} class="mr-1 hidden whitespace-nowrap lg:flex" />
-		<div>
+		<VoteStats gameVotes={query.data} class="mr-1 hidden whitespace-nowrap lg:flex" />
+		<div class="hidden lg:block">
 			<ButtonGroup.Root>
 				<Button size={'sm'} onclick={periodPrev} variant="secondary"><LeftArrow /></Button>
 				<Popover.Root>

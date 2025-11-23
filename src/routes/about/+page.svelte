@@ -17,7 +17,7 @@
 
 	const votes = createQuery(() => ({
 		queryKey: ['lastvotesabout'],
-		queryFn: async () => await fetch(`/api/lastvotes`).then((r)=>r.json())
+		queryFn: async () => await fetch(`/api/lastvotes`).then((r) => r.json())
 	}));
 
 	const allVotes = $derived(
@@ -35,7 +35,6 @@
 	const chartConfigAll = {
 		count: { label: 'Amount of votes', color: 'var(--chart-1)' }
 	} satisfies Chart.ChartConfig;
-	
 </script>
 
 <div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
@@ -45,7 +44,7 @@
 			happens to your vote.</Alert.Description
 		>
 	</Alert.Root>
-	<div class="flex gap-5">
+	<div class="flex flex-wrap gap-5">
 		<div class=" flex flex-col space-y-5">
 			<Alert.Root variant="default" class="text-xl">
 				<Alert.Description class=" block text-base"
@@ -79,7 +78,7 @@
 				</p>
 			</Card>
 			<div class="flex grow flex-col gap-5 lg:flex-row">
-				<Card class="w-1/2 p-5">
+				<Card class="p-5 lg:w-1/2">
 					<h2 class="text-xl font-bold">Supported Games</h2>
 					Only steam games have images, price and so on but we also track non steam games just without
 					any metadata. We may look at another source of info in the future to support more games.
