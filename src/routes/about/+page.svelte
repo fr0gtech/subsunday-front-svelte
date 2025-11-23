@@ -69,59 +69,59 @@
 					non official vote tracker and is not able to provide accurate data.
 				</p>
 			</Card>
-			<Card class=" w-full p-5 ">
+			<Card class=" min-h-40 w-full p-5">
 				<h1>Amount of votes by week</h1>
-				{#if history.data && history.data.sorted}
-					<Chart.Container config={chartConfigAll} class="h-40">
-						<AreaChart
-							bind:context
-							onTooltipClick={() =>
-								selectedPeriod.set(getDateRange({ offset: context.tooltip.data.date }))}
-							data={history.data.sorted.map((d: { date: string | number | Date }) => ({
-								...d,
-								date: new Date(d.date)
-							}))}
-							x="date"
-							xScale={scaleUtc()}
-							series={[
-								{
-									key: 'count',
-									color: chartConfigAll.count.color
-								}
-							]}
-							seriesLayout="stack"
-							props={{
-								xAxis: {
-									ticks: 13,
-									format: (v) =>
-										getWeek(v) +
-										'-' +
-										v.toLocaleDateString('en-US', {
-											year: '2-digit'
-										})
-								},
+				<Chart.Container config={chartConfigAll} class="h-40">
+					<AreaChart
+						bind:context
+						onTooltipClick={() =>
+							selectedPeriod.set(getDateRange({ offset: context.tooltip.data.date }))}
+						data={history.data && history.data.sorted
+							? history.data.sorted.map((d: { date: string | number | Date }) => ({
+									...d,
+									date: new Date(d.date)
+								}))
+							: []}
+						x="date"
+						xScale={scaleUtc()}
+						series={[
+							{
+								key: 'count',
+								color: chartConfigAll.count.color
+							}
+						]}
+						seriesLayout="stack"
+						props={{
+							xAxis: {
+								ticks: 13,
+								format: (v) =>
+									getWeek(v) +
+									'-' +
+									v.toLocaleDateString('en-US', {
+										year: '2-digit'
+									})
+							},
 
-								area: {
-									curve: curveNatural,
-									'fill-opacity': 0.4,
-									line: { class: 'stroke-1' }
-								}
-							}}
-						>
-							{#snippet tooltip()}
-								<Chart.Tooltip
-									labelFormatter={(v: Date) =>
-										getWeek(v) +
-										'-' +
-										v.toLocaleDateString('en-US', {
-											year: '2-digit'
-										})}
-									indicator="line"
-								/>
-							{/snippet}
-						</AreaChart>
-					</Chart.Container>
-				{/if}
+							area: {
+								curve: curveNatural,
+								'fill-opacity': 0.4,
+								line: { class: 'stroke-1' }
+							}
+						}}
+					>
+						{#snippet tooltip()}
+							<Chart.Tooltip
+								labelFormatter={(v: Date) =>
+									getWeek(v) +
+									'-' +
+									v.toLocaleDateString('en-US', {
+										year: '2-digit'
+									})}
+								indicator="line"
+							/>
+						{/snippet}
+					</AreaChart>
+				</Chart.Container>
 			</Card>
 			<Card class="w-full p-5 ">
 				<h1 class="text-2xl font-bold">Github</h1>
@@ -176,29 +176,23 @@
 		<div class="space-y-5">
 			<Card>
 				<div class="flex items-center justify-center gap-5 text-center">
-					<div>
-						<p>
-							Votes
-							<Badge variant="secondary" class="text-lg">
-								<NumberFlow value={$votestats.totalVotes} />
-							</Badge>
-						</p>
+					<div class="grow">
+						<p>Votes</p>
+						<Badge variant="secondary" class="text-lg">
+							<NumberFlow value={$votestats.totalVotes || 0} />
+						</Badge>
 					</div>
-					<div>
-						<p>
-							Games
-							<Badge variant="secondary" class="text-lg">
-								<NumberFlow value={$votestats.totalGames} />
-							</Badge>
-						</p>
+					<div class="grow">
+						<p>Games</p>
+						<Badge variant="secondary" class="text-lg">
+							<NumberFlow value={$votestats.totalGames || 0} />
+						</Badge>
 					</div>
-					<div>
-						<p>
-							Users
-							<Badge variant="secondary" class="text-lg">
-								<NumberFlow value={$votestats.totalUsers} />
-							</Badge>
-						</p>
+					<div class="grow">
+						<p>Users</p>
+						<Badge variant="secondary" class="text-lg">
+							<NumberFlow value={$votestats.totalUsers || 0} />
+						</Badge>
 					</div>
 				</div>
 			</Card>
