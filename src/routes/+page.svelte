@@ -23,6 +23,9 @@
 	import CustomCalendar from '$lib/components/customcalendar/customcalendar.svelte';
 	import RightArrow from '@lucide/svelte/icons/step-forward';
 
+
+
+
 	let periodKey = $state(0);
 	let pageNumber = -1;
 	const { data } = $props();
@@ -52,46 +55,43 @@
 			return;
 		}
 		pageNumber++;
-		const response = await fetch(
-			`/api/games?page=${pageNumber}&period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`
-		);
+		const response = await fetch(`/api/games?page=${pageNumber}&period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`);
 		let data = await response.json();
 		hasMore = data.hasMore;
-		allGames = [...allGames, ...data.games].sort(
-			// should get sorted data from api but cant get drizzle to do that
-			// so sort by and and vote amount
-			(a, b) => b.voteCount - a.voteCount || a.id - b.id
-		);
+		allGames = [...allGames, ...data.games].sort((a, b) => b.voteCount - a.voteCount || a.id - b.id);
+
 		if (!hasMore) {
 			loaderState.complete();
 			return;
 		}
-
 		await tick();
-
 		loaderState.loaded();
 	};
-	async function fetchUntilFilled() {
-		while (hasMore && !isOverflowing()) {
+
+	async function fetchUntilFilled() {		
+		while (hasMore && !checkOverflow()) {
 			await loadMore();
 			await tick();
 		}
 	}
+
 	async function periodNext() {
 		$selectedPeriod = getDateRange({
 			offset: $selectedPeriod.currentPeriod.nextStartDate
 		});
 		await setURLparams(page, $selectedPeriod);
 	}
+	
 	async function periodPrev() {
 		$selectedPeriod = getDateRange({
 			offset: subDays($selectedPeriod.currentPeriod.startDate, 1)
 		});
 		await setURLparams(page, $selectedPeriod);
 	}
-	function isOverflowing() {
-		return document.documentElement.scrollHeight > window.innerHeight;
-	}
+
+    function checkOverflow() {
+        return container ? container?.offsetHeight >= window.innerHeight : false;
+    }
 
 	async function fetchNewPeriod() {
 		if ($selectedPeriod) {
