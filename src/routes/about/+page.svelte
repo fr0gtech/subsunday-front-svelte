@@ -13,6 +13,7 @@
 	import { createQuery } from '@tanstack/svelte-query';
 	import Customcalendar from '@/components/customcalendar/customcalendar.svelte';
 	import { Spinner } from '@/components/ui/spinner/index.js';
+	import NumberFlow from '@number-flow/svelte';
 	const { data } = $props();
 	let context = $state<any>(null);
 
@@ -124,19 +125,25 @@
 					<div>
 						<p>
 							Votes
-							<Badge variant="secondary" class="text-lg">{$votestats.totalVotes}</Badge>
+							<Badge variant="secondary" class="text-lg">
+								<NumberFlow value={$votestats.totalVotes} />
+							</Badge>
 						</p>
 					</div>
 					<div>
 						<p>
 							Games
-							<Badge variant="secondary" class="text-lg">{$votestats.totalGames}</Badge>
+							<Badge variant="secondary" class="text-lg">
+								<NumberFlow value={$votestats.totalGames} />
+							</Badge>
 						</p>
 					</div>
 					<div>
 						<p>
 							Users
-							<Badge variant="secondary" class="text-lg">{$votestats.totalUsers}</Badge>
+							<Badge variant="secondary" class="text-lg">
+								<NumberFlow value={$votestats.totalUsers} />
+							</Badge>
 						</p>
 					</div>
 				</div>

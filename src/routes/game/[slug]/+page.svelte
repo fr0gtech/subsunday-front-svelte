@@ -19,18 +19,30 @@
 
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import Button from '@/components/ui/button/button.svelte';
-	let { data }: { data: { gameData: Game & { screenshots: any; movies: any } } } = $props();
+	import Number from '@/components/number/number.svelte';
+	let {
+		data
+	}: { data: { gameData: Game & { screenshots: any; movies: any; voteCount: number } } } = $props();
 
 	let selectedItem = $state<any>(null);
 
+	const getVotes = async () => {
+		const res = await fetch(`/api/lastvotes?game=${data.gameData.id}`);
+		return await res.json();
+	};
 	const votes = createQuery(() => ({
 		queryKey: [`lastvotes${data.gameData.id}`],
-		queryFn: async () => await fetch(`/api/lastvotes?game=${data.gameData.id}`).then((r)=>r.json())
+		queryFn: () => getVotes()
 	}));
+
+	const getVoteStats = async () => {
+		const res = await fetch(`/api/votestats?game=${data.gameData.id}`);
+		return await res.json();
+	};
 
 	const gameVotes = createQuery(() => ({
 		queryKey: [`votestats${data.gameData.id}`],
-		queryFn: async () => await fetch(`/api/votestats?game=${data.gameData.id}`).then((r)=>r.json())
+		queryFn: () => getVoteStats()
 	}));
 
 	const getGraph = async () => {
@@ -74,7 +86,8 @@
 				<div class="space-y-2 px-4">
 					<div class=" flex items-center gap-2">
 						<h1 class="truncate text-xl font-bold">{data.gameData.name}</h1>
-						<div class="text-xs">reviews: {data.gameData.recommendations}</div>
+						<div class="text-xs">reviews: <Number number={data.gameData.recommendations} /></div>
+						<div class="text-xs">votes: <Number number={data.gameData.voteCount} /></div>
 					</div>
 					<div class="flex flex-wrap gap-5 lg:flex-nowrap">
 						{#if data.gameData.picture !== 'default'}

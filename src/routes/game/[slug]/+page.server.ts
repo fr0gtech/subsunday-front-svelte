@@ -1,7 +1,8 @@
 import { error } from '@sveltejs/kit';
-import { game } from '$lib/server/db/schema';
+import { game, vote } from '$lib/server/db/schema';
 import { db } from '$lib/server/db';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
+const voteCountExpr = sql<number>`CAST(COUNT(${vote.id}) AS INT)`;
 
 export const load = async ({ params }) => {
 	const gameOnDb = await db
@@ -15,9 +16,12 @@ export const load = async ({ params }) => {
 			movies: game.movies,
 			picture: game.picture,
 			steamId: game.steamId,
-			categories: game.categories
+			categories: game.categories,
+			voteCount: voteCountExpr.as('voteCount')
 		})
 		.from(game)
+		.groupBy(game.id)
+		.leftJoin(vote, eq(vote.forId, game.id))
 		.where(eq(game.id, parseInt(params.slug)))
 		.limit(1);
 
