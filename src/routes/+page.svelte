@@ -251,13 +251,13 @@
 						</a>
 					{/each}
 						
-					{#snippet loading()}
+					<!-- {#snippet loading()}
 						<div class="infinite-loader-wrapper">
 							{#each Array(20).fill(0) as skeleton}
 								<Skeleton class="h-40 grid-item w-full max-w-[400px] border-0 !py-0" />
 							{/each}
 						</div>
-					{/snippet}
+					{/snippet} -->
 					{#snippet noData()}{/snippet}
 					{#snippet error(load)}
 						<div>Error fetching data</div>
