@@ -8,6 +8,7 @@
 	import ImageWithFallback from '@/components/imageWithFallback/imageWithFallback.svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { Spinner } from '@/components/ui/spinner';
+	import Badge from '@/components/ui/badge/badge.svelte';
 
 	const { props } = $props();
 
@@ -55,7 +56,6 @@
 					>
 					<Table.Header class="min-w-[300px]">
 						<Table.Row>
-							<Table.Head>Rank</Table.Head>
 							<Table.Head class="w-full">Game</Table.Head>
 							<Table.Head>Votes</Table.Head>
 						</Table.Row>
@@ -64,11 +64,13 @@
 						{#each votes.data.topGames as game, i}
 							<Table.Row>
 								<a href={`/game/${game.id}`}>
-									<Table.Cell class="font-medium"># {i + 1}</Table.Cell>
-									<Table.Cell class="w-full">
-										<div class="flex items-center gap-3">
+									<Table.Cell class="w-full ">
+										<div class="relative flex items-center gap-3">
+											<Badge variant="secondary" class="absolute top-1 left-1 text-lg"
+												># {i + 1}</Badge
+											>
 											<ImageWithFallback {game} />
-											{game.name}
+											<span class="overflow-hidden">{game.name}</span>
 										</div>
 									</Table.Cell>
 									<Table.Cell>{game._count.votes}</Table.Cell>
