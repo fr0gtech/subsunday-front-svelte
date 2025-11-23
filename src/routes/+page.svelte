@@ -24,12 +24,8 @@
 	import RightArrow from '@lucide/svelte/icons/step-forward';
 	import { Skeleton } from '@/components/ui/skeleton/index.js';
 
-
-
-
 	let periodKey = $state(0);
 	let pageNumber = -1;
-	const { data } = $props();
 	let container = $state<HTMLDivElement | null>(null);
 	let hasMore = $state(true);
 	const loaderState = $state(new LoaderState());
@@ -56,10 +52,14 @@
 			return;
 		}
 		pageNumber++;
-		const response = await fetch(`/api/games?page=${pageNumber}&period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`);
+		const response = await fetch(
+			`/api/games?page=${pageNumber}&period=${$selectedPeriod.currentPeriod.startDate.toISOString()}`
+		);
 		let data = await response.json();
 		hasMore = data.hasMore;
-		allGames = [...allGames, ...data.games].sort((a, b) => b.voteCount - a.voteCount || a.id - b.id);
+		allGames = [...allGames, ...data.games].sort(
+			(a, b) => b.voteCount - a.voteCount || a.id - b.id
+		);
 
 		if (!hasMore) {
 			loaderState.complete();
@@ -69,7 +69,7 @@
 		loaderState.loaded();
 	};
 
-	async function fetchUntilFilled() {		
+	async function fetchUntilFilled() {
 		while (hasMore && !checkOverflow()) {
 			await loadMore();
 			await tick();
@@ -90,9 +90,9 @@
 		await setURLparams(page, $selectedPeriod);
 	}
 
-    function checkOverflow() {
-        return container ? container?.offsetHeight >= window.innerHeight : false;
-    }
+	function checkOverflow() {
+		return container ? container?.offsetHeight >= window.innerHeight : false;
+	}
 
 	async function fetchNewPeriod() {
 		if ($selectedPeriod) {
@@ -250,11 +250,13 @@
 							</Card>
 						</a>
 					{/each}
-					
+						
 					{#snippet loading()}
-						{#each Array(20).fill(0) as skeleton }
-							<Skeleton class="w-full h-40 max-w-[400px] border-0 !py-0" />
-						{/each}
+						<div class="infinite-loader-wrapper">
+							{#each Array(20).fill(0) as skeleton}
+								<Skeleton class="h-40 grid-item w-full max-w-[400px] border-0 !py-0" />
+							{/each}
+						</div>
 					{/snippet}
 					{#snippet noData()}{/snippet}
 					{#snippet error(load)}
