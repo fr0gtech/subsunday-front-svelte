@@ -2,14 +2,13 @@ import { vote } from '$lib/server/db/schema';
 import { db } from '$lib/server/db';
 import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
 import { addDays, isSameDay, subDays } from 'date-fns';
-import { getDateRange } from '@/utils';
 
 export const load = async () => {
 	const game = 0;
-	const range = getDateRange();
-	const now = new Date()
-	const votesLast7Days = await getVotesBetween(now, 7, game);
-	const voteLastWeek = await getVotesBetween(subDays(now, 7), 7, game);
+	const now = new Date();
+	const votesLast7Days = await getVotesBetween(subDays(now, 7), 7, game);
+	const voteLastWeek = await getVotesBetween(subDays(now, 14), 7, game);
+	console.log(votesLast7Days, voteLastWeek);
 
 	return {
 		thisWeekVsLastWeek: votesLast7Days.map((e, i) => {
