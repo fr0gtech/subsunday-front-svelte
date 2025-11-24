@@ -16,7 +16,6 @@
 	import { env } from '$env/dynamic/public';
 	import Steamicon from '@/components/icons/steamicon.svelte';
 	import PlayIcon from '@lucide/svelte/icons/play';
-
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import Button from '@/components/ui/button/button.svelte';
 	import Number from '@/components/number/number.svelte';
@@ -26,33 +25,21 @@
 
 	let selectedItem = $state<any>(null);
 
-	const getVotes = async () => {
-		const res = await fetch(`/api/lastvotes?game=${data.gameData.id}`);
-		return await res.json();
-	};
 	const votes = createQuery(() => ({
 		queryKey: [`lastvotes${data.gameData.id}`],
-		queryFn: () => getVotes()
+		queryFn: async () =>
+			await fetch(`/api/lastvotes?game=${data.gameData.id}`).then((r) => r.json())
 	}));
-
-	const getVoteStats = async () => {
-		const res = await fetch(`/api/votestats?game=${data.gameData.id}`);
-		return await res.json();
-	};
 
 	const gameVotes = createQuery(() => ({
 		queryKey: [`votestats${data.gameData.id}`],
-		queryFn: () => getVoteStats()
+		queryFn: async () =>
+			await fetch(`/api/votestats?game=${data.gameData.id}`).then((r) => r.json())
 	}));
-
-	const getGraph = async () => {
-		const res = await fetch(`/api/graph?game=${data.gameData.id}`);
-		return await res.json();
-	};
 
 	const graph = createQuery(() => ({
 		queryKey: ['graph'],
-		queryFn: () => getGraph()
+		queryFn: async () => await fetch(`/api/graph?game=${data.gameData.id}`).then((r) => r.json())
 	}));
 
 	const allVotes = $derived(
@@ -198,7 +185,6 @@
 		<div class="m-3 w-full space-y-5 lg:m-0 lg:w-4/12">
 			<Card class="p-5">
 				<VoteStats gameVotes={gameVotes.data} />
-
 				{#if graph.data}
 					<Chart.Container config={chartConfig}>
 						<AreaChart

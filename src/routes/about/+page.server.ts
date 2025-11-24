@@ -8,7 +8,6 @@ export const load = async () => {
 	const now = new Date();
 	const votesLast7Days = await getVotesBetween(subDays(now, 7), 7, game);
 	const voteLastWeek = await getVotesBetween(subDays(now, 14), 7, game);
-	console.log(votesLast7Days, voteLastWeek);
 
 	return {
 		thisWeekVsLastWeek: votesLast7Days.map((e, i) => {

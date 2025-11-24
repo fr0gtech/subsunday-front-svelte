@@ -44,12 +44,6 @@
 </script>
 
 <div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
-	<Alert.Root variant="destructive" class="text-xl">
-		<Alert.Description class="block text-base"
-			>*Vote count may be inaccurate. This project was made for fun and does not represents what
-			happens to your vote.</Alert.Description
-		>
-	</Alert.Root>
 	<div class="flex flex-wrap gap-5 lg:flex-nowrap">
 		<div class=" flex flex-col space-y-5">
 			<Card class="w-full p-5 ">
@@ -62,58 +56,63 @@
 				</p>
 			</Card>
 			<Card class=" min-h-40 w-full p-5">
-				<h1>Amount of votes by week</h1>
-				<Chart.Container config={chartConfigAll} class="h-40">
-					<AreaChart
-						bind:context
-						onTooltipClick={() =>
-							selectedPeriod.set(getDateRange({ offset: context.tooltip.data.date }))}
-						data={history.data && history.data.sorted
-							? history.data.sorted.map((d: { date: string | number | Date }) => ({
-									...d,
-									date: new Date(d.date)
-								}))
-							: []}
-						x="date"
-						xScale={scaleUtc()}
-						series={[
-							{
-								key: 'count',
-								color: chartConfigAll.count.color
-							}
-						]}
-						seriesLayout="stack"
-						props={{
-							xAxis: {
-								ticks: 13,
-								format: (v) =>
-									getWeek(v) +
-									'-' +
-									v.toLocaleDateString('en-US', {
-										year: '2-digit'
-									})
-							},
+				<h1 class="flex items-center gap-1">Amount of votes by week</h1>
+				{#if history.isLoading}
+					<div class="flex h-40 items-center justify-center">
+						<Spinner />
+					</div>
+				{:else}
+					<Chart.Container config={chartConfigAll} class="h-40">
+						<AreaChart
+							bind:context
+							onTooltipClick={() =>
+								selectedPeriod.set(getDateRange({ offset: context.tooltip.data.date }))}
+							data={history.data && history.data.sorted
+								? history.data.sorted.map((d: { date: string | number | Date }) => ({
+										...d,
+										date: new Date(d.date)
+									}))
+								: []}
+							x="date"
+							xScale={scaleUtc()}
+							series={[
+								{
+									key: 'count',
+									color: chartConfigAll.count.color
+								}
+							]}
+							seriesLayout="stack"
+							props={{
+								xAxis: {
+									format: (v) =>
+										getWeek(v) +
+										'-' +
+										v.toLocaleDateString('en-US', {
+											year: '2-digit'
+										})
+								},
 
-							area: {
-								curve: curveNatural,
-								'fill-opacity': 0.4,
-								line: { class: 'stroke-1' }
-							}
-						}}
-					>
-						{#snippet tooltip()}
-							<Chart.Tooltip
-								labelFormatter={(v: Date) =>
-									getWeek(v) +
-									'-' +
-									v.toLocaleDateString('en-US', {
-										year: '2-digit'
-									})}
-								indicator="line"
-							/>
-						{/snippet}
-					</AreaChart>
-				</Chart.Container>
+								area: {
+									curve: curveNatural,
+									'fill-opacity': 0.4,
+									line: { class: 'stroke-1' }
+								}
+							}}
+						>
+							{#snippet tooltip()}
+								<Chart.Tooltip
+									labelFormatter={(v: Date) =>
+										getWeek(v) +
+										'-' +
+										v.toLocaleDateString('en-US', {
+											year: '2-digit'
+										})}
+									indicator="line"
+								/>
+							{/snippet}
+						</AreaChart>
+					</Chart.Container>
+				{/if}
 			</Card>
 			<Card class="w-full p-5 ">
 				<h1 class="text-2xl font-bold">Github</h1>
@@ -129,7 +128,6 @@
 					>
 				</p>
 			</Card>
-			<div class="w-full"></div>
 			<div class="flex grow flex-col gap-5 lg:flex-row">
 				<Card class="p-5 lg:w-1/2">
 					<h2 class="text-xl font-bold">Supported Games</h2>
@@ -151,13 +149,11 @@
 					<h2 class="text-xl font-bold">Recent Votes</h2>
 					{#if allVotes}
 						{#each allVotes as vote (vote.id)}
-							<span class="-ml-1 text-sm leading-relaxed" in:fly out:fade>
-								<Badge class="text-sm" variant="secondary" href={`/user/${vote.user.id}`}
+							<span class="-ml-1 rounded p-2 text-sm leading-7" in:fly out:fade>
+								<Badge variant="outline" class="-ml-1" href={`/user/${vote.user.id}`}
 									>{vote.user.name}</Badge
 								> voted for
-								<Badge class="text-sm" variant="secondary" href={`/game/${vote.game.id}`}
-									>{vote.game.name}</Badge
-								>
+								<Badge variant="outline" href={`/game/${vote.game.id}`}>{vote.game.name}</Badge>
 								{formatDistance(vote.createdAt, getNowTZ(), { addSuffix: true })}
 							</span>
 						{/each}
@@ -165,7 +161,7 @@
 				</Card>
 			</div>
 		</div>
-		<div class="space-y-5">
+		<div class="w-full space-y-5 lg:w-1/2">
 			<Card>
 				<div class="flex items-center justify-center gap-5 text-center">
 					<div class="grow">
@@ -188,6 +184,12 @@
 					</div>
 				</div>
 			</Card>
+			<Alert.Root variant="destructive" class="text-xl">
+				<Alert.Description class="block text-base"
+					>*Vote count may be inaccurate. This project was made for fun and does not represents what
+					happens to your vote.</Alert.Description
+				>
+			</Alert.Root>
 			<Card class="mt-5 p-5">
 				<h1>Votes this week vs votes last week</h1>
 				<Chart.Container config={chartConfig}>
@@ -215,7 +217,6 @@
 								line: { class: 'stroke-1' }
 							},
 							xAxis: {
-								ticks: 7,
 								format: (v) => {
 									return v.toLocaleDateString('en-US', {
 										month: 'short',
@@ -243,7 +244,7 @@
 
 			<Card class="p-4 text-xs">
 				<h3 class="text-base font-bold">Voting period</h3>
-				<pre>Sunday 00:00 - Saturday 22:00 America/New_York</pre>
+				<pre class=" whitespace-normal">Sunday 00:00 - Saturday 22:00 America/New_York</pre>
 			</Card>
 			<Customcalendar />
 		</div>

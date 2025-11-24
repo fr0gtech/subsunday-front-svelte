@@ -1,18 +1,15 @@
 import { vote } from '$lib/server/db/schema';
 import { db } from '$lib/server/db';
 import { and, count, eq, gte, lte, sql } from 'drizzle-orm';
-import { TZDate } from '@date-fns/tz';
 import { addDays, isSameDay, subDays } from 'date-fns';
 import { json } from '@sveltejs/kit';
-import { getDateRange } from '@/utils';
 
 export async function GET({ url }: { url: URL }) {
 	const game = parseInt(url.searchParams.get('game') as string) || 0;
-
-	const range = getDateRange();
-
-	const votesLast7Days = await getVotesBetween(range.currentPeriod.startDate, 7, game);
-	const voteLastWeek = await getVotesBetween(subDays(range.currentPeriod.startDate, 7), 7, game);
+	const now = new Date();
+	const votesLast7Days = await getVotesBetween(subDays(now, 7), 7, game);
+	const voteLastWeek = await getVotesBetween(subDays(now, 14), 7, game);
+	console.log(votesLast7Days);
 
 	return json({
 		votes: votesLast7Days.map((e, i) => {
