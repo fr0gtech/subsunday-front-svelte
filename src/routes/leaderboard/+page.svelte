@@ -29,24 +29,6 @@
 </script>
 
 <div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
-	<div class="mx-auto flex max-w-xl flex-wrap justify-center gap-5 lg:flex-nowrap">
-		<div class=" grow">
-			<Alert.Root variant="default" class="w-full text-xl">
-				<Alert.Description class=" block text-base whitespace-nowrap"
-					><p class="flex items-center gap-2">
-						<Spinner />Votes are currently being synchronized
-					</p></Alert.Description
-				>
-			</Alert.Root>
-		</div>
-		<div class="w-full">
-			<Alert.Root variant="destructive" class="mx-auto  text-xl whitespace-nowrap">
-				<Alert.Description class="block text-base"
-					>*inaccurate until syncing is done</Alert.Description
-				>
-			</Alert.Root>
-		</div>
-	</div>
 	<div class="flex flex-col justify-center gap-5 lg:flex-row">
 		{#if votes.data}
 			<Card>

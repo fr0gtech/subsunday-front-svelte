@@ -52,14 +52,6 @@
 	</Alert.Root>
 	<div class="flex flex-wrap gap-5 lg:flex-nowrap">
 		<div class=" flex flex-col space-y-5">
-			<Alert.Root variant="default" class="text-xl">
-				<Alert.Description class=" block text-base"
-					><p class="flex items-center gap-2">
-						<Spinner />Votes are currently being synchronized
-					</p></Alert.Description
-				>
-			</Alert.Root>
-
 			<Card class="w-full p-5 ">
 				<h1 class="text-2xl font-bold">Sub Sunday</h1>
 				<p>
