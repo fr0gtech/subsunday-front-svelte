@@ -84,11 +84,11 @@
 								class="max-w-[250px] rounded-2xl object-cover"
 							/>
 						{/if}
-						<div class="space-y-2">
+						<div class="w-full space-y-2">
 							<p class="">
 								{data.gameData.description}
 							</p>
-							<div class="flex items-center gap-1">
+							<div class="flex w-full flex-wrap items-center gap-1">
 								{#each data.gameData.categories as any as category}
 									<Badge variant="secondary">{category.description}</Badge>
 								{/each}

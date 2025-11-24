@@ -9,7 +9,6 @@ export async function GET({ url }: { url: URL }) {
 	const now = new Date();
 	const votesLast7Days = await getVotesBetween(subDays(now, 7), 7, game);
 	const voteLastWeek = await getVotesBetween(subDays(now, 14), 7, game);
-	console.log(votesLast7Days);
 
 	return json({
 		votes: votesLast7Days.map((e, i) => {
