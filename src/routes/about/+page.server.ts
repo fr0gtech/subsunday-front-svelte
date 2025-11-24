@@ -7,8 +7,9 @@ import { getDateRange } from '@/utils';
 export const load = async () => {
 	const game = 0;
 	const range = getDateRange();
-	const votesLast7Days = await getVotesBetween(range.currentPeriod.startDate, 7, game);
-	const voteLastWeek = await getVotesBetween(subDays(range.currentPeriod.startDate, 14), 7, game);
+	const now = new Date()
+	const votesLast7Days = await getVotesBetween(now, 7, game);
+	const voteLastWeek = await getVotesBetween(subDays(now, 7), 7, game);
 
 	return {
 		thisWeekVsLastWeek: votesLast7Days.map((e, i) => {
