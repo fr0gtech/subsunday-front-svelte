@@ -20,7 +20,7 @@
 	import * as InputGroup from '$lib/components/ui/input-group/index.js';
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { goto } from '$app/navigation';
-	import { cn, getDateRange, getNowTZ, setURLparams } from '@/utils';
+	import { cn, dateFromYearWeek, getDateRange, getNowTZ, setURLparams } from '@/utils';
 	import Badge from '../ui/badge/badge.svelte';
 
 	import { formatDistance, getWeek, getYear, isAfter, isSunday, subDays } from 'date-fns';
@@ -80,12 +80,12 @@
 		warning?: boolean;
 	};
 	onMount(async () => {
-		if (
-			page.url.searchParams.get('period') &&
-			parseInt(page.url.searchParams.get('period') as string) > 0
-		) {
+		if (page.url.searchParams.get('y') && page.url.searchParams.get('w')) {
 			$selectedPeriod = getDateRange({
-				offset: new Date(parseInt(page.url.searchParams.get('period') as string))
+				offset: dateFromYearWeek(
+					parseInt(page.url.searchParams.get('y') || '0'),
+					parseInt(page.url.searchParams.get('w') || '0')
+				)
 			});
 		} else {
 			if (isSunday(getNowTZ())) {

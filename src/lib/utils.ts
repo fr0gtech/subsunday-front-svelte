@@ -18,7 +18,12 @@ import {
 	setHours,
 	nextDay,
 	subDays,
-	type Day
+	type Day,
+	getYear,
+	getWeek,
+	setYear,
+	setISOWeek,
+	startOfISOWeek
 } from 'date-fns';
 import { tick } from 'svelte';
 import { twMerge } from 'tailwind-merge';
@@ -111,10 +116,18 @@ export const getNowTZ = () => {
 };
 
 export const setURLparams = async (
-	page: Page<Record<string, string>, string | null>,
+	page: Page<Record<string, string>>,
 	selectedPeriod: PeriodSelection
 ) => {
-	page.url.searchParams.set('period', selectedPeriod.currentPeriod.startDate.getTime().toString());
+	page.url.searchParams.set('y', getYear(selectedPeriod.currentPeriod.startDate).toString());
+	page.url.searchParams.set('w', getWeek(selectedPeriod.currentPeriod.startDate).toString());
 	await tick();
 	replaceState(page.url, page.state);
 };
+
+export function dateFromYearWeek(year: number, week: number): Date {
+	let d = new Date();
+	d = setYear(d, year);
+	d = setISOWeek(d, week);
+	return startOfISOWeek(d);
+}

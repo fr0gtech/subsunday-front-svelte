@@ -8,7 +8,7 @@
 	import { Toaster } from '@/components/ui/sonner';
 	import { page } from '$app/state'; // use this
 
-	let { data, children } = $props();
+	let { children } = $props();
 	export const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -33,7 +33,7 @@
 	<ModeWatcher />
 	<Toaster />
 	<WebSockets />
-	<Nav data />
+	<Nav />
 
 	{@render children?.()}
 </QueryClientProvider>
