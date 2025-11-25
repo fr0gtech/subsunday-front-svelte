@@ -13,9 +13,7 @@
 			[
 				...(data.user.votes || []),
 				...$wsVotes.filter((e: any) => parseInt(e.user.id) === data.user.id)
-			]
-				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-				.slice(0, 10)
+			].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 	);
 </script>
 
@@ -119,14 +117,16 @@
 		<Separator />
 		<div class="flex flex-col gap-3 text-sm">
 			<h3 class="text-xs font-bold">Recent Votes</h3>
-			{#each allVotes as vote}
-				<div>
-					{formatDistance(getNowTZ(), vote.createdAt)} ago for
-					<Badge class="max-w-[200px] truncate" variant="secondary" href={`/game/${vote.game.id}`}
-						>{vote.game.name}</Badge
-					>
-				</div>
-			{/each}
+			<div class="flex max-h-100 flex-col gap-3 overflow-scroll text-sm">
+				{#each allVotes as vote}
+					<div>
+						{formatDistance(getNowTZ(), vote.createdAt)} ago for
+						<Badge class="max-w-[200px] truncate" variant="secondary" href={`/game/${vote.game.id}`}
+							>{vote.game.name}</Badge
+						>
+					</div>
+				{/each}
+			</div>
 		</div>
 	</Card>
 </div>
