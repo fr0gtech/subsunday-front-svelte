@@ -48,7 +48,7 @@
 
 <div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
 	<div class="flex flex-wrap gap-5 lg:flex-nowrap">
-		<div class=" flex w-8/12 flex-col space-y-5">
+		<div class=" flex w-full flex-col space-y-5 lg:w-8/12">
 			<Card class="w-full p-5 ">
 				<h1 class="text-2xl font-bold">Sub Sunday</h1>
 				<p>
