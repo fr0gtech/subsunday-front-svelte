@@ -1,25 +1,19 @@
 <script lang="ts">
 	import { wsVotes } from '$lib/shared.svelte';
 	import { io } from '$lib/websockets';
-	import { TZDate } from '@date-fns/tz';
 	import { onMount } from 'svelte';
-	import { env } from '$env/dynamic/public';
 	import { v4 as uuidv4 } from 'uuid';
 	import { toast } from 'svelte-sonner';
 	import ToastComp from '../ToastComp.svelte';
 	import { getNowTZ } from '@/utils';
-
-	let textfield = '';
-	let username = '';
-
-	let messages = [];
+	import type { TempVoteDate, WsVote } from '@/types';
 
 	onMount(() => {
 		io.emit('join', 'main');
 		io.on('vote', vote);
 		io.on('voteUpdate', (value) => vote(value, true));
 	});
-	function vote(value: any, update?: boolean) {
+	function vote(value: WsVote, update?: boolean) {
 		const now = getNowTZ();
 
 		toast.success(ToastComp, {
@@ -29,11 +23,13 @@
 		});
 		const valWithCreatedAT = {
 			...value,
+			forId: value.game.id,
+			fromId: value.user.id,
 			updated: true,
 			id: uuidv4(),
 			updatedAt: now,
 			createdAt: now
-		} as any;
+		} as WsVote & TempVoteDate;
 		$wsVotes = [valWithCreatedAT, ...$wsVotes.slice(0, 25)];
 	}
 </script>

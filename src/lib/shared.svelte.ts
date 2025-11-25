@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prefer-const */
 import type { Vote } from './server/db/types';
+import type { TempVoteDate, VoteStats, WsVote } from './types';
 import { type PeriodSelection } from './utils';
 import { writable } from 'svelte/store';
 
@@ -26,8 +27,14 @@ export let selectedPeriod = writable<PeriodSelection>({
 		nextStartDate: null
 	}
 } as any);
-export let wsVotes = writable([]);
-export let votestats = writable<any>([]);
+export let wsVotes = writable<Array<WsVote & TempVoteDate>>([]);
+export let votestats = writable<VoteStats>({
+	totalGames: 0,
+	totalUsers: 0,
+	totalVotes: 0,
+	votesThisPeriod: 0,
+	votesToday: 0
+});
 
 export const staleTime = writable(1000);
 export const gcTime = writable(3000);

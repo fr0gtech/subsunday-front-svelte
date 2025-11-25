@@ -6,7 +6,7 @@
 	import { AreaChart } from 'layerchart';
 	import { curveNatural } from 'd3-shape';
 	import { Badge } from '$lib/components/ui/badge/index.js';
-	import { formatDistance, getWeek, getYear } from 'date-fns';
+	import { formatDistance, getWeek } from 'date-fns';
 	import { selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { getDateRange, getNowTZ } from '@/utils.js';
@@ -28,8 +28,11 @@
 
 	const allVotes = $derived(
 		votes.data &&
-			[...(votes.data.votes || []), ...$wsVotes]
+			[...(votes.data.votes || []), ...($wsVotes || [])]
 				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+				.filter(
+					(v, i, arr) => arr.findIndex((x) => x.fromId === v.fromId && x.forId === v.forId) === i
+				)
 				.slice(0, 10)
 	);
 
