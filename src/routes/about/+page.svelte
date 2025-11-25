@@ -30,7 +30,7 @@
 		votes.data &&
 			[...(votes.data.votes || []), ...$wsVotes]
 				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-				.slice(0, 8)
+				.slice(0, 10)
 	);
 
 	const chartConfig = {
@@ -45,7 +45,7 @@
 
 <div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
 	<div class="flex flex-wrap gap-5 lg:flex-nowrap">
-		<div class=" flex flex-col space-y-5">
+		<div class=" flex w-8/12 flex-col space-y-5">
 			<Card class="w-full p-5 ">
 				<h1 class="text-2xl font-bold">Sub Sunday</h1>
 				<p>
@@ -83,6 +83,7 @@
 							]}
 							seriesLayout="stack"
 							props={{
+								yAxis: { format: () => '' },
 								xAxis: {
 									format: (v) =>
 										getWeek(v) +
@@ -149,7 +150,7 @@
 					<h2 class="text-xl font-bold">Recent Votes</h2>
 					{#if allVotes}
 						{#each allVotes as vote (vote.id)}
-							<span class="-ml-1 rounded p-2 text-sm leading-7" in:fly out:fade>
+							<span class="-ml-1 rounded text-sm" in:fly out:fade>
 								<Badge variant="outline" class="-ml-1" href={`/user/${vote.user.id}`}
 									>{vote.user.name}</Badge
 								> voted for
@@ -161,7 +162,7 @@
 				</Card>
 			</div>
 		</div>
-		<div class="w-full space-y-5 lg:w-1/2">
+		<div class="w-full space-y-5 lg:w-4/12">
 			<Card>
 				<div class="flex items-center justify-center gap-5 text-center">
 					<div class="grow">
