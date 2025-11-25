@@ -4,7 +4,6 @@
 	import Card from '$lib/components/ui/card/card.svelte';
 	import * as InputGroup from '$lib/components/ui/input-group/index.js';
 	import ImageWithFallback from '@/components/imageWithFallback/imageWithFallback.svelte';
-	import { fromAbsolute } from '@internationalized/date';
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { onMount } from 'svelte';
 	const { data } = $props();
@@ -76,6 +75,9 @@
 								<div class="truncate">
 									{game.name}
 								</div>
+								<div class="pr-2 text-xs whitespace-nowrap">
+									votes: {game.voteCount}
+								</div>
 							</div>
 						</a>
 					{/each}
@@ -93,6 +95,9 @@
 							<span class="ml-2">
 								{user.name}
 							</span>
+							<div class="text-xs">
+								votes: {user.voteCount}
+							</div>
 						</div>
 					</a>
 				{/each}
