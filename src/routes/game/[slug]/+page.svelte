@@ -44,11 +44,11 @@
 
 	const allVotes = $derived(
 		votes.data &&
-			[
-				...(votes.data.votes || []),
-				...$wsVotes.filter((e: any) => parseInt(e.game.id) === data.gameData.id)
-			]
+			[...(votes.data.votes || []), ...($wsVotes || [])]
 				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+				.filter(
+					(v, i, arr) => arr.findIndex((x) => x.fromId === v.fromId && x.forId === v.forId) === i
+				)
 				.slice(0, 10)
 	);
 
