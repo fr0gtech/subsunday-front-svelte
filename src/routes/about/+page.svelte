@@ -157,7 +157,12 @@
 								<Badge variant="outline" class="-ml-1" href={`/user/${vote.user.id}`}
 									>{vote.user.name}</Badge
 								> voted for
-								<Badge variant="outline" href={`/game/${vote.game.id}`}>{vote.game.name}</Badge>
+								<Badge
+									variant="outline"
+									class="max-w-[200px] truncate"
+									title={vote.game.name}
+									href={`/game/${vote.game.id}`}>{vote.game.name}</Badge
+								>
 								{formatDistance(vote.createdAt, getNowTZ(), { addSuffix: true })}
 							</span>
 						{/each}
