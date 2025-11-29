@@ -1,7 +1,7 @@
 import { error } from '@sveltejs/kit';
-import { game, user } from '$lib/server/db/schema';
+import { user, vote } from '$lib/server/db/schema';
 import { db } from '$lib/server/db';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
 	const userDb = await db.query.user.findFirst({
@@ -10,12 +10,40 @@ export const load = async ({ params }) => {
 			votes: {
 				with: {
 					game: {
-						name: true
+						columns: {
+							name: true
+						}
 					}
 				}
 			}
 		}
 	});
+
+	// todo this is slow and we should index on db to make this faster
+	// CREATE INDEX idx_user_streak ON "user"(streak DESC);
+	const targetUser = await db.query.user.findFirst({
+		where: eq(user.id, parseInt(params.slug))
+	});
+
+	const higherCountStreak = await db
+		.select({ count: sql<number>`count(*)` })
+		.from(user)
+		.where(sql`${user.streak} > ${targetUser?.streak}`)
+		.then((r) => r[0].count);
+
+	const streakRank = higherCountStreak ?? 0;
+
+	const higherCountResult = await db
+		.select({
+			count: sql<number>`count(*)`
+		})
+		.from(user)
+		.leftJoin(vote, eq(vote.fromId, user.id))
+		.groupBy(user.id)
+		.having(sql`count(${vote.id}) > ${userDb?.votes.length}`)
+		.then((r) => r.length);
+
+	const voteRank = higherCountResult ?? 0;
 	// const userOnDb = await db
 	// 	.select()
 	// 	.from(user)
@@ -33,7 +61,7 @@ export const load = async ({ params }) => {
 
 	if (userDb) {
 		return {
-			user: userDb,
+			user: { ...userDb, streakRank: streakRank, voteRank: voteRank },
 			meta: [
 				{ name: 'title', content: `Sub-Sunday.com - ${userDb.name}` },
 				{

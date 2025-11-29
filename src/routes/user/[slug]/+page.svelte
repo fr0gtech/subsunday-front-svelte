@@ -7,7 +7,13 @@
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import { cn, getNowTZ } from '@/utils';
 	import { Slider } from '$lib/components/ui/slider/index.js';
-	let { data }: { data: { user: User & { votes: (Vote & { game: Game })[] } } } = $props();
+	let {
+		data
+	}: {
+		data: {
+			user: User & { voteRank: string; streakRank: string; votes: (Vote & { game: Game })[] };
+		};
+	} = $props();
 	const allVotes = $derived(
 		data.user.votes &&
 			[
@@ -109,8 +115,16 @@
 					<a href={`https://twitch.tv/${data.user.name}`}>
 						<h2 class="text-xl font-bold">{data.user.name}</h2>
 					</a>
-					<span>votes<Badge variant="secondary">{data.user.votes.length}</Badge></span>
-					<span>streak<Badge variant="secondary">{data.user.streak}</Badge></span>
+					<span
+						>votes<Badge variant="secondary"
+							>{data.user.votes.length} (#{parseInt(data.user.voteRank) + 1})</Badge
+						></span
+					>
+					<span
+						>streak<Badge variant="secondary"
+							>{data.user.streak} (#{parseInt(data.user.streakRank) + 1})</Badge
+						>
+					</span>
 				</div>
 			</div>
 		</div>

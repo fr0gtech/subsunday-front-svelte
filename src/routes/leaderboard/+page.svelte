@@ -47,173 +47,205 @@
 
 <div class="mx-auto max-w-7xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
 	<div class="flex flex-col justify-center gap-5 lg:flex-row">
-		<Card class="w-1/2">
-			<div class="flex items-center">
-				<h2 class="p-2 text-xl">Top Game by votes</h2>
-				<div class="flex justify-between gap-5 px-5">
-					<Button
-						title="prev page"
-						variant="secondary"
-						disabled={topGamesPage === 1}
-						onclick={() => topGamesPage--}
-					>
-						<LeftArrow />
-					</Button>
-					<Button
-						title="next page"
-						variant="secondary"
-						disabled={topGamesPage * 10 >= 490}
-						onclick={() => topGamesPage++}><RightArrow /></Button
-					>
-				</div>
-			</div>
-			<div>
-				<div class="flex justify-between border-b-2 px-2">
-					<div>Game</div>
-					<div>Votes</div>
+		<Card class="h-fit w-1/2 overflow-clip p-0 pt-2">
+			<div class="space-y-2">
+				<div class="flex items-center">
+					<h2 class="p-2 text-xl font-bold">Top Games</h2>
+					<div class="flex justify-between gap-5 px-5">
+						<Button
+							title="prev page"
+							variant="secondary"
+							disabled={topGamesPage === 1}
+							onclick={() => topGamesPage--}
+						>
+							<LeftArrow />
+						</Button>
+						<Button
+							title="next page"
+							variant="secondary"
+							disabled={topGamesPage * 10 >= 490}
+							onclick={() => topGamesPage++}><RightArrow /></Button
+						>
+					</div>
 				</div>
 				<div>
-					{#if topGames.isLoading}
-						<div>loading</div>
-					{:else if topGames.error}
-						<div>error loading data</div>
-					{:else if topGames.data}
-						{#each topGames.data as game, i (game.id)}
-							<div
-								class="relative flex items-center justify-between gap-2 border-b-2 p-3 hover:bg-neutral-500/20"
-							>
-								<Badge variant="secondary" class="absolute left-1 text-lg"
-									>{'#' + (i + 1 + 10 * (topGamesPage - 1))}</Badge
-								>
-								<div class="flex items-center gap-2">
-									<div class="min-h-fit">
-										<ImageWithFallback {game} />
+					<div class="flex justify-between border-b-2 p-2">
+						<div>Game</div>
+						<div>Votes</div>
+					</div>
+					<div>
+						{#if topGames.isLoading || topGames.isFetching || topGames.isPending}
+							<div class="space-y-2">
+								{#each Array(10).fill(0)}
+									<div class="relative flex items-center justify-between gap-2 border-b-2 p-3">
+										<div class="flex items-center gap-2">
+											<div class="min-h-10">
+												<Skeleton class="h-13.5 w-34 rounded-2xl bg-current/10" />
+											</div>
+											<div>
+												<Skeleton class="h-5 w-30 rounded-2xl bg-current/10" />
+											</div>
+										</div>
+										<div>
+											<Skeleton class="h-5 w-10 rounded-2xl bg-current/10" />
+										</div>
 									</div>
-									<div>
-										{game.name}
-									</div>
-								</div>
-								<div>
-									{game.voteCount}
-								</div>
+								{/each}
 							</div>
-						{/each}
-					{/if}
+						{:else if topGames.error}
+							<div>error loading data</div>
+						{:else if topGames.data}
+							{#each topGames.data as game, i (game.id)}
+								<a href={`/game/${game.id}`}>
+									<div
+										class="relative flex items-center justify-between gap-2 border-b-2 p-3 hover:bg-neutral-500/20"
+									>
+										<Badge variant="secondary" class="absolute left-1 text-lg"
+											>{'#' + (i + 1 + 10 * (topGamesPage - 1))}</Badge
+										>
+										<div class="flex items-center gap-2">
+											<div class="min-h-15">
+												<ImageWithFallback {game} />
+											</div>
+											<div>
+												{game.name}
+											</div>
+										</div>
+										<div>
+											{game.voteCount}
+										</div>
+									</div>
+								</a>
+							{/each}
+						{/if}
+					</div>
 				</div>
 			</div>
 		</Card>
 
 		<div class="flex w-1/2 flex-col gap-5">
-			<Card>
-				<div class="flex items-center">
-					<h2 class="p-2 text-xl">Top Users by votes</h2>
-					<div class="flex justify-between gap-5 px-5">
-						<Button
-							title="prev page"
-							variant="secondary"
-							disabled={topUsersByVotePage === 1}
-							onclick={() => topUsersByVotePage--}
-						>
-							<LeftArrow />
-						</Button>
-						<Button
-							title="next page"
-							variant="secondary"
-							disabled={topUsersByVotePage * 10 >= 490}
-							onclick={() => topUsersByVotePage++}><RightArrow /></Button
-						>
+			<Card class="overflow-clip p-0 pt-2">
+				<div class="space-y-2">
+					<div class="flex items-center">
+						<h2 class="p-2 text-xl font-bold">Top Voters</h2>
+						<div class="flex justify-between gap-5 px-5">
+							<Button
+								title="prev page"
+								variant="secondary"
+								disabled={topUsersByVotePage === 1}
+								onclick={() => topUsersByVotePage--}
+							>
+								<LeftArrow />
+							</Button>
+							<Button
+								title="next page"
+								variant="secondary"
+								disabled={topUsersByVotePage * 10 >= 490}
+								onclick={() => topUsersByVotePage++}><RightArrow /></Button
+							>
+						</div>
 					</div>
-				</div>
 
-				<div>
-					<div class="flex justify-between border-b-2 px-2">
-						<div>User</div>
-						<div>Votes</div>
-					</div>
 					<div>
-						{#if topUsersByVote.isLoading}
-							{#each Array(10).fill(0)}
-								<div
-									class="relative flex items-center justify-between gap-2 border-b-2 p-3 hover:bg-neutral-500/20"
-								>
-									<Skeleton/>
-								</div>
-							{/each}
-						{:else if topUsersByVote.error}
-							<div>error loading data</div>
-						{:else if topUsersByVote.data}
-							{#each topUsersByVote.data as user, i (user.id)}
-								<div
-									class="relative flex items-center justify-between gap-2 border-b-2 p-3 hover:bg-neutral-500/20"
-								>
-									<div class="flex items-center gap-2">
-										<div>
-											# {i + 1 + 10 * (topUsersByVotePage - 1)}
-										</div>
-										<div>
-											{user.name}
-										</div>
+						<div class="flex justify-between border-b-2 p-2">
+							<div>User</div>
+							<div>Votes</div>
+						</div>
+						<div>
+							{#if topUsersByVote.isLoading || topUsersByVote.isFetching || topUsersByVote.isPending}
+								{#each Array(10).fill(0)}
+									<div class="relative flex h-10 items-center justify-between gap-2 border-b-2 p-3">
+										<Skeleton class="h-5 w-20 rounded-2xl bg-current/10" />
+										<Skeleton class="h-5 w-20 rounded-2xl bg-current/10" />
 									</div>
-									<div>
-										{user.voteCount}
-									</div>
-								</div>
-							{/each}
-						{/if}
+								{/each}
+							{:else if topUsersByVote.error}
+								<div>error loading data</div>
+							{:else if topUsersByVote.data}
+								{#each topUsersByVote.data as user, i (user.id)}
+									<a href={`/user/${user.id}`}>
+										<div
+											class="relative flex items-center justify-between gap-2 border-b-2 p-1 py-1.5 hover:bg-neutral-500/20"
+										>
+											<div class="flex items-center gap-2">
+												<div>
+													# {i + 1 + 10 * (topUsersByVotePage - 1)}
+												</div>
+												<div>
+													{user.name}
+												</div>
+											</div>
+											<div>
+												{user.voteCount}
+											</div>
+										</div>
+									</a>
+								{/each}
+							{/if}
+						</div>
 					</div>
 				</div>
 			</Card>
 
-			<Card>
-				<div class="flex items-center">
-					<h2 class="p-2 text-xl">Top Users by Steak</h2>
-					<div class="flex justify-between gap-5 px-5">
-						<Button
-							title="prev page"
-							variant="secondary"
-							disabled={topUsersByStreakPage === 1}
-							onclick={() => topUsersByStreakPage--}
-						>
-							<LeftArrow />
-						</Button>
-						<Button
-							title="next page"
-							variant="secondary"
-							disabled={topUsersByStreakPage * 10 >= 490}
-							onclick={() => topUsersByStreakPage++}><RightArrow /></Button
-						>
+			<Card class="overflow-clip p-0 pt-2">
+				<div class="space-y-2">
+					<div class="flex items-center">
+						<h2 class="p-2 text-xl font-bold">Top Streak</h2>
+						<div class="flex justify-between gap-5 px-5">
+							<Button
+								title="prev page"
+								variant="secondary"
+								disabled={topUsersByStreakPage === 1}
+								onclick={() => topUsersByStreakPage--}
+							>
+								<LeftArrow />
+							</Button>
+							<Button
+								title="next page"
+								variant="secondary"
+								disabled={topUsersByStreakPage * 10 >= 490}
+								onclick={() => topUsersByStreakPage++}><RightArrow /></Button
+							>
+						</div>
 					</div>
-				</div>
 
-				<div>
-					<div class="flex justify-between border-b-2 px-2">
-						<div>User</div>
-						<div>Votes</div>
-					</div>
 					<div>
-						{#if topUsersByStreak.isLoading}
-							<div>loading</div>
-						{:else if topUsersByStreak.error}
-							<div>error loading data</div>
-						{:else if topUsersByStreak.data}
-							{#each topUsersByStreak.data as user, i (user.id)}
-								<div
-									class="relative flex items-center justify-between gap-2 border-b-2 p-3 hover:bg-neutral-500/20"
-								>
-									<div class="flex items-center gap-2">
-										<div>
-											# {i + 1 + 10 * (topUsersByStreakPage - 1)}
-										</div>
-										<div>
-											{user.name}
-										</div>
+						<div class="flex justify-between border-b-2 p-2">
+							<div>User</div>
+							<div>Streak</div>
+						</div>
+						<div>
+							{#if topUsersByStreak.isLoading || topUsersByStreak.isFetching || topUsersByStreak.isPending}
+								{#each Array(10).fill(0)}
+									<div class="relative flex h-10 items-center justify-between gap-2 border-b-2 p-3">
+										<Skeleton class="h-5 w-20 rounded-2xl bg-current/10" />
+										<Skeleton class="h-5 w-20 rounded-2xl bg-current/10" />
 									</div>
-									<div>
-										{user.streak}
-									</div>
-								</div>
-							{/each}
-						{/if}
+								{/each}
+							{:else if topUsersByStreak.error}
+								<div>error loading data</div>
+							{:else if topUsersByStreak.data}
+								{#each topUsersByStreak.data as user, i (user.id)}
+									<a href={`/user/${user.id}`}>
+										<div
+											class="relative flex items-center justify-between gap-2 border-b-2 p-1 py-1.5 hover:bg-neutral-500/20"
+										>
+											<div class="flex items-center gap-2">
+												<div>
+													# {i + 1 + 10 * (topUsersByStreakPage - 1)}
+												</div>
+												<div>
+													{user.name}
+												</div>
+											</div>
+											<div>
+												{user.streak}
+											</div>
+										</div>
+									</a>
+								{/each}
+							{/if}
+						</div>
 					</div>
 				</div>
 			</Card>
