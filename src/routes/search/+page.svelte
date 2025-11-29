@@ -10,22 +10,32 @@
 
 	let query = $state<any>('');
 	let searchData = $state<any>(null);
+	let firstSearch = $state(true)
 
 	const getSearch = async () => {
 		const res = await fetch(`/api/search?q=${query}`);
 		return await res.json();
 	};
+
 	const searchStuff = async () => {
 		searchData = await getSearch();
 		page.url.searchParams.set('q', query);
 		replaceState(page.url, page.state);
 	};
+
 	onMount(() => {
 		if (page.url.searchParams.get('q')) {
 			query = page.url.searchParams.get('q');
 			searchStuff();
 		}
 	});
+
+	$effect(()=>{
+		if (page.url.searchParams.get('q')) {
+			query = page.url.searchParams.get('q');
+			searchStuff();
+		}
+	})
 	// $effect(() => {
 	// 	const hasProp = page.url.searchParams.get('q');
 	// 	triggerSubmit(hasProp);

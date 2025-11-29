@@ -11,7 +11,8 @@ export const load = async ({ params }) => {
 				with: {
 					game: {
 						columns: {
-							name: true
+							name: true,
+							id: true
 						}
 					}
 				}
