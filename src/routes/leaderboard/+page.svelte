@@ -175,7 +175,7 @@
 										>
 											<div class="flex items-center gap-2">
 												<div>
-													# {i + 1 + 10 * (topUsersByVotePage - 1)}
+													#{i + 1 + 10 * (topUsersByVotePage - 1)}
 												</div>
 												<div>
 													{user.name}
@@ -241,7 +241,7 @@
 										>
 											<div class="flex items-center gap-2">
 												<div>
-													# {i + 1 + 10 * (topUsersByStreakPage - 1)}
+													#{i + 1 + 10 * (topUsersByStreakPage - 1)}
 												</div>
 												<div>
 													{user.name}
