@@ -49,9 +49,9 @@
 	<div class="flex flex-col justify-center gap-5 lg:flex-row">
 		<Card class="h-fit w-full overflow-clip p-0 pt-2">
 			<div class="space-y-2">
-				<div class="flex items-center">
+				<div class="flex items-center justify-between">
 					<h2 class="p-2 text-xl font-bold">Top Games</h2>
-					<div class="flex justify-between gap-5 px-5">
+					<div class="flex items-center justify-between gap-5 px-5">
 						<Button
 							title="prev page"
 							variant="secondary"
@@ -60,10 +60,13 @@
 						>
 							<LeftArrow />
 						</Button>
+						<span class="font-mono text-xs">
+							page {topGamesPage} / 50
+						</span>
 						<Button
 							title="next page"
 							variant="secondary"
-							disabled={topGamesPage * 10 >= 490}
+							disabled={topGamesPage * 10 >= 500}
 							onclick={() => topGamesPage++}><RightArrow /></Button
 						>
 					</div>
@@ -122,13 +125,13 @@
 				</div>
 			</div>
 		</Card>
-		
-		<div class="flex w-full flex-col gap-5 ">
+
+		<div class="flex w-full flex-col gap-5">
 			<Card class="overflow-clip p-0 pt-2">
 				<div class="space-y-2">
-					<div class="flex items-center">
+					<div class="flex items-center justify-between">
 						<h2 class="p-2 text-xl font-bold">Top Voters</h2>
-						<div class="flex justify-between gap-5 px-5">
+						<div class="flex items-center justify-between gap-5 px-5">
 							<Button
 								title="prev page"
 								variant="secondary"
@@ -137,10 +140,13 @@
 							>
 								<LeftArrow />
 							</Button>
+							<span class="font-mono text-xs">
+								page {topUsersByVotePage} / 50
+							</span>
 							<Button
 								title="next page"
 								variant="secondary"
-								disabled={topUsersByVotePage * 10 >= 490}
+								disabled={topUsersByVotePage * 10 >= 500}
 								onclick={() => topUsersByVotePage++}><RightArrow /></Button
 							>
 						</div>
@@ -189,9 +195,9 @@
 
 			<Card class="overflow-clip p-0 pt-2">
 				<div class="space-y-2">
-					<div class="flex items-center">
+					<div class="flex items-center justify-between">
 						<h2 class="p-2 text-xl font-bold">Top Streak</h2>
-						<div class="flex justify-between gap-5 px-5">
+						<div class="flex items-center justify-between gap-5 px-5">
 							<Button
 								title="prev page"
 								variant="secondary"
@@ -200,6 +206,9 @@
 							>
 								<LeftArrow />
 							</Button>
+							<span class="font-mono text-xs">
+								page {topUsersByStreakPage} / 50
+							</span>
 							<Button
 								title="next page"
 								variant="secondary"
