@@ -47,7 +47,7 @@
 
 <div class="mx-auto max-w-7xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
 	<div class="flex flex-col justify-center gap-5 lg:flex-row">
-		<Card class="h-fit w-1/2 overflow-clip p-0 pt-2">
+		<Card class="h-fit w-full overflow-clip p-0 pt-2">
 			<div class="space-y-2">
 				<div class="flex items-center">
 					<h2 class="p-2 text-xl font-bold">Top Games</h2>
@@ -122,8 +122,8 @@
 				</div>
 			</div>
 		</Card>
-
-		<div class="flex w-1/2 flex-col gap-5">
+		
+		<div class="flex w-full flex-col gap-5 ">
 			<Card class="overflow-clip p-0 pt-2">
 				<div class="space-y-2">
 					<div class="flex items-center">
