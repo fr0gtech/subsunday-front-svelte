@@ -7,6 +7,7 @@
 	import WebSockets from '$lib/components/webSockets/webSockets.svelte';
 	import { Toaster } from '@/components/ui/sonner';
 	import { page } from '$app/state'; // use this
+	import Footer from '@/components/footer/footer.svelte';
 
 	let { children } = $props();
 	export const queryClient = new QueryClient({
@@ -30,10 +31,12 @@
 	{/if}
 </svelte:head>
 <QueryClientProvider client={queryClient}>
-	<ModeWatcher />
-	<Toaster />
-	<WebSockets />
-	<Nav />
-
-	{@render children?.()}
+	<div class="flex min-h-screen flex-col">
+		<ModeWatcher />
+		<Toaster />
+		<WebSockets />
+		<Nav />
+		{@render children?.()}
+		<Footer />
+	</div>
 </QueryClientProvider>

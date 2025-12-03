@@ -173,6 +173,13 @@
 					</div>
 				</div>
 			</div>
+			{#if (allGamesWithWsVotes.length === 0 || loaderState.status === 'LOADING') && loaderState.status !== 'COMPLETE'}
+				<div class="infinite-loader-wrapper">
+					{#each Array(20).fill(0) as skeleton}
+						<Skeleton class="grid-item h-40 w-full max-w-[400px] border-0 !py-0" />
+					{/each}
+				</div>
+			{/if}
 			{#key periodKey}
 				<InfiniteLoader
 					intersectionOptions={{ rootMargin: '200px', root: container }}
@@ -253,14 +260,10 @@
 						</a>
 					{/each}
 
-					<!-- {#snippet loading()}
-						<div class="infinite-loader-wrapper">
-							{#each Array(20).fill(0) as skeleton}
-								<Skeleton class="h-40 grid-item w-full max-w-[400px] border-0 !py-0" />
-							{/each}
-						</div>
-					{/snippet} -->
-					{#snippet noData()}{/snippet}
+					{#snippet loading()}{/snippet}
+					{#snippet noData()}
+						<div>No data for this period</div>
+					{/snippet}
 					{#snippet error(load)}
 						<div>Error fetching data</div>
 						<button onclick={load}>Retry</button>

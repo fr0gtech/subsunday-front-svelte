@@ -99,9 +99,9 @@
 							<div>error loading data</div>
 						{:else if topGames.data}
 							{#each topGames.data as game, i (game.id)}
-								<a href={`/game/${game.id}`}>
+								<a href={`/game/${game.id}`} class="group">
 									<div
-										class="relative flex items-center justify-between gap-2 border-b-2 p-3 hover:bg-neutral-500/20"
+										class="relative flex items-center justify-between gap-2 border-b-2 p-3 group-last:border-0 hover:bg-neutral-500/20"
 									>
 										<Badge variant="secondary" class="absolute left-1 text-lg"
 											>{'#' + (i + 1 + 10 * (topGamesPage - 1))}</Badge
@@ -169,9 +169,9 @@
 								<div>error loading data</div>
 							{:else if topUsersByVote.data}
 								{#each topUsersByVote.data as user, i (user.id)}
-									<a href={`/user/${user.id}`}>
+									<a href={`/user/${user.id}`} class="group">
 										<div
-											class="relative flex items-center justify-between gap-2 border-b-2 p-1 py-1.5 hover:bg-neutral-500/20"
+											class="relative flex items-center justify-between gap-2 border-b-2 p-1 py-1.5 group-last:border-0 hover:bg-neutral-500/20"
 										>
 											<div class="flex items-center gap-2">
 												<div>
@@ -235,9 +235,9 @@
 								<div>error loading data</div>
 							{:else if topUsersByStreak.data}
 								{#each topUsersByStreak.data as user, i (user.id)}
-									<a href={`/user/${user.id}`}>
+									<a href={`/user/${user.id}`} class="group">
 										<div
-											class="relative flex items-center justify-between gap-2 border-b-2 p-1 py-1.5 hover:bg-neutral-500/20"
+											class="relative flex items-center justify-between gap-2 border-b-2 p-1 py-1.5 group-last:border-0 hover:bg-neutral-500/20"
 										>
 											<div class="flex items-center gap-2">
 												<div>
