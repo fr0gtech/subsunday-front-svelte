@@ -173,13 +173,13 @@
 					</div>
 				</div>
 			</div>
-			{#if (allGamesWithWsVotes.length === 0 || loaderState.status === 'LOADING') && loaderState.status !== 'COMPLETE'}
+			<!-- {#if (allGamesWithWsVotes.length === 0 || loaderState.status === 'LOADING') && loaderState.status !== 'COMPLETE'}
 				<div class="infinite-loader-wrapper">
 					{#each Array(20).fill(0) as skeleton}
 						<Skeleton class="grid-item h-40 w-full max-w-[400px] border-0 !py-0" />
 					{/each}
 				</div>
-			{/if}
+			{/if} -->
 			{#key periodKey}
 				<InfiniteLoader
 					intersectionOptions={{ rootMargin: '200px', root: container }}
