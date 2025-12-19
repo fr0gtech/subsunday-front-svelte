@@ -210,6 +210,8 @@
 					{#each allGamesWithWsVotes as game, i (game.id)}
 						{@const foundMoment =
 							matchingStream.data &&
+							matchingStream.data.stream &&
+							matchingStream.data.stream.moments &&
 							matchingStream.data.stream.moments.find(
 								(moment: Moment) => moment.description === game.name
 							)}
