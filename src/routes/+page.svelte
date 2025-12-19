@@ -3,17 +3,24 @@
 	import { tick } from 'svelte';
 	import { Card } from '$lib/components/ui/card';
 	import Logo from '$lib/components/logo/logo.svelte';
-	import Nav from '$lib/components/nav/nav.svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import Price from '$lib/components/priceCalc/price.svelte';
 	import { layout, selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
-	import type { Game, GameCategories, GamePrice } from '$lib/server/db/types';
+	import type { Game, GameCategories, GamePrice, Moment } from '$lib/server/db/types';
 	import { InfiniteLoader, LoaderState } from 'svelte-infinite';
 	import { fade } from 'svelte/transition';
 	import NumberFlow from '@number-flow/svelte';
 	import { getDateRange, getNowTZ, setURLparams } from '@/utils';
 	import { page } from '$app/state';
-	import { formatDistance, getWeek, getYear, isAfter, isSunday, subDays } from 'date-fns';
+	import {
+		formatDistance,
+		formatDuration,
+		getWeek,
+		getYear,
+		intervalToDuration,
+		isAfter,
+		subDays
+	} from 'date-fns';
 	import VoteStats from '@/components/voteStats/voteStats.svelte';
 	import * as ButtonGroup from '$lib/components/ui/button-group/index.js';
 	import Button, { buttonVariants } from '@/components/ui/button/button.svelte';
@@ -22,7 +29,8 @@
 	import LeftArrow from '@lucide/svelte/icons/step-back';
 	import CustomCalendar from '$lib/components/customcalendar/customcalendar.svelte';
 	import RightArrow from '@lucide/svelte/icons/step-forward';
-	import { Skeleton } from '@/components/ui/skeleton/index.js';
+	import { createQuery } from '@tanstack/svelte-query';
+	import * as HoverCard from '$lib/components/ui/hover-card/index.js';
 
 	let periodKey = $state(0);
 	let pageNumber = -1;
@@ -45,6 +53,14 @@
 			})
 			.sort((a, b) => parseInt(b.voteCount) - parseInt(a.voteCount) || a.id - b.id);
 	});
+
+	const matchingStream = createQuery(() => ({
+		queryKey: ['matchingStream', $selectedPeriod.currentPeriod.startDate],
+		queryFn: async () =>
+			await fetch(
+				`/api/matchingstream?p=${$selectedPeriod.currentPeriod.startDate.getTime()}`
+			).then((r) => r.json())
+	}));
 
 	const loadMore = async () => {
 		if (!hasMore) {
@@ -180,6 +196,8 @@
 					{/each}
 				</div>
 			{/if} -->
+			<!-- {JSON.stringify(matchingStream.data.stream.moments)} -->
+
 			{#key periodKey}
 				<InfiniteLoader
 					intersectionOptions={{ rootMargin: '200px', root: container }}
@@ -190,8 +208,18 @@
 					triggerLoad={loadMore}
 				>
 					{#each allGamesWithWsVotes as game, i (game.id)}
+						{@const foundMoment =
+							matchingStream.data &&
+							matchingStream.data.stream.moments.find(
+								(moment: Moment) => moment.description === game.name
+							)}
 						<a href={`game/${game.id}`} in:fade class="z-0">
 							<Card class="grid-item relative h-full max-w-[400px] border-0 !py-0">
+								<!-- {JSON.stringify(
+									matchingStream.data.stream.moments.filter((e) => e.description === game.name)
+										.length
+								)} -->
+
 								<div
 									class="rounded-large relative !max-w-full rounded-xl shadow-none shadow-black/5"
 									style="max-width: fit-content;"
@@ -220,7 +248,7 @@
 								</div>
 								<div class="absolute top-0 left-0 h-full w-full">
 									<Badge
-										class=" absolute -top-[0px] -left-[0px] z-10 flex rounded-tl-md  rounded-tr-none rounded-bl-none "
+										class={' absolute -top-[0px] -left-[0px] z-10 flex rounded-tl-md  rounded-tr-none rounded-bl-none '}
 										variant="secondary"
 									>
 										<span class="text-base font-bold">
@@ -235,6 +263,43 @@
 									>
 										<Price price={(game.price as GamePrice).final} />
 									</Badge>
+									{#if foundMoment}
+										<div class="absolute z-[100] flex h-full w-full items-center justify-end">
+											<HoverCard.Root>
+												<HoverCard.Trigger>
+													<Badge variant="secondary" class="  rounded-tr-none rounded-br-none  "
+														>played</Badge
+													>
+												</HoverCard.Trigger>
+												<HoverCard.Content class="w-full">
+													<div class="flex gap-2">
+														{#if foundMoment.game.picture === 'default'}
+															<div class="rounded-xl bg-neutral-700 p-4 text-xs">no image</div>
+														{:else}
+															<img
+																alt={foundMoment.game.title}
+																class=" h-10 rounded-xl"
+																src={foundMoment.game.picture}
+															/>
+															<div>
+																<div>{foundMoment.game.name}</div>
+																<div class=" text-sm">
+																	played for
+																	{formatDuration(
+																		intervalToDuration({
+																			start: 0,
+																			end: foundMoment.durationMilliseconds
+																		}),
+																		{ format: ['hours', 'minutes'] }
+																	)}
+																</div>
+															</div>
+														{/if}
+													</div>
+												</HoverCard.Content>
+											</HoverCard.Root>
+										</div>
+									{/if}
 									<Badge
 										class="absolute -right-[0px] -bottom-[0px] z-50 flex rounded-tl-md rounded-tr-none rounded-bl-none   text-sm  "
 										variant="secondary"

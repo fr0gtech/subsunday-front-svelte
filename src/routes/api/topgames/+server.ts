@@ -4,8 +4,8 @@ import { user, vote, game } from '$lib/server/db/schema';
 import { desc, sql } from 'drizzle-orm';
 
 export async function GET({ url }: { url: URL }) {
-	const page = (parseInt(url.searchParams.get('p') as string) - 1) || 0;
-	const pageSize = 10
+	const page = parseInt(url.searchParams.get('p') as string) - 1 || 0;
+	const pageSize = 10;
 	const games = await db
 		.select({
 			name: game.name,
@@ -19,8 +19,6 @@ export async function GET({ url }: { url: URL }) {
 		.orderBy(desc(sql`count(${vote.id})`))
 		.offset(pageSize * page)
 		.limit(pageSize);
-	
-	return json( games );
 
-
+	return json(games);
 }

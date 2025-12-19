@@ -1,29 +1,31 @@
 import { error } from '@sveltejs/kit';
-import { game, vote } from '$lib/server/db/schema';
+import { game, subSundayMoment, vote } from '$lib/server/db/schema';
 import { db } from '$lib/server/db';
-import { eq, sql } from 'drizzle-orm';
-const voteCountExpr = sql<number>`CAST(COUNT(${vote.id}) AS INT)`;
+import { eq } from 'drizzle-orm';
+import { and } from 'drizzle-orm';
+import { gte } from 'drizzle-orm';
+import { ne } from 'drizzle-orm';
 
 export const load = async ({ params }) => {
-	const gameOnDb = await db
-		.select({
-			name: game.name,
-			description: game.description,
-			price: game.price,
-			detailedDescription: game.detailedDescription,
-			recommendations: game.recommendations,
-			screenshots: game.screenshots,
-			movies: game.movies,
-			picture: game.picture,
-			steamId: game.steamId,
-			categories: game.categories,
-			voteCount: voteCountExpr.as('voteCount')
-		})
-		.from(game)
-		.groupBy(game.id)
-		.leftJoin(vote, eq(vote.forId, game.id))
-		.where(eq(game.id, parseInt(params.slug)))
-		.limit(1);
+	const gameOnDb = await db.query.game.findFirst({
+		where: eq(game.id, Number(params.slug)),
+		with: {
+			moments: {
+				where: and(
+					gte(subSundayMoment.durationMilliseconds, 10000),
+					ne(subSundayMoment.description, 'Just Chatting')
+				),
+				with: {
+					stream: {
+						columns: {
+							publishedAt: true
+						}
+					}
+				}
+			}
+		}
+	});
+	const voteCount = await db.$count(vote, eq(vote.forId, Number(params.slug)));
 
 	// const gameOnDb2 = await db.query.game.findFirst({
 	// 	where: eq(game.id, parseInt(params.slug))
@@ -37,10 +39,10 @@ export const load = async ({ params }) => {
 
 	if (gameOnDb) {
 		return {
-			gameData: { ...gameOnDb[0], id: params.slug },
+			gameData: { ...gameOnDb, id: params.slug, voteCount },
 			meta: [
-				{ name: 'title', content: `Sub-Sunday.com - ${gameOnDb[0].name}` },
-				{ name: 'description', content: gameOnDb[0].description }
+				{ name: 'title', content: `Sub-Sunday.com - ${gameOnDb.name}` },
+				{ name: 'description', content: gameOnDb.description }
 			]
 		};
 	}

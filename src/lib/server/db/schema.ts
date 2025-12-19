@@ -11,6 +11,27 @@ import {
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
 
+export const subSundayStream = pgTable('SubSundayStream', {
+	id: serial().primaryKey(),
+	streamId: text().notNull(),
+	title: text().notNull(),
+	duration: integer().notNull(),
+	publishedAt: timestamp({ precision: 6, withTimezone: true }).notNull(),
+	createdAt: timestamp({ precision: 6, withTimezone: true }).notNull(),
+	updatedAt: timestamp({ precision: 6, withTimezone: true }).notNull()
+});
+
+export const subSundayMoment = pgTable('SubSundayMoment', {
+	id: serial().primaryKey(),
+	streamId: text().notNull(),
+	description: text().notNull().default(''),
+	durationMilliseconds: integer().notNull(),
+	positionMilliseconds: integer().notNull(),
+	gameId: integer().notNull(),
+	createdAt: timestamp({ precision: 6, withTimezone: true }).notNull(),
+	updatedAt: timestamp({ precision: 6, withTimezone: true }).notNull()
+});
+
 export const user = pgTable('User', {
 	id: serial().primaryKey(),
 	name: text().notNull(),
@@ -80,5 +101,7 @@ export const vote = pgTable(
 export const schema = {
 	user,
 	vote,
-	game
+	game,
+	subSundayStream,
+	subSundayMoment
 };

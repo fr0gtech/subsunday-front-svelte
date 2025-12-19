@@ -19,6 +19,7 @@
 	"devDependencies": {
 		"@eslint/compat": "^1.2.5",
 		"@eslint/js": "^9.18.0",
+		"@internationalized/date": "^3.10.1",
 		"@lucide/svelte": "^0.544.0",
 		"@sveltejs/adapter-auto": "^6.0.0",
 		"@sveltejs/kit": "^2.49.0",
@@ -28,7 +29,7 @@
 		"@types/d3-scale": "^4.0.9",
 		"@types/d3-shape": "^3.1.7",
 		"@types/node": "^20",
-		"bits-ui": "^2.14.1",
+		"bits-ui": "^2.14.4",
 		"clsx": "^2.1.1",
 		"drizzle-kit": "^0.30.2",
 		"embla-carousel-svelte": "^8.6.0",
@@ -53,7 +54,6 @@
 	},
 	"dependencies": {
 		"@date-fns/tz": "^1.2.0",
-		"@internationalized/date": "^3.8.1",
 		"@number-flow/svelte": "^0.3.9",
 		"@sveltejs/adapter-node": "^5.2.12",
 		"@tanstack/query-core": "^5.90.10",

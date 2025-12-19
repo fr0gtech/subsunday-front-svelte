@@ -1,0 +1,1 @@
+ALTER TABLE "SubSundayStream" ADD COLUMN "duration" integer NOT NULL;

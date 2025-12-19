@@ -24,7 +24,9 @@
 	function isSameRange(a: CalendarDate, b: CalendarDate) {
 		return a.toDate('America/New_York').getTime() === b.toDate('America/New_York').getTime();
 	}
-	let value = $state(toCalendar(getDateRange().currentPeriod));
+	let value = $state(
+		toCalendar(getDateRange({ offset: $selectedPeriod.currentPeriod.startDate }).currentPeriod)
+	);
 
 	function handleSelect(date: CalendarDate) {
 		if (!isSameRange(date, value.start)) {

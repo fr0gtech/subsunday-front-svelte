@@ -1,14 +1,20 @@
 <script lang="ts">
 	import Price from '$lib/components/priceCalc/price.svelte';
 	import { Badge } from '$lib/components/ui/badge';
-	import type { Game } from '$lib/server/db/types';
+	import type { Game, Moment } from '$lib/server/db/types';
 	import { createQuery } from '@tanstack/svelte-query';
 	import { scaleUtc } from 'd3-scale';
 	import { AreaChart } from 'layerchart';
 	import { curveBasis } from 'd3-shape';
 	import * as Chart from '$lib/components/ui/chart/index.js';
 	import Card from '$lib/components/ui/card/card.svelte';
-	import { formatDistance } from 'date-fns';
+	import {
+		formatDistance,
+		formatDuration,
+		formatISO,
+		formatISO9075,
+		intervalToDuration
+	} from 'date-fns';
 	import { wsVotes } from '$lib/shared.svelte';
 	import { fade, fly } from 'svelte/transition';
 	import VoteStats from '@/components/voteStats/voteStats.svelte';
@@ -19,9 +25,19 @@
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import Button from '@/components/ui/button/button.svelte';
 	import Number from '@/components/number/number.svelte';
+
 	let {
 		data
-	}: { data: { gameData: Game & { screenshots: any; movies: any; voteCount: number } } } = $props();
+	}: {
+		data: {
+			gameData: Game & {
+				screenshots: any;
+				movies: any;
+				voteCount: number;
+				moments: (Moment & { stream: { publishedAt: Date } })[];
+			};
+		};
+	} = $props();
 
 	let selectedItem = $state<any>(null);
 
@@ -258,6 +274,25 @@
 						</p>
 					{/each}
 				{/if}
+			</Card>
+			<Card class="p-3">
+				<h2 class="font-bold">Played on sub-sunday</h2>
+				{#each data.gameData.moments as moment}
+					<div class=" text-sm">
+						played for
+						{formatDuration(
+							intervalToDuration({
+								start: 0,
+								end: moment.durationMilliseconds
+							}),
+							{ format: ['hours', 'minutes'] }
+						)}
+						on the
+						<a class="text-blue-600" href={`https://twitch.tv/videos/${moment.streamId}`}>
+							{formatISO9075(moment.stream.publishedAt)}
+						</a>
+					</div>
+				{/each}
 			</Card>
 		</div>
 	</div>

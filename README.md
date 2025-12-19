@@ -5,6 +5,7 @@ The frontend for [sub-sunday.com](https://sub-sunday.com)
 This displays sub sunday voting data for [lirik](https://twitch.tv/lirik)
 
 ## Features
+
 - Display games by period sorted by votes
 - Game page
 - User page
@@ -13,6 +14,7 @@ This displays sub sunday voting data for [lirik](https://twitch.tv/lirik)
 ## Developing
 
 Clone this repo and install dependencies:
+
 ```bash
 pnpm install
 ```
