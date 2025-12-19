@@ -11,7 +11,7 @@
 		<Card class="w-full p-5">
 			<h2 class="text-xl font-bold">How to Vote</h2>
 			Voting can be done in two different ways and you don't need to be a subscriber. You can use ur
-			channel points to vote! Twitch Chat.
+			channel points to vote!
 
 			<p>
 				<span
