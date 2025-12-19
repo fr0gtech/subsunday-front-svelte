@@ -11,8 +11,31 @@
 		<Card class="w-full p-5">
 			<h2 class="text-xl font-bold">How to Vote</h2>
 			Voting can be done in two different ways and you don't need to be a subscriber. You can use ur
-			channel points to vote!
-			<Table.Root>
+			channel points to vote! Twitch Chat.
+
+			<p>
+				<span
+					><Badge class="mr-1 bg-green-300"><CheckIcon /></Badge>Twitch Chat votes are tracked on
+					this website.
+				</span>
+				<span></span>
+				<br />
+				<span
+					><Badge class="mr-1 bg-red-300"><XIcon /></Badge>Votes from sub.vote are not tracked on
+					this website
+				</span>
+			</p>
+
+			<p>
+				<b>Twitch Chat</b> (subscriber and all with channel points): Simply type !vote followed by the
+				name of the game you wish to vote for.
+			</p>
+			<p>
+				<b>sub.vote</b> (subscriber only): Visit
+				<a href="https://sub.vote" target="_blank">sub.vote</a> login and vote.
+			</p>
+
+			<!-- <Table.Root>
 				<Table.Header>
 					<Table.Row>
 						<Table.Head>Method</Table.Head>
@@ -39,7 +62,7 @@
 						<Table.Cell><Badge class="bg-red-300"><XIcon /></Badge></Table.Cell>
 					</Table.Row>
 				</Table.Body>
-			</Table.Root>
+			</Table.Root> -->
 		</Card>
 	</div>
 </div>
