@@ -86,7 +86,7 @@
 
 <div class="mx-auto max-w-screen-xl space-y-5 pt-16">
 	<div class="flex flex-wrap justify-center gap-5 lg:flex-nowrap">
-		<div class="w-full space-y-5">
+		<div class="w-full space-y-5 md:min-w-125">
 			<Card class="m-3 pt-3 lg:m-0">
 				<div class="space-y-2 px-4">
 					<div class=" flex items-center gap-2">
@@ -200,7 +200,7 @@
 				{/if}
 			</div>
 		</div>
-		<div class="m-3 w-full space-y-5 lg:m-0 lg:w-4/12">
+		<div class="m-3 w-full space-y-5 md:min-w-80 lg:m-0 lg:w-4/12">
 			<Card class="p-5">
 				<VoteStats gameVotes={gameVotes.data} />
 				{#if graph.data}
@@ -264,7 +264,7 @@
 					</Chart.Container>
 				{/if}
 			</Card>
-			<Card class=" flex gap-4 p-3 text-sm">
+			<Card class=" flex gap-4 p-3 text-sm md:min-w-80">
 				{#if allVotes}
 					{#each allVotes as vote (vote.id)}
 						<p in:fly out:fade>
