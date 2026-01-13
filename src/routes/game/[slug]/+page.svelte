@@ -74,6 +74,15 @@
 	} satisfies Chart.ChartConfig;
 </script>
 
+<svelte:head>
+	<title
+		>{`${data.gameData.name ? data.gameData.name : 'n/a'} @ ${gameVotes.data ? gameVotes.data.votesThisPeriod : 'n/a'} votes this week`}</title
+	>
+	<meta
+		name="description"
+		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
+	/>
+</svelte:head>
 <!-- <svelte:head>
 	{#if $page.data.meta}
 		{#each $page.data.meta as { name, content }}
@@ -275,25 +284,27 @@
 					{/each}
 				{/if}
 			</Card>
-			<Card class="p-3">
-				<h2 class="font-bold">Played on sub-sunday</h2>
-				{#each data.gameData.moments as moment}
-					<div class=" text-sm">
-						played for
-						{formatDuration(
-							intervalToDuration({
-								start: 0,
-								end: moment.durationMilliseconds
-							}),
-							{ format: ['hours', 'minutes'] }
-						)}
-						on the
-						<a class="text-blue-600" href={`https://twitch.tv/videos/${moment.streamId}`}>
-							{formatISO9075(moment.stream.publishedAt)}
-						</a>
-					</div>
-				{/each}
-			</Card>
+			{#if data.gameData.moments.length > 0}
+				<Card class="p-3">
+					<h2 class="font-bold">Played on sub-sunday</h2>
+					{#each data.gameData.moments as moment}
+						<div class=" text-sm">
+							played for
+							{formatDuration(
+								intervalToDuration({
+									start: 0,
+									end: moment.durationMilliseconds
+								}),
+								{ format: ['hours', 'minutes'] }
+							)}
+							on the
+							<a class="text-blue-600" href={`https://twitch.tv/videos/${moment.streamId}`}>
+								{formatISO9075(moment.stream.publishedAt)}
+							</a>
+						</div>
+					{/each}
+				</Card>
+			{/if}
 		</div>
 	</div>
 </div>

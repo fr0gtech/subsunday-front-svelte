@@ -66,6 +66,11 @@
 			description: 'Check out the top voted games and users.'
 		},
 		{
+			title: 'Played Games',
+			href: '/played',
+			description: 'Find out what games lirik already played on subsunday'
+		},
+		{
 			title: 'About',
 			href: '/about',
 			description: 'Learn more about Sub Sunday and its mission.',

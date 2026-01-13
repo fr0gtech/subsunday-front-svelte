@@ -140,7 +140,9 @@
 </script>
 
 <svelte:head>
-	<title>Sub-sunday.com - Tracking votes for lirik's sub sunday.</title>
+	<title
+		>{`${getWeek($selectedPeriod.currentPeriod.startDate)}-${getYear($selectedPeriod.currentPeriod.startDate)} @ ${$votestats.votesThisPeriod} votes`}</title
+	>
 	<meta
 		name="description"
 		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
