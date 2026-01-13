@@ -64,7 +64,7 @@ export const load = async ({ params }) => {
 		return {
 			user: { ...userDb, streakRank: streakRank, voteRank: voteRank },
 			meta: [
-				{ name: 'title', content: `Sub-Sunday.com - ${userDb.name}` },
+				{ name: 'title', content: `${userDb.name}` },
 				{
 					name: 'description',
 					content:

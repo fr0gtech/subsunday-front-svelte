@@ -83,13 +83,6 @@
 		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
 	/>
 </svelte:head>
-<!-- <svelte:head>
-	{#if $page.data.meta}
-		{#each $page.data.meta as { name, content }}
-			<meta {name} {content} />
-		{/each}
-	{/if}
-</svelte:head> -->
 
 <div class="mx-auto max-w-screen-xl space-y-5 pt-16">
 	<div class="flex flex-wrap justify-center gap-5 lg:flex-nowrap">

@@ -6,6 +6,13 @@
 	import XIcon from '@lucide/svelte/icons/x';
 </script>
 
+<svelte:head>
+	<title>{`How to vote`}</title>
+	<meta
+		name="description"
+		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
+	/>
+</svelte:head>
 <div class="mx-auto max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:p-0 lg:pt-16">
 	<div class="flex flex-col gap-5 lg:flex-row">
 		<Card class="w-full p-5">

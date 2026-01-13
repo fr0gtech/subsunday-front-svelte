@@ -39,11 +39,7 @@ export const load = async ({ params }) => {
 
 	if (gameOnDb) {
 		return {
-			gameData: { ...gameOnDb, id: params.slug, voteCount },
-			meta: [
-				{ name: 'title', content: `Sub-Sunday.com - ${gameOnDb.name}` },
-				{ name: 'description', content: gameOnDb.description }
-			]
+			gameData: { ...gameOnDb, id: params.slug, voteCount }
 		};
 	}
 	error(404, 'Not found');

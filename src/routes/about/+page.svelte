@@ -46,6 +46,13 @@
 	} satisfies Chart.ChartConfig;
 </script>
 
+<svelte:head>
+	<title>{`About`}</title>
+	<meta
+		name="description"
+		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
+	/>
+</svelte:head>
 <div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
 	<div class="flex flex-wrap gap-5 lg:flex-nowrap">
 		<div class=" flex w-full flex-col space-y-5 lg:w-8/12">
