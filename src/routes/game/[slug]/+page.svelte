@@ -113,12 +113,14 @@
 								<Badge>
 									<Price price={(data.gameData.price as any).final} />
 								</Badge>
-								<a
-									href={`https://store.steampowered.com/app/${data.gameData.steamId}`}
-									target="_blank"
-								>
-									<Steamicon size={20} />
-								</a>
+								{#if data.gameData.steamId > 0}
+									<a
+										href={`https://store.steampowered.com/app/${data.gameData.steamId}`}
+										target="_blank"
+									>
+										<Steamicon size={20} />
+									</a>
+								{/if}
 							</div>
 						</div>
 					</div>
@@ -147,50 +149,51 @@
 						</video>
 					{/if}
 				</div>
-
-				<div class="mx-15">
-					<Carousel.Root
-						opts={{
-							align: 'start'
-						}}
-						class=" w-full"
-					>
-						<Carousel.Content class="-ml-1 w-full">
-							{#each data.gameData.screenshots as screenshot}
-								<Carousel.Item
-									onclick={() => (selectedItem = screenshot as any)}
-									class="basis-1/3 pl-1 transition-all hover:brightness-125 md:basis-1/2 lg:basis-1/4"
-								>
-									<Card class="m-0 overflow-clip p-0">
-										<img alt="screenshot" src={screenshot.path_thumbnail} />
-									</Card>
-								</Carousel.Item>
-							{/each}
-							{#each data.gameData.movies as movie}
-								<Carousel.Item class="basis-1/3 pl-1 md:basis-1/2 lg:basis-1/4">
-									<Card
-										class="relative m-0 flex h-full items-center justify-center overflow-clip p-0 "
+				{#if data.gameData.screenshots.length + data.gameData.movies.length > 0}
+					<div class="mx-15">
+						<Carousel.Root
+							opts={{
+								align: 'start'
+							}}
+							class=" w-full"
+						>
+							<Carousel.Content class="-ml-1 w-full">
+								{#each data.gameData.screenshots as screenshot}
+									<Carousel.Item
+										onclick={() => (selectedItem = screenshot as any)}
+										class="basis-1/3 pl-1 transition-all hover:brightness-125 md:basis-1/2 lg:basis-1/4"
 									>
-										<Button
-											onclick={() => (selectedItem = movie as any)}
-											variant="secondary"
-											class="z-1  "
+										<Card class="m-0 overflow-clip p-0">
+											<img alt="screenshot" src={screenshot.path_thumbnail} />
+										</Card>
+									</Carousel.Item>
+								{/each}
+								{#each data.gameData.movies as movie}
+									<Carousel.Item class="basis-1/3 pl-1 md:basis-1/2 lg:basis-1/4">
+										<Card
+											class="relative m-0 flex h-full items-center justify-center overflow-clip p-0 "
 										>
-											<PlayIcon />
-										</Button>
-										<img
-											alt="movie thumbnail"
-											class="absolute top-0 left-0 z-0"
-											src={movie.thumbnail}
-										/>
-									</Card>
-								</Carousel.Item>
-							{/each}
-						</Carousel.Content>
-						<Carousel.Previous />
-						<Carousel.Next />
-					</Carousel.Root>
-				</div>
+											<Button
+												onclick={() => (selectedItem = movie as any)}
+												variant="secondary"
+												class="z-1  "
+											>
+												<PlayIcon />
+											</Button>
+											<img
+												alt="movie thumbnail"
+												class="absolute top-0 left-0 z-0"
+												src={movie.thumbnail}
+											/>
+										</Card>
+									</Carousel.Item>
+								{/each}
+							</Carousel.Content>
+							<Carousel.Previous />
+							<Carousel.Next />
+						</Carousel.Root>
+					</div>
+				{/if}
 			</Card>
 			<div class="mt-5">
 				{#if data.gameData.detailedDescription && (data.gameData.detailedDescription as any).html}

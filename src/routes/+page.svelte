@@ -225,7 +225,7 @@
 								)} -->
 
 								<div
-									class="rounded-large relative !max-w-full rounded-xl shadow-none shadow-black/5"
+									class="rounded-large relative h-full !max-w-full rounded-xl shadow-none shadow-black/5"
 									style="max-width: fit-content;"
 								>
 									{#if game.picture !== 'default'}
@@ -244,7 +244,7 @@
 											data-loaded="true"
 										/>
 									{:else}
-										<div class="flex h-[150px] w-full flex-col items-center justify-center">
+										<div class="flex h-full w-full flex-col items-center justify-center">
 											<Logo />
 											<p class="text-center text-xs">no image</p>
 										</div>
