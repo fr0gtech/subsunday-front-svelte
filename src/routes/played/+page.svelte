@@ -10,6 +10,7 @@
 	import { formatDistance, formatDuration, intervalToDuration } from 'date-fns';
 	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
 	import * as Collapsible from '$lib/components/ui/collapsible/index.js';
+	import { formatDurationCompact } from '@/utils';
 	let pastStreamsPage = $state(1);
 	let playedGamesPage = $state(1);
 
@@ -94,6 +95,7 @@
 
 									<Collapsible.Content class="space-y-2 px-5">
 										{#each stream.moments as moment (moment.id)}
+											{@const dur = formatDurationCompact(moment.durationMilliseconds / 1000)}
 											<div class="rounded-md border px-4 py-3 text-sm">
 												played <b>
 													<a href={`${moment.game ? `/game/${moment.game.id}` : ''}`}>
@@ -104,15 +106,9 @@
 												<b>
 													<a
 														class="text-blue-500"
-														href={`https://www.twitch.tv/videos/${stream.streamId}`}
+														href={`https://www.twitch.tv/videos/${stream.streamId}?t=${dur.replaceAll(' ', '')}`}
 													>
-														{formatDuration(
-															intervalToDuration({
-																start: 0,
-																end: moment.durationMilliseconds
-															}),
-															{ format: ['hours', 'minutes'] }
-														)}
+														{dur}
 													</a>
 												</b>
 											</div>

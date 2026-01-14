@@ -23,7 +23,8 @@ import {
 	getWeek,
 	setYear,
 	setISOWeek,
-	startOfISOWeek
+	startOfISOWeek,
+	intervalToDuration
 } from 'date-fns';
 import { tick } from 'svelte';
 import { twMerge } from 'tailwind-merge';
@@ -131,4 +132,15 @@ export function dateFromYearWeek(year: number, week: number): Date {
 	d = setYear(d, year);
 	d = setISOWeek(d, week);
 	return startOfISOWeek(d);
+}
+
+export function formatDurationCompact(seconds: number) {
+	const duration = intervalToDuration({ start: 0, end: seconds * 1000 });
+
+	const parts = [];
+	if (duration.hours) parts.push(`${duration.hours}h`);
+	if (duration.minutes) parts.push(`${duration.minutes}m`);
+	if (duration.seconds) parts.push(`${duration.seconds}s`);
+
+	return parts.join(' ');
 }

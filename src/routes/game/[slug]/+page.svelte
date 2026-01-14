@@ -25,6 +25,7 @@
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import Button from '@/components/ui/button/button.svelte';
 	import Number from '@/components/number/number.svelte';
+	import { formatDurationCompact } from '@/utils';
 
 	let {
 		data
@@ -284,6 +285,8 @@
 				<Card class="p-3">
 					<h2 class="font-bold">Played on sub-sunday</h2>
 					{#each data.gameData.moments as moment}
+						{@const dur = formatDurationCompact(moment.durationMilliseconds / 1000)}
+
 						<div class=" text-sm">
 							played for
 							{formatDuration(
@@ -294,7 +297,11 @@
 								{ format: ['hours', 'minutes'] }
 							)}
 							on the
-							<a class="text-blue-600" href={`https://twitch.tv/videos/${moment.streamId}`}>
+
+							<a
+								class="text-blue-600"
+								href={`https://www.twitch.tv/videos/${moment.streamId}?t=${dur.replaceAll(' ', '')}`}
+							>
 								{formatISO9075(moment.stream.publishedAt)}
 							</a>
 						</div>
