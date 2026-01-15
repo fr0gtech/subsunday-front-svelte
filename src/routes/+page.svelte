@@ -244,7 +244,7 @@
 											data-loaded="true"
 										/>
 									{:else}
-										<div class="flex h-full w-full flex-col items-center justify-center">
+										<div class="flex h-full min-h-45 w-full flex-col items-center justify-center">
 											<Logo />
 											<p class="text-center text-xs">no image</p>
 										</div>
