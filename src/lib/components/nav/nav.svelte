@@ -7,7 +7,6 @@
 	import DisplayList from '../displayList/displayList.svelte';
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
 	import MenuIcon from '@lucide/svelte/icons/menu';
-	import SettingsIcon from '@lucide/svelte/icons/settings-2';
 	import LeftArrow from '@lucide/svelte/icons/step-back';
 	import RightArrow from '@lucide/svelte/icons/step-forward';
 	import NumberFlow from '@number-flow/svelte';
@@ -21,7 +20,6 @@
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { goto } from '$app/navigation';
 	import { cn, dateFromYearWeek, getDateRange, getNowTZ, setURLparams } from '@/utils';
-	import Badge from '../ui/badge/badge.svelte';
 
 	import { formatDistance, getWeek, getYear, isAfter, isSunday, subDays } from 'date-fns';
 	import type { HTMLAttributes } from 'svelte/elements';
@@ -99,7 +97,9 @@
 				$selectedPeriod = getDateRange({ offset: getNowTZ() });
 			}
 		}
-		await setURLparams(page, $selectedPeriod);
+		if (page.url.pathname.length === 0) {
+			await setURLparams(page, $selectedPeriod);
+		}
 	});
 </script>
 
