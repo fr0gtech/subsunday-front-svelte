@@ -161,6 +161,7 @@
 .bb_img_ctn {
   position: relative;
   display: inline-block;
+  width: fit-content;
 }
 .bb_img {
   height: auto;
