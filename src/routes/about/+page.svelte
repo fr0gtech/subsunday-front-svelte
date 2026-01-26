@@ -70,6 +70,9 @@
 					<br /><b>This does not mean that the most voted game will be played.</b> This website is a
 					non official vote tracker and is not able to provide accurate data.
 				</p>
+				<pre class="  text-sm whitespace-normal">Voting period: <b>Sunday 00:00</b> - <b
+						>Saturday 22:00</b
+					> America/New_York</pre>
 			</Card>
 			<Card class=" min-h-40 w-full p-5">
 				<h1 class="flex items-center gap-1">Amount of votes by week</h1>
@@ -257,11 +260,6 @@
 						{/snippet}
 					</AreaChart>
 				</Chart.Container>
-			</Card>
-
-			<Card class="p-4 text-xs">
-				<h3 class="text-base font-bold">Voting period</h3>
-				<pre class=" whitespace-normal">Sunday 00:00 - Saturday 22:00 America/New_York</pre>
 			</Card>
 			<Customcalendar />
 		</div>
