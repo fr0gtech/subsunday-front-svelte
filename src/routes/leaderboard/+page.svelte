@@ -57,12 +57,12 @@
 	<div class="flex w-full flex-col justify-center gap-5 lg:flex-row">
 		<Card class="h-fit w-1/1 overflow-clip p-0 pt-2">
 			<div class="space-y-2">
-				<div class="flex flex-wrap items-center justify-start p-5 lg:justify-between">
+				<div class="flex flex-wrap items-center justify-start gap-5 p-5 lg:justify-between">
 					<div>
 						<h2 class="text-lg font-bold text-nowrap">Top Games</h2>
 						<span>All Time</span>
 					</div>
-					<div class="flex items-center justify-between gap-5 px-5">
+					<div class="flex items-center justify-between gap-5">
 						<Button
 							title="prev page"
 							variant="secondary"
@@ -112,7 +112,7 @@
 							{#each topGames.data as game, i (game.id)}
 								<a href={`/game/${game.id}`} class="group">
 									<div
-										class="relative flex items-center justify-between gap-2 border-b-2 p-3 group-last:border-0 hover:bg-neutral-500/20"
+										class="relative flex items-center gap-2 border-b-2 p-3 group-last:border-0 hover:bg-neutral-500/20"
 									>
 										<Badge variant="secondary" class="absolute left-1 text-lg"
 											>{'#' + (i + 1 + 10 * (topGamesPage - 1))}</Badge

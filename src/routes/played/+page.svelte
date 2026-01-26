@@ -166,7 +166,7 @@
 							{#each playedGames.data as playedGame, i (playedGame.id)}
 								<a href={`/game/${playedGame.game.id}`} class="group">
 									<div
-										class="relative flex items-center justify-between gap-2 border-b-2 p-3 group-last:border-0 hover:bg-neutral-500/20"
+										class="relative flex items-center gap-2 border-b-2 p-3 group-last:border-0 hover:bg-neutral-500/20"
 									>
 										<Badge variant="secondary" class="absolute left-1 text-lg"
 											>{'#' + (i + 1 + 10 * (playedGamesPage - 1))}</Badge
