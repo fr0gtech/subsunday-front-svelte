@@ -1,6 +1,6 @@
 import { db } from '@/server/db';
 
-const site = 'https://sub-sunday.com'; // change this to reflect your domain
+const site = 'https://sub-sunday.com';
 
 /** @type {import('./$types').RequestHandler} */
 export async function GET() {
@@ -36,6 +36,26 @@ const sitemap = (
   xmlns:image="https://www.google.com/schemas/sitemap-image/1.1"
   xmlns:video="https://www.google.com/schemas/sitemap-video/1.1"
 >
+        <url>
+          <loc>${site}/how-to-vote</loc>
+          <changefreq></changefreq>
+          <priority>0.5</priority>
+        </url>
+		<url>
+          <loc>${site}/leaderboard</loc>
+          <changefreq></changefreq>
+          <priority>0.5</priority>
+        </url>
+		<url>
+          <loc>${site}/played</loc>
+          <changefreq></changefreq>
+          <priority>0.5</priority>
+        </url>
+		<url>
+          <loc>${site}/about</loc>
+          <changefreq></changefreq>
+          <priority>0.5</priority>
+        </url>
   ${users
 		.map(
 			(user) => `
