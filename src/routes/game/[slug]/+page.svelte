@@ -232,7 +232,7 @@
 							)}
 
 							<a
-								class="text-blue-600"
+								class="text-sky-500"
 								href={`https://www.twitch.tv/videos/${moment.streamId}?t=${pos.replaceAll(' ', '')}`}
 							>
 								{formatDistance(moment.stream.publishedAt, new Date(), { addSuffix: true })}
