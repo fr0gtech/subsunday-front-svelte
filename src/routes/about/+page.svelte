@@ -53,7 +53,7 @@
 		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
 	/>
 </svelte:head>
-<div class="mx-auto max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:pt-16 xl:p-0">
+<div class="mx-auto max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:pt-16">
 	<Alert.Root variant="destructive">
 		<Alert.Description class="block"
 			>*Vote count may be inaccurate. This project was made for fun and does not represents what
@@ -63,7 +63,7 @@
 	<div class="flex flex-wrap gap-5 lg:flex-nowrap">
 		<div class=" flex w-full flex-col space-y-5 lg:w-8/12">
 			<Card class="w-full p-5 ">
-				<h1 class="text-2xl font-bold">Sub Sunday</h1>
+				<h1 class="text-lg font-bold">Sub Sunday</h1>
 				<p>
 					Sub Sunday is a weekly event where viewer of the channel can vote for games they'd like to
 					see Lirik play.
@@ -132,7 +132,7 @@
 				{/if}
 			</Card>
 			<Card class="w-full p-5 ">
-				<h1 class="text-2xl font-bold">Github</h1>
+				<h1 class="text-lg font-bold">Github</h1>
 				Open a github issue if you have any questions or want to contribute/share ideas.
 				<p class="text-base">
 					The code for the website you are on right now.
