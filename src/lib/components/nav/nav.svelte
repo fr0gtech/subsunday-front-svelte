@@ -111,36 +111,38 @@
 	warning,
 	...restProps
 }: ListItemProps)}
-	<div>
-		<a
-			onclick={() => {
-				isOpen = false;
-			}}
-			{href}
-			class={cn(
-				'hover:bg-accent bg-accent/50 hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground relative block space-y-1 rounded-md p-2 select-none',
-				className,
-				warning
-					? 'after:absolute after:top-0 after:right-0 after:ml-1 after:text-red-400 after:content-["*"]'
-					: ''
-			)}
-			{...restProps as any}
-		>
-			<div class="text-sm leading-none font-medium">{title}</div>
-		</a>
-	</div>
+	<a
+		onclick={() => {
+			isOpen = false;
+		}}
+		{href}
+		class={cn(
+			page.url.pathname === href && 'bg-sky-500/50!',
+			' hover:text-accent-foreground focus:text-accent-foreground relative block space-y-1 rounded-md bg-neutral-500/10 px-3 py-2 select-none hover:bg-neutral-500/20',
+			className,
+			warning
+				? 'after:absolute after:top-0 after:right-1 after:ml-1 after:text-red-400 after:content-["*"]'
+				: ''
+		)}
+		{...restProps as any}
+	>
+		<h1 class=" text-base leading-none">{title}</h1>
+	</a>
 {/snippet}
-<div class="bg-currentbg fixed z-50 flex w-full items-center p-2 backdrop-blur-xl">
-	<div class="flex w-2/5">
-		<div class="flex w-full items-center xl:w-1/2">
+<div class="bg-background fixed z-50 flex w-full items-center justify-between p-2">
+	<div class="w-1/3 md:w-1/4">
+		<div class="relative flex w-full items-center xl:w-1/2">
 			<Popover.Root bind:open={isOpen}>
-				<Popover.Trigger
-					class={[buttonVariants({ variant: 'secondary', size: 'sm' }), ' show mr-2 xl:hidden']}
-				>
-					<MenuIcon />
+				<Popover.Trigger class={'show relative mr-2 ml-2'}>
+					<div
+						class="cursor-pointer after:absolute after:-top-2 after:-right-1 after:ml-1 after:text-red-400 after:content-['*']"
+					>
+						<MenuIcon size={18} />
+					</div>
 				</Popover.Trigger>
-				<Popover.Content class=" m-0 ml-2 flex !w-fit flex-col border-none p-5">
-					<!-- <Calendar type="single" bind:value class="rounded-md border" /> -->
+				<Popover.Content
+					class=" m-0 ml-2 flex  w-[calc(100vw-5%)] min-w-80 flex-col gap-2 border-none p-5 sm:w-full"
+				>
 					{#each links as link, i (i)}
 						{@render ListItem({
 							href: link.href,
@@ -152,18 +154,15 @@
 					<InputGroup.Root
 						onkeydown={(e) =>
 							e.key === 'Enter' && goto(`/search?q=${search}`, { replaceState: true })}
-						class=" h-8 min-w-[200px] border-0 outline-0 "
+						class="hidden h-8 min-w-[200px] border-0 outline-0 lg:flex"
 					>
 						<InputGroup.Input bind:value={search} name="search" placeholder="Search..." />
 						<InputGroup.Addon>
 							<SearchIcon />
 						</InputGroup.Addon>
-						<!-- {#if searchData}
-				<InputGroup.Addon align="inline-end"
-					>{searchData.games.length + searchData.users.length} results
-				</InputGroup.Addon>
-			{/if} -->
 					</InputGroup.Root>
+					<DisplayList />
+					<ThemeSwitch />
 				</Popover.Content>
 			</Popover.Root>
 			<div class="flex items-center gap-2">
@@ -171,7 +170,7 @@
 					<Logo />
 					<h1 class="text-lg font-bold whitespace-nowrap">Sub Sunday</h1>
 				</a>
-				<div class="hidden gap-2 whitespace-nowrap xl:flex">
+				<div class="hidden gap-2 whitespace-nowrap">
 					{#each links as link, i (i)}
 						{@render ListItem({
 							href: link.href,
@@ -184,14 +183,22 @@
 			</div>
 		</div>
 	</div>
-	<div class="flex items-center justify-start gap-10">
-		<VoteStats gameVotes={query.data} class="mr-1 hidden whitespace-nowrap lg:flex" />
-		<div class="hidden lg:block">
+	<div class="hidden grow items-center justify-start gap-10 lg:flex">
+		<div class="flex items-center gap-2">
+			<span class="font-mono! text-xs! whitespace-nowrap">
+				<NumberFlow
+					value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
+				/> -
+				{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+			</span>
+
 			<ButtonGroup.Root>
-				<Button size={'sm'} onclick={periodPrev} variant="secondary"><LeftArrow /></Button>
+				<Button size={'sm'} onclick={periodPrev} variant="secondary"
+					><LeftArrow class="h-3.5! w-3.5!" /></Button
+				>
 				<Popover.Root>
 					<Popover.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}
-						><CalendarIcon /></Popover.Trigger
+						><CalendarIcon class="h-3.5! w-3.5!" /></Popover.Trigger
 					>
 					<Popover.Content
 						class=" m-0 flex !w-fit flex-col  items-center justify-center border-none p-0"
@@ -205,52 +212,36 @@
 					disabled={isAfter($selectedPeriod.currentPeriod.nextStartDate, getNowTZ())}
 					size={'sm'}
 					onclick={periodNext}
-					variant="secondary"><RightArrow /></Button
+					variant="secondary"
 				>
+					<RightArrow class="h-3.5! w-3.5!" />
+				</Button>
 			</ButtonGroup.Root>
 		</div>
-		<span class=" hidden text-sm lg:block">
+		<VoteStats gameVotes={query.data} class=" hidden text-sm whitespace-nowrap lg:flex" />
+	</div>
+	<div>
+		<span class=" hidden text-sm whitespace-nowrap lg:block">
 			{#if $selectedPeriod && isAfter(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
-				voting for <Badge variant="secondary" class="font-mono!">
+				voting for week
+				<b>
 					<NumberFlow
 						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
-					/> -
-					{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
-				</Badge> ended
-				{formatDistance($selectedPeriod.currentPeriod.endDate, getNowTZ())} ago
+					/>
+				</b>
+				({$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}) ended
+				<b>{formatDistance($selectedPeriod.currentPeriod.endDate, getNowTZ())}</b> ago
 			{:else if $selectedPeriod && isAfter($selectedPeriod.currentPeriod.endDate, getNowTZ())}
-				voting for <Badge variant="secondary" class="font-mono!">
+				voting for
+				<b>
 					<NumberFlow
 						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
-					/> -
-					{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
-				</Badge>
-				ends in {formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
+					/>
+				</b>
+				-
+				{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+				ends in <b>{formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}</b>
 			{/if}
 		</span>
-	</div>
-	<div class="flex grow justify-end gap-2">
-		<div class="hidden items-center gap-5 text-xs whitespace-nowrap lg:flex"></div>
-		<Popover.Root>
-			<Popover.Trigger
-				class={[buttonVariants({ variant: 'secondary', size: 'sm' }), ' show mr-2 ']}
-			>
-				<SettingsIcon />
-			</Popover.Trigger>
-			<Popover.Content class=" m-0 ml-2 flex !w-fit flex-col gap-3 border-none p-5">
-				<InputGroup.Root
-					onkeydown={(e) =>
-						e.key === 'Enter' && goto(`/search?q=${search}`, { replaceState: true })}
-					class="hidden h-8 min-w-[200px] border-0 outline-0 lg:flex"
-				>
-					<InputGroup.Input bind:value={search} name="search" placeholder="Search..." />
-					<InputGroup.Addon>
-						<SearchIcon />
-					</InputGroup.Addon>
-				</InputGroup.Root>
-				<DisplayList />
-				<ThemeSwitch />
-			</Popover.Content>
-		</Popover.Root>
 	</div>
 </div>

@@ -22,6 +22,8 @@
 	import { env } from '$env/dynamic/public';
 	import Steamicon from '@/components/icons/steamicon.svelte';
 	import PlayIcon from '@lucide/svelte/icons/play';
+	import StarIcon from '@lucide/svelte/icons/star';
+
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import Button from '@/components/ui/button/button.svelte';
 	import Number from '@/components/number/number.svelte';
@@ -85,15 +87,21 @@
 	/>
 </svelte:head>
 
-<div class="mx-auto max-w-screen-xl space-y-5 pt-16">
-	<div class="flex flex-wrap justify-center gap-5 lg:flex-nowrap">
+<div class="mx-auto max-w-screen-xl space-y-5 p-5 pt-16">
+	<div class="flex flex-wrap justify-center gap-0 md:gap-5 lg:flex-nowrap">
 		<div class="w-full space-y-5 md:min-w-125">
-			<Card class="m-3 pt-3 lg:m-0">
-				<div class="space-y-2 px-4">
-					<div class=" flex items-center gap-2">
-						<h1 class="truncate text-xl font-bold">{data.gameData.name}</h1>
-						<div class="text-xs">reviews: <Number number={data.gameData.recommendations} /></div>
-						<div class="text-xs">votes: <Number number={data.gameData.voteCount} /></div>
+			<Card class="py-2">
+				<div class="space-y-5 px-4">
+					<div class=" flex items-center justify-between gap-5">
+						<h1 class="truncate text-2xl font-bold">{data.gameData.name}</h1>
+						<div class=" text-right">
+							<div class="gap-2 text-sm">
+								<b><Number number={data.gameData.recommendations} /> </b> reviews
+							</div>
+							<div class="text-sm">
+								<b><Number number={data.gameData.voteCount} /> </b> votes
+							</div>
+						</div>
 					</div>
 					<div class="flex flex-wrap gap-5 lg:flex-nowrap">
 						{#if data.gameData.picture !== 'default'}
@@ -104,14 +112,16 @@
 							/>
 						{/if}
 						<div class="w-full space-y-2">
-							<p class="">
-								{data.gameData.description}
-							</p>
-							<div class="flex w-full flex-wrap items-center gap-1">
+							{#if data.gameData.description.length > 0}
+								<p class=" leading-relaxedPast sub sunday streams mb-5">
+									{data.gameData.description}
+								</p>
+							{/if}
+							<div class=" flex w-full flex-wrap items-center gap-1">
 								{#each data.gameData.categories as any as category}
-									<Badge variant="secondary">{category.description}</Badge>
+									<Badge>{category.description}</Badge>
 								{/each}
-								<Badge>
+								<Badge variant="secondary">
 									<Price price={(data.gameData.price as any).final} />
 								</Badge>
 								{#if data.gameData.steamId > 0}
@@ -162,10 +172,10 @@
 								{#each data.gameData.screenshots as screenshot}
 									<Carousel.Item
 										onclick={() => (selectedItem = screenshot as any)}
-										class="basis-1/3 pl-1 transition-all hover:brightness-125 md:basis-1/2 lg:basis-1/4"
+										class=" basis-1/3 pl-1 transition-all hover:brightness-125 sm:basis-1/3 md:basis-1/3 lg:basis-1/4"
 									>
-										<Card class="m-0 overflow-clip p-0">
-											<img alt="screenshot" src={screenshot.path_thumbnail} />
+										<Card class="m-0 w-fit overflow-clip p-0">
+											<img class="w-50" alt="screenshot" src={screenshot.path_thumbnail} />
 										</Card>
 									</Carousel.Item>
 								{/each}
@@ -205,8 +215,34 @@
 			</div>
 		</div>
 		<div class="m-3 w-full space-y-5 md:min-w-80 lg:m-0 lg:w-4/12">
+			{#if data.gameData.moments.length > 0}
+				<Card class="p-3">
+					{#each data.gameData.moments as moment}
+						{@const dur = formatDurationCompact(moment.durationMilliseconds / 1000)}
+						{@const pos = formatDurationCompact(moment.positionMilliseconds / 1000)}
+
+						<div class=" text-sm">
+							played for
+							{formatDuration(
+								intervalToDuration({
+									start: 0,
+									end: moment.durationMilliseconds
+								}),
+								{ format: ['hours', 'minutes'] }
+							)}
+
+							<a
+								class="text-blue-600"
+								href={`https://www.twitch.tv/videos/${moment.streamId}?t=${pos.replaceAll(' ', '')}`}
+							>
+								{formatDistance(moment.stream.publishedAt, new Date(), { addSuffix: true })}
+							</a>
+						</div>
+					{/each}
+				</Card>
+			{/if}
 			<Card class="p-5">
-				<VoteStats gameVotes={gameVotes.data} />
+				<VoteStats gameVotes={gameVotes.data} class="text-sm!" />
 				{#if graph.data}
 					<Chart.Container config={chartConfig}>
 						<AreaChart
@@ -281,33 +317,6 @@
 					{/each}
 				{/if}
 			</Card>
-			{#if data.gameData.moments.length > 0}
-				<Card class="p-3">
-					<h2 class="font-bold">Played on sub-sunday</h2>
-					{#each data.gameData.moments as moment}
-						{@const dur = formatDurationCompact(moment.durationMilliseconds / 1000)}
-
-						<div class=" text-sm">
-							played for
-							{formatDuration(
-								intervalToDuration({
-									start: 0,
-									end: moment.durationMilliseconds
-								}),
-								{ format: ['hours', 'minutes'] }
-							)}
-							on the
-
-							<a
-								class="text-blue-600"
-								href={`https://www.twitch.tv/videos/${moment.streamId}?t=${dur.replaceAll(' ', '')}`}
-							>
-								{formatISO9075(moment.stream.publishedAt)}
-							</a>
-						</div>
-					{/each}
-				</Card>
-			{/if}
 		</div>
 	</div>
 </div>

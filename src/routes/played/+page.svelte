@@ -7,10 +7,12 @@
 	import { Button, buttonVariants } from '@/components/ui/button';
 	import LeftArrow from '@lucide/svelte/icons/step-back';
 	import RightArrow from '@lucide/svelte/icons/step-forward';
-	import { formatDistance, formatDuration, intervalToDuration } from 'date-fns';
+	import { formatDistance, formatDuration, getWeek, getYear, intervalToDuration } from 'date-fns';
 	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
 	import * as Collapsible from '$lib/components/ui/collapsible/index.js';
-	import { formatDurationCompact } from '@/utils';
+	import { formatDurationCompact, getDateRange } from '@/utils';
+	import { selectedPeriod } from '@/shared.svelte';
+	import NumberFlow from '@number-flow/svelte';
 	let pastStreamsPage = $state(1);
 	let playedGamesPage = $state(1);
 
@@ -39,7 +41,7 @@
 		<Card class="h-fit w-full overflow-clip p-0 pt-2">
 			<div class="space-y-2">
 				<div class="flex items-center justify-between">
-					<h2 class="p-5 text-xl font-bold">Past sub sunday streams</h2>
+					<h2 class="p-5 text-lg font-bold">Past sub sunday streams</h2>
 					<div class="flex items-center justify-between gap-5 px-5">
 						<Button
 							title="prev page"
@@ -70,7 +72,17 @@
 										class="m-5 flex items-center justify-between space-x-4 rounded-xl bg-neutral-800 p-3"
 									>
 										<h4 class=" text-sm">
-											<b>{formatDistance(new Date(), stream.publishedAt)}</b> streamed for
+											<b>{formatDistance(stream.publishedAt, new Date(), { addSuffix: true })}</b>
+											(<button
+												onclick={() =>
+													($selectedPeriod = getDateRange({
+														offset: stream.publishedAt
+													}))}
+												class="cursor-pointer text-sky-500 italic"
+											>
+												<NumberFlow value={getWeek(stream.publishedAt)} /> -
+												{getYear(stream.publishedAt)}
+											</button>) streamed for
 											<b>
 												{formatDuration(
 													intervalToDuration({
@@ -96,8 +108,11 @@
 									<Collapsible.Content class="space-y-2 px-5">
 										{#each stream.moments as moment (moment.id)}
 											{@const dur = formatDurationCompact(moment.durationMilliseconds / 1000)}
+											{@const pos = formatDurationCompact(moment.positionMilliseconds / 1000)}
+
 											<div class="rounded-md border px-4 py-3 text-sm">
-												played <b>
+												played
+												<b>
 													<a href={`${moment.game ? `/game/${moment.game.id}` : ''}`}>
 														{moment.description}
 													</a>
@@ -106,7 +121,7 @@
 												<b>
 													<a
 														class="text-blue-500"
-														href={`https://www.twitch.tv/videos/${stream.streamId}?t=${dur.replaceAll(' ', '')}`}
+														href={`https://www.twitch.tv/videos/${stream.streamId}?t=${pos.replaceAll(' ', '')}`}
 													>
 														{dur}
 													</a>
@@ -124,7 +139,7 @@
 		<Card class="h-fit w-full overflow-clip p-0 pt-2">
 			<div class="space-y-2">
 				<div class="flex items-center justify-between">
-					<h2 class="p-5 text-xl font-bold">Longest sub sunday segments</h2>
+					<h2 class="p-5 text-lg font-bold">Longest sub sunday segments</h2>
 					<div class="flex items-center justify-between gap-5 px-5">
 						<Button
 							title="prev page"

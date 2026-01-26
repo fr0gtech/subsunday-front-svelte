@@ -146,8 +146,7 @@
 }
 .bb_paragraph {
 	min-height: 0.15em;
-	line-height: 1.5em;
-	margin: 0.5em 0;
+	line-height: 1.625em;
 }
 .bb_ul {
 	list-style-type: disc;

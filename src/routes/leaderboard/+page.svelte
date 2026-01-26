@@ -22,6 +22,7 @@
 		keepPreviousData: true,
 		queryFn: async () => await fetch(`/api/topgames?p=${topGamesPage}`).then((r) => r.json())
 	}));
+
 	const topUsersByVote = createQuery(() => ({
 		queryKey: ['topUsersByVote', topUsersByVotePage],
 		keepPreviousData: true,
@@ -52,12 +53,17 @@
 		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
 	/>
 </svelte:head>
-<div class="mx-auto gap-5 space-y-5 p-5 pt-16 leading-relaxed">
-	<div class="flex flex-col justify-center gap-5 lg:flex-row">
-		<Card class="h-fit w-full overflow-clip p-0 pt-2">
+<div
+	class="mx-auto w-full max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:p-0 lg:pt-16"
+>
+	<div class="flex w-full flex-col justify-center gap-5 lg:flex-row">
+		<Card class="h-fit w-1/1 overflow-clip p-0 pt-2">
 			<div class="space-y-2">
 				<div class="flex items-center justify-between p-5">
-					<h2 class="p-2 text-xl font-bold">Top Games</h2>
+					<div>
+						<h2 class="text-xl font-bold text-nowrap">Top Games</h2>
+						<span>All Time</span>
+					</div>
 					<div class="flex items-center justify-between gap-5 px-5">
 						<Button
 							title="prev page"
@@ -67,7 +73,7 @@
 						>
 							<LeftArrow />
 						</Button>
-						<span class="font-mono text-xs">
+						<span class="font-mono text-xs whitespace-nowrap">
 							page {topGamesPage} / 50
 						</span>
 						<Button
@@ -132,12 +138,11 @@
 				</div>
 			</div>
 		</Card>
-
 		<div class="flex w-full flex-col gap-5">
-			<Card class="overflow-clip p-0 pt-2">
+			<Card class="w-12/12 overflow-clip p-0  pt-2">
 				<div class="space-y-2">
 					<div class="flex items-center justify-between p-5">
-						<h2 class="p-2 text-xl font-bold">Top Voters</h2>
+						<h2 class=" text-xl font-bold">Top Voters</h2>
 						<div class="flex items-center justify-between gap-5 px-5">
 							<Button
 								title="prev page"
@@ -200,10 +205,10 @@
 				</div>
 			</Card>
 
-			<Card class="overflow-clip p-0 pt-2">
+			<Card class="w-12/12 overflow-clip p-0  pt-2">
 				<div class="space-y-2">
 					<div class="flex items-center justify-between p-5">
-						<h2 class="p-2 text-xl font-bold">Top Streak</h2>
+						<h2 class="text-xl font-bold">Top Streak</h2>
 						<div class="flex items-center justify-between gap-5 px-5">
 							<Button
 								title="prev page"

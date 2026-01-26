@@ -150,7 +150,7 @@
 </svelte:head>
 <div class=" flex max-h-screen flex-col overflow-hidden">
 	{#if $layout.type === 'icon'}
-		<div class=" w-full overflow-y-scroll p-5 pt-15" bind:this={container}>
+		<div class=" w-full overflow-y-scroll px-5 pt-20" bind:this={container}>
 			<div class="mx-auto mb-10 flex flex-col gap-5 pt-10 lg:hidden">
 				<div class=" w-full text-center text-xl font-bold">
 					{#if $selectedPeriod && isAfter(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
@@ -217,7 +217,7 @@
 							matchingStream.data.stream.moments.find(
 								(moment: Moment) => moment.description === game.name
 							)}
-						<a href={`game/${game.id}`} in:fade class="z-0">
+						<a href={`game/${game.id}`} in:fade class="z-0 mx-auto w-fit md:w-full">
 							<Card class="grid-item relative h-full max-w-[400px] border-0 !py-0">
 								<!-- {JSON.stringify(
 									matchingStream.data.stream.moments.filter((e) => e.description === game.name)
