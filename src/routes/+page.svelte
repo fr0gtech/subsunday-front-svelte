@@ -343,7 +343,9 @@
 
 					{#snippet loading()}{/snippet}
 					{#snippet noData()}
-						<div>No data for this period</div>
+						{#if allGamesWithWsVotes.length === 0}
+							<div>No data for this period</div>
+						{/if}
 					{/snippet}
 					{#snippet error(load)}
 						<div>Error fetching data</div>
