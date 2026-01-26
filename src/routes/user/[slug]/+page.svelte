@@ -117,13 +117,31 @@
 					</a>
 					<span
 						>votes<Badge variant="secondary"
-							>{data.user.votes.length} (#{parseInt(data.user.voteRank) + 1})</Badge
-						></span
+							>{data.user.votes.length}
+							{#if parseInt(data.user.voteRank) === 0}
+								<span class="text-amber-400">(#{parseInt(data.user.voteRank) + 1})</span>
+							{:else if parseInt(data.user.voteRank) === 1}
+								<span class="text-orange-400">(#{parseInt(data.user.voteRank) + 1})</span>
+							{:else if parseInt(data.user.voteRank) === 2}
+								<span class="text-gray-400">(#{parseInt(data.user.voteRank) + 1})</span>
+							{:else}
+								<span>(#{parseInt(data.user.streakRank) + 1})</span>
+							{/if}
+						</Badge></span
 					>
 					<span
 						>streak<Badge variant="secondary"
-							>{data.user.streak} (#{parseInt(data.user.streakRank) + 1})</Badge
-						>
+							>{data.user.streak}
+							{#if parseInt(data.user.streakRank) === 0}
+								<span class="text-amber-400">(#{parseInt(data.user.streakRank) + 1})</span>
+							{:else if parseInt(data.user.streakRank) === 1}
+								<span class="text-orange-400">(#{parseInt(data.user.streakRank) + 1})</span>
+							{:else if parseInt(data.user.streakRank) === 2}
+								<span class="text-gray-400">(#{parseInt(data.user.streakRank) + 1})</span>
+							{:else}
+								<span>(#{parseInt(data.user.streakRank) + 1})</span>
+							{/if}
+						</Badge>
 					</span>
 				</div>
 			</div>

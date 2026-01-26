@@ -17,7 +17,7 @@
 	<div class="flex flex-col gap-5 lg:flex-row">
 		<Card class="w-full p-5">
 			<h2 class="text-lg font-bold">How to Vote</h2>
-			Voting can be done in two different ways and you don't need to be a subscriber. You can use ur
+			Voting can be done in two different ways and you don't need to be a subscriber. You can use your
 			channel points to vote!
 
 			<p>

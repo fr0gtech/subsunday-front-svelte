@@ -112,17 +112,19 @@
 							{#each topGames.data as game, i (game.id)}
 								<a href={`/game/${game.id}`} class="group">
 									<div
-										class="relative flex items-center gap-2 border-b-2 p-3 group-last:border-0 hover:bg-neutral-500/20"
+										class="relative flex items-center justify-between gap-2 border-b-2 p-3 group-last:border-0 hover:bg-neutral-500/20"
 									>
-										<Badge variant="secondary" class="absolute left-1 text-lg"
-											>{'#' + (i + 1 + 10 * (topGamesPage - 1))}</Badge
-										>
-										<div class="flex items-center gap-2">
-											<div class="min-h-15">
-												<ImageWithFallback {game} />
-											</div>
-											<div>
-												{game.name}
+										<div>
+											<Badge variant="secondary" class="absolute left-1 text-lg"
+												>{'#' + (i + 1 + 10 * (topGamesPage - 1))}</Badge
+											>
+											<div class="flex items-center gap-2">
+												<div class="mr-2 min-h-15">
+													<ImageWithFallback {game} />
+												</div>
+												<p class=" truncate">
+													{game.name}
+												</p>
 											</div>
 										</div>
 										<div>
@@ -184,9 +186,23 @@
 											class="relative flex items-center justify-between gap-2 border-b-2 p-1 py-1.5 group-last:border-0 hover:bg-neutral-500/20"
 										>
 											<div class="flex items-center gap-2">
-												<div>
-													#{i + 1 + 10 * (topUsersByVotePage - 1)}
-												</div>
+												{#if i === 0}
+													<div class="text-amber-400 opacity-70">
+														#{i + 1 + 10 * (topUsersByVotePage - 1)}
+													</div>
+												{:else if i === 1}
+													<div class="text-orange-400 opacity-70">
+														#{i + 1 + 10 * (topUsersByVotePage - 1)}
+													</div>
+												{:else if i === 2}
+													<div class="text-gray-400 opacity-70">
+														#{i + 1 + 10 * (topUsersByVotePage - 1)}
+													</div>
+												{:else}
+													<div class="opacity-70">
+														#{i + 1 + 10 * (topUsersByVotePage - 1)}
+													</div>
+												{/if}
 												<div>
 													{user.name}
 												</div>
@@ -250,8 +266,24 @@
 											class="relative flex items-center justify-between gap-2 border-b-2 p-1 py-1.5 group-last:border-0 hover:bg-neutral-500/20"
 										>
 											<div class="flex items-center gap-2">
-												<div>
-													#{i + 1 + 10 * (topUsersByStreakPage - 1)}
+												<div class="flex items-center gap-2">
+													{#if i === 0}
+														<div class="text-amber-400 opacity-70">
+															#{i + 1 + 10 * (topUsersByVotePage - 1)}
+														</div>
+													{:else if i === 1}
+														<div class="text-orange-400 opacity-70">
+															#{i + 1 + 10 * (topUsersByVotePage - 1)}
+														</div>
+													{:else if i === 2}
+														<div class="text-gray-400 opacity-70">
+															#{i + 1 + 10 * (topUsersByVotePage - 1)}
+														</div>
+													{:else}
+														<div class="opacity-70">
+															#{i + 1 + 10 * (topUsersByVotePage - 1)}
+														</div>
+													{/if}
 												</div>
 												<div>
 													{user.name}
