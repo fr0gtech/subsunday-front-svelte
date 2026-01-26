@@ -93,7 +93,7 @@
 			<Card class="p-5">
 				<div class="space-y-5">
 					<div class=" flex items-center justify-between gap-5">
-						<h1 class="truncate text-2xl font-bold">{data.gameData.name}</h1>
+						<h1 class="truncate text-2xl font-bold whitespace-pre-wrap">{data.gameData.name}</h1>
 						<div class=" text-right">
 							<div class="gap-2 text-sm">
 								<b><Number number={data.gameData.recommendations} /> </b> reviews
@@ -213,7 +213,7 @@
 				{/if}
 			</div>
 		</div>
-		<div class="w-full space-y-5 md:min-w-80 lg:m-0 lg:w-4/12">
+		<div class="mt-5 w-full space-y-5 md:min-w-80 lg:m-0 lg:mt-0 lg:w-4/12">
 			{#if data.gameData.moments.length > 0}
 				<Card class="p-3">
 					{#each data.gameData.moments as moment}

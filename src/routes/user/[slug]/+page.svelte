@@ -125,7 +125,7 @@
 							{:else if parseInt(data.user.voteRank) === 2}
 								<span class="text-gray-400">(#{parseInt(data.user.voteRank) + 1})</span>
 							{:else}
-								<span>(#{parseInt(data.user.streakRank) + 1})</span>
+								<span>(#{parseInt(data.user.voteRank) + 1})</span>
 							{/if}
 						</Badge></span
 					>
