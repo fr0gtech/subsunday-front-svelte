@@ -159,3 +159,11 @@
 	font-size: 1.4em;
 	font-weight: 800;
 }
+.bb_img_ctn {
+  position: relative;
+  display: inline-block;
+}
+.bb_img {
+  height: auto;
+  max-width: 100%;
+}
