@@ -148,63 +148,64 @@
 		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
 	/>
 </svelte:head>
-<div class=" flex max-h-screen flex-col overflow-hidden">
-	<div class="mt-15">
-		<div class="mb-10 w-full space-y-5 lg:hidden">
-			<div class="mx-auto flex w-fit items-center gap-5">
-				<span class="text-sm">
+{#snippet mobileStats()}
+	<div class="mt-20 mb-10 w-full space-y-5 lg:hidden">
+		<div class="mx-auto flex w-fit items-center gap-5">
+			<span class="text-sm">
+				<NumberFlow
+					value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
+				/> -
+				{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+			</span>
+			<ButtonGroup.Root>
+				<Button size={'sm'} onclick={periodPrev} variant="secondary"><LeftArrow /></Button>
+				<Popover.Root>
+					<Popover.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}
+						><CalendarIcon /></Popover.Trigger
+					>
+					<Popover.Content
+						class=" m-0 flex !w-fit flex-col  items-center justify-center border-none p-0"
+					>
+						<!-- <Calendar type="single" bind:value class="rounded-md border" /> -->
+
+						<CustomCalendar />
+					</Popover.Content>
+				</Popover.Root>
+				<Button size={'sm'} onclick={periodNext} variant="secondary"><RightArrow /></Button>
+			</ButtonGroup.Root>
+		</div>
+
+		<div class=" w-full text-center text-lg">
+			{#if $selectedPeriod && isAfter(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
+				voting for week
+				<b>
 					<NumberFlow
 						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
-					/> -
-					{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
-				</span>
-				<ButtonGroup.Root>
-					<Button size={'sm'} onclick={periodPrev} variant="secondary"><LeftArrow /></Button>
-					<Popover.Root>
-						<Popover.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}
-							><CalendarIcon /></Popover.Trigger
-						>
-						<Popover.Content
-							class=" m-0 flex !w-fit flex-col  items-center justify-center border-none p-0"
-						>
-							<!-- <Calendar type="single" bind:value class="rounded-md border" /> -->
-
-							<CustomCalendar />
-						</Popover.Content>
-					</Popover.Root>
-					<Button size={'sm'} onclick={periodNext} variant="secondary"><RightArrow /></Button>
-				</ButtonGroup.Root>
-			</div>
-
-			<div class=" w-full text-center text-lg">
-				{#if $selectedPeriod && isAfter(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
-					voting for week
-					<b>
-						<NumberFlow
-							value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
-						/>
-					</b>
-					({$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}) ended
-					<b>{formatDistance($selectedPeriod.currentPeriod.endDate, getNowTZ())}</b> ago
-				{:else if $selectedPeriod && isAfter($selectedPeriod.currentPeriod.endDate, getNowTZ())}
-					voting for
-					<b>
-						<NumberFlow
-							value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
-						/>
-					</b>
-					-
-					{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
-					ends in <b>{formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}</b>
-				{/if}
-			</div>
-			<div class="flex justify-center">
-				<VoteStats gameVotes={$votestats} class={'text-sm'} />
-			</div>
+					/>
+				</b>
+				({$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}) ended
+				<b>{formatDistance($selectedPeriod.currentPeriod.endDate, getNowTZ())}</b> ago
+			{:else if $selectedPeriod && isAfter($selectedPeriod.currentPeriod.endDate, getNowTZ())}
+				voting for
+				<b>
+					<NumberFlow
+						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
+					/>
+				</b>
+				-
+				{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+				ends in <b>{formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}</b>
+			{/if}
+		</div>
+		<div class="flex justify-center">
+			<VoteStats gameVotes={$votestats} class={'text-sm'} />
 		</div>
 	</div>
+{/snippet}
+<div class=" flex max-h-screen flex-col overflow-hidden">
 	{#if $layout.type === 'icon'}
-		<div class=" w-full space-y-5 overflow-y-scroll px-5 xl:pt-20" bind:this={container}>
+		<div class=" w-full space-y-5 overflow-y-scroll px-5 lg:pt-20" bind:this={container}>
+			{@render mobileStats()}
 			<!-- {#if (allGamesWithWsVotes.length === 0 || loaderState.status === 'LOADING') && loaderState.status !== 'COMPLETE'}
 				<div class="infinite-loader-wrapper">
 					{#each Array(20).fill(0) as skeleton}
@@ -352,11 +353,13 @@
 			{/key}
 		</div>
 	{:else}
-		<div class=" flex w-full flex-col items-start gap-2 overflow-y-scroll pt-12">
+		<div class=" flex w-full flex-col items-start gap-2 overflow-y-scroll lg:pt-20">
+			{@render mobileStats()}
+
 			{#each allGames as game, i}
 				<a href={`game/${game.id}`} class="w-full px-3">
 					<Card class="relative flex w-full flex-row items-start gap-0 overflow-clip !py-0">
-						<div class=" h-[40px] w-[100px]">
+						<div class="min-h-20 w-1/3">
 							{#if game.picture !== 'default'}
 								<div class="relative w-full">
 									<img
@@ -377,7 +380,7 @@
 								class="bg-primary-foreground text-primary-background z-10 text-lg"
 								variant="default"
 							>
-								# {i + 1}
+								<span class="text-sm"># {i + 1}</span>
 								{game.name}
 							</Badge>
 							<Badge class="bg-primary-foreground text-primary-background  z-10 " variant="default">
