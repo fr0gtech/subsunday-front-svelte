@@ -126,8 +126,7 @@
 	}
 }
 .bb_img {
-	width: 100%;
-	border-radius: 1em;
+	height: auto;
 }
 
 .bb_tag {
