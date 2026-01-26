@@ -149,48 +149,62 @@
 	/>
 </svelte:head>
 <div class=" flex max-h-screen flex-col overflow-hidden">
-	{#if $layout.type === 'icon'}
-		<div class=" w-full overflow-y-scroll px-5 pt-20" bind:this={container}>
-			<div class="mx-auto mb-10 flex flex-col gap-5 pt-10 lg:hidden">
-				<div class=" w-full text-center text-lg font-bold">
-					{#if $selectedPeriod && isAfter(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
-						voting ended {formatDistance($selectedPeriod.currentPeriod.endDate, getNowTZ())} ago
-					{:else if $selectedPeriod && isAfter($selectedPeriod.currentPeriod.endDate, getNowTZ())}
-						voting ends in {formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
-					{/if}
-				</div>
-				<div class="flex justify-center">
-					<VoteStats gameVotes={$votestats} />
-				</div>
-				<div class="flex items-center justify-center gap-5">
-					<div>
-						<span class="text-sm">
-							<NumberFlow
-								value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
-							/> -
-							{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
-						</span>
-					</div>
-					<div>
-						<ButtonGroup.Root>
-							<Button size={'sm'} onclick={periodPrev} variant="secondary"><LeftArrow /></Button>
-							<Popover.Root>
-								<Popover.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}
-									><CalendarIcon /></Popover.Trigger
-								>
-								<Popover.Content
-									class=" m-0 flex !w-fit flex-col  items-center justify-center border-none p-0"
-								>
-									<!-- <Calendar type="single" bind:value class="rounded-md border" /> -->
+	<div class="mt-15">
+		<div class="mb-10 w-full space-y-5 lg:hidden">
+			<div class="mx-auto flex w-fit items-center gap-5">
+				<span class="text-sm">
+					<NumberFlow
+						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
+					/> -
+					{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+				</span>
+				<ButtonGroup.Root>
+					<Button size={'sm'} onclick={periodPrev} variant="secondary"><LeftArrow /></Button>
+					<Popover.Root>
+						<Popover.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}
+							><CalendarIcon /></Popover.Trigger
+						>
+						<Popover.Content
+							class=" m-0 flex !w-fit flex-col  items-center justify-center border-none p-0"
+						>
+							<!-- <Calendar type="single" bind:value class="rounded-md border" /> -->
 
-									<CustomCalendar />
-								</Popover.Content>
-							</Popover.Root>
-							<Button size={'sm'} onclick={periodNext} variant="secondary"><RightArrow /></Button>
-						</ButtonGroup.Root>
-					</div>
-				</div>
+							<CustomCalendar />
+						</Popover.Content>
+					</Popover.Root>
+					<Button size={'sm'} onclick={periodNext} variant="secondary"><RightArrow /></Button>
+				</ButtonGroup.Root>
 			</div>
+
+			<div class=" w-full text-center text-lg">
+				{#if $selectedPeriod && isAfter(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
+					voting for week
+					<b>
+						<NumberFlow
+							value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
+						/>
+					</b>
+					({$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}) ended
+					<b>{formatDistance($selectedPeriod.currentPeriod.endDate, getNowTZ())}</b> ago
+				{:else if $selectedPeriod && isAfter($selectedPeriod.currentPeriod.endDate, getNowTZ())}
+					voting for
+					<b>
+						<NumberFlow
+							value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
+						/>
+					</b>
+					-
+					{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+					ends in <b>{formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}</b>
+				{/if}
+			</div>
+			<div class="flex justify-center">
+				<VoteStats gameVotes={$votestats} class={'text-sm'} />
+			</div>
+		</div>
+	</div>
+	{#if $layout.type === 'icon'}
+		<div class=" w-full space-y-5 overflow-y-scroll px-5 xl:pt-20" bind:this={container}>
 			<!-- {#if (allGamesWithWsVotes.length === 0 || loaderState.status === 'LOADING') && loaderState.status !== 'COMPLETE'}
 				<div class="infinite-loader-wrapper">
 					{#each Array(20).fill(0) as skeleton}
