@@ -61,7 +61,7 @@
 			<div class="space-y-2">
 				<div class="flex items-center justify-between p-5">
 					<div>
-						<h2 class="text-xl font-bold text-nowrap">Top Games</h2>
+						<h2 class="text-lg font-bold text-nowrap">Top Games</h2>
 						<span>All Time</span>
 					</div>
 					<div class="flex items-center justify-between gap-5 px-5">
@@ -142,7 +142,7 @@
 			<Card class="w-12/12 overflow-clip p-0  pt-2">
 				<div class="space-y-2">
 					<div class="flex items-center justify-between p-5">
-						<h2 class=" text-xl font-bold">Top Voters</h2>
+						<h2 class=" text-lg font-bold">Top Voters</h2>
 						<div class="flex items-center justify-between gap-5 px-5">
 							<Button
 								title="prev page"
@@ -208,7 +208,7 @@
 			<Card class="w-12/12 overflow-clip p-0  pt-2">
 				<div class="space-y-2">
 					<div class="flex items-center justify-between p-5">
-						<h2 class="text-xl font-bold">Top Streak</h2>
+						<h2 class="text-lg font-bold">Top Streak</h2>
 						<div class="flex items-center justify-between gap-5 px-5">
 							<Button
 								title="prev page"
