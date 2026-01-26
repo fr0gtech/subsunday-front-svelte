@@ -53,9 +53,7 @@
 		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
 	/>
 </svelte:head>
-<div
-	class="mx-auto w-full max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:pt-16 xl:p-0"
->
+<div class="mx-auto w-full max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:pt-16">
 	<div class="flex w-full flex-col justify-center gap-5 lg:flex-row">
 		<Card class="h-fit w-1/1 overflow-clip p-0 pt-2">
 			<div class="space-y-2">
