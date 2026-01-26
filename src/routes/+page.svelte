@@ -152,7 +152,7 @@
 	{#if $layout.type === 'icon'}
 		<div class=" w-full overflow-y-scroll px-5 pt-20" bind:this={container}>
 			<div class="mx-auto mb-10 flex flex-col gap-5 pt-10 lg:hidden">
-				<div class=" w-full text-center text-xl font-bold">
+				<div class=" w-full text-center text-lg font-bold">
 					{#if $selectedPeriod && isAfter(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
 						voting ended {formatDistance($selectedPeriod.currentPeriod.endDate, getNowTZ())} ago
 					{:else if $selectedPeriod && isAfter($selectedPeriod.currentPeriod.endDate, getNowTZ())}
@@ -258,7 +258,7 @@
 										variant="secondary"
 									>
 										<span class="text-base font-bold">
-											<span class="text-sm font-normal">#</span><span class="mr-1 text-xl"
+											<span class="text-sm font-normal">#</span><span class="mr-1 text-lg"
 												>{i + 1}</span
 											>{game.name.slice(0, 25)}
 										</span>
@@ -360,7 +360,7 @@
 						</div>
 						<div>
 							<Badge
-								class="bg-primary-foreground text-primary-background z-10  text-xl"
+								class="bg-primary-foreground text-primary-background z-10 text-lg"
 								variant="default"
 							>
 								# {i + 1}

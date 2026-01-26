@@ -37,8 +37,8 @@
 	);
 
 	const chartConfig = {
-		votesLast7Days: { label: 'This Week', color: 'var(--chart-1)' },
-		votesLastWeek: { label: 'Last Week', color: 'var(--chart-2)' }
+		votesLast7Days: { label: 'This Week', color: '#462764' },
+		votesLastWeek: { label: 'Last Week', color: '#084d26' }
 	} satisfies Chart.ChartConfig;
 
 	const chartConfigAll = {
@@ -54,6 +54,12 @@
 	/>
 </svelte:head>
 <div class="mx-auto max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:p-0 lg:pt-16">
+	<Alert.Root variant="destructive">
+		<Alert.Description class="block"
+			>*Vote count may be inaccurate. This project was made for fun and does not represents what
+			happens to your vote.</Alert.Description
+		>
+	</Alert.Root>
 	<div class="flex flex-wrap gap-5 lg:flex-nowrap">
 		<div class=" flex w-full flex-col space-y-5 lg:w-8/12">
 			<Card class="w-full p-5 ">
@@ -141,11 +147,11 @@
 			</Card>
 			<div class="flex grow flex-col gap-5 lg:flex-row">
 				<Card class="p-5 lg:w-1/2">
-					<h2 class="text-xl font-bold">Supported Games</h2>
+					<h2 class="text-lg font-bold">Supported Games</h2>
 					Only steam games have images, price and so on but we also track non steam games just without
 					any metadata. We may look at another source of info in the future to support more games.
 
-					<h2 class="text-xl font-bold">Credit</h2>
+					<h2 class="text-lg font-bold">Credit</h2>
 					<p>
 						Here some sources used to create this website:<br />
 						<a class="text-blue-500" href="https://ragnapixel.itch.io/particle-fx">ragnapixel</a>:
@@ -157,7 +163,7 @@
 					</p>
 				</Card>
 				<Card class="w-full grow p-5">
-					<h2 class="text-xl font-bold">Recent Votes</h2>
+					<h2 class="text-lg font-bold">Recent Votes</h2>
 					{#if allVotes}
 						{#each allVotes as vote (vote.id)}
 							<span class="-ml-1 rounded text-sm" in:fly out:fade>
@@ -200,12 +206,7 @@
 					</div>
 				</div>
 			</Card>
-			<Alert.Root variant="destructive" class="text-xl">
-				<Alert.Description class="block text-base"
-					>*Vote count may be inaccurate. This project was made for fun and does not represents what
-					happens to your vote.</Alert.Description
-				>
-			</Alert.Root>
+
 			<Card class="mt-5 p-5">
 				<h1>Votes this week vs votes last week</h1>
 				<Chart.Container config={chartConfig}>

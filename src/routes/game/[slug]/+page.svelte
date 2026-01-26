@@ -72,8 +72,8 @@
 	);
 
 	const chartConfig = {
-		votesLast7Days: { label: 'This Week', color: 'var(--chart-1)' },
-		votesLastWeek: { label: 'Last Week', color: 'var(--chart-2)' }
+		votesLast7Days: { label: 'This Week', color: '#462764' },
+		votesLastWeek: { label: 'Last Week', color: '#084d26' }
 	} satisfies Chart.ChartConfig;
 </script>
 
@@ -91,7 +91,7 @@
 	<div class="flex flex-wrap justify-center gap-0 md:gap-5 lg:flex-nowrap">
 		<div class="w-full space-y-5 md:min-w-125">
 			<Card class="p-5">
-				<div class="space-y-5 px-4">
+				<div class="space-y-5">
 					<div class=" flex items-center justify-between gap-5">
 						<h1 class="truncate text-2xl font-bold">{data.gameData.name}</h1>
 						<div class=" text-right">

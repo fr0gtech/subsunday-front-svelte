@@ -16,7 +16,7 @@
 <div class="mx-auto max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:p-0 lg:pt-16">
 	<div class="flex flex-col gap-5 lg:flex-row">
 		<Card class="w-full p-5">
-			<h2 class="text-xl font-bold">How to Vote</h2>
+			<h2 class="text-lg font-bold">How to Vote</h2>
 			Voting can be done in two different ways and you don't need to be a subscriber. You can use ur
 			channel points to vote!
 

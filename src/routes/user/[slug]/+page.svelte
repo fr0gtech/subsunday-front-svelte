@@ -113,7 +113,7 @@
 				</div>
 				<div class="font-mono! text-xs">
 					<a href={`https://twitch.tv/${data.user.name}`}>
-						<h2 class="text-xl font-bold">{data.user.name}</h2>
+						<h2 class="text-lg font-bold">{data.user.name}</h2>
 					</a>
 					<span
 						>votes<Badge variant="secondary"
