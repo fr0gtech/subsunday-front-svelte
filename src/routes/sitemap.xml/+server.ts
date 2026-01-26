@@ -21,22 +21,18 @@ const sitemap = () =>
 >
         <url>
           <loc>${site}/how-to-vote</loc>
-          <changefreq></changefreq>
           <priority>0.5</priority>
         </url>
 		<url>
           <loc>${site}/leaderboard</loc>
-          <changefreq></changefreq>
           <priority>0.5</priority>
         </url>
 		<url>
           <loc>${site}/played</loc>
-          <changefreq></changefreq>
           <priority>0.5</priority>
         </url>
 		<url>
           <loc>${site}/about</loc>
-          <changefreq></changefreq>
           <priority>0.5</priority>
         </url>
 </urlset>`.trim();

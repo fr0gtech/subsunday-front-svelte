@@ -34,7 +34,7 @@ const sitemap = (users: { id: number; updatedAt: Date }[]) =>
 			(user) => `
       <url>
           <loc>${site}/user/${user.id}</loc>
-          <changefreq>${user.updatedAt.toISOString()}</changefreq>
+          <lastmod>${user.updatedAt.toISOString()}</lastmod>
           <priority>0.5</priority>
         </url>
     `
