@@ -90,16 +90,13 @@
 <div class="mx-auto max-w-screen-xl space-y-5 p-5 pt-16">
 	<div class="flex flex-wrap justify-center gap-0 md:gap-5 lg:flex-nowrap">
 		<div class="w-full space-y-5 md:min-w-125">
-			<Card class="py-2">
+			<Card class="p-5">
 				<div class="space-y-5 px-4">
 					<div class=" flex items-center justify-between gap-5">
 						<h1 class="truncate text-2xl font-bold">{data.gameData.name}</h1>
 						<div class=" text-right">
 							<div class="gap-2 text-sm">
 								<b><Number number={data.gameData.recommendations} /> </b> reviews
-							</div>
-							<div class="text-sm">
-								<b><Number number={data.gameData.voteCount} /> </b> votes
 							</div>
 						</div>
 					</div>
@@ -136,7 +133,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="mx-auto overflow-clip">
+				<div class="overflow-cli mx-auto py-10">
 					{#if selectedItem === null}
 						{#if (data.gameData.screenshots as any).length > 0}
 							<img
@@ -161,7 +158,7 @@
 					{/if}
 				</div>
 				{#if data.gameData.screenshots.length + data.gameData.movies.length > 0}
-					<div class="mx-15">
+					<div class="mx-15 pb-10">
 						<Carousel.Root
 							opts={{
 								align: 'start'
@@ -208,7 +205,7 @@
 			</Card>
 			<div class="mt-5">
 				{#if data.gameData.detailedDescription && (data.gameData.detailedDescription as any).html}
-					<Card class="detailContent m-3 grow px-4 lg:m-0 ">
+					<Card class="detailContent m-3 grow p-5 lg:m-0 ">
 						{@html (data.gameData.detailedDescription as any).html}
 					</Card>
 				{/if}
@@ -242,6 +239,9 @@
 				</Card>
 			{/if}
 			<Card class="p-5">
+				<h3 class="text-lg">
+					<b><Number number={data.gameData.voteCount} /> </b> total votes
+				</h3>
 				<VoteStats gameVotes={gameVotes.data} class="text-sm!" />
 				{#if graph.data}
 					<Chart.Container config={chartConfig}>
@@ -304,7 +304,7 @@
 					</Chart.Container>
 				{/if}
 			</Card>
-			<Card class=" flex gap-4 p-3 text-sm md:min-w-80">
+			<Card class=" flex gap-6 p-5 py-6 text-sm md:min-w-80">
 				{#if allVotes}
 					{#each allVotes as vote (vote.id)}
 						<p in:fly out:fade>
