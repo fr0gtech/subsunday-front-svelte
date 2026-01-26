@@ -232,7 +232,7 @@
 							matchingStream.data.stream.moments.find(
 								(moment: Moment) => moment.description === game.name
 							)}
-						<a href={`game/${game.id}`} in:fade class="z-0 mx-auto w-fit md:w-full">
+						<a href={`game/${game.id}`} in:fade class="z-0 mx-auto w-fit min-w-80 md:w-full">
 							<Card class="grid-item relative h-full max-w-[400px] border-0 !py-0">
 								<!-- {JSON.stringify(
 									matchingStream.data.stream.moments.filter((e) => e.description === game.name)
@@ -263,7 +263,7 @@
 											class="flex h-full min-h-45 w-full flex-col items-center justify-center md:min-h-auto"
 										>
 											<Logo />
-											<p class="text-center text-xs">no image</p>
+											<p class="w-full text-center text-xs">no image</p>
 										</div>
 									{/if}
 								</div>
