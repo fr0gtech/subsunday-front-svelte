@@ -53,7 +53,7 @@
 		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
 	/>
 </svelte:head>
-<div class="mx-auto max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:p-0 lg:pt-16">
+<div class="mx-auto max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:pt-16 xl:p-0">
 	<Alert.Root variant="destructive">
 		<Alert.Description class="block"
 			>*Vote count may be inaccurate. This project was made for fun and does not represents what

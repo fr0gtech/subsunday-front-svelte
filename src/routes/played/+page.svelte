@@ -36,11 +36,11 @@
 		content="A website to track lirik's sub sunday votes. With game info, direct link to steam and more."
 	/>
 </svelte:head>
-<div class="mx-auto max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:p-0 lg:pt-16">
+<div class="mx-auto max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:pt-16 xl:p-0">
 	<div class="flex flex-col gap-5 lg:flex-row">
 		<Card class="h-fit w-full overflow-clip p-0 pt-2">
 			<div class="space-y-2">
-				<div class="flex items-center justify-between">
+				<div class="flex flex-wrap items-center justify-between">
 					<h2 class="p-5 text-lg font-bold">Past sub sunday streams</h2>
 					<div class="flex items-center justify-between gap-5 px-5">
 						<Button
@@ -69,7 +69,7 @@
 								<!-- {JSON.stringify(stream)} -->
 								<Collapsible.Root class=" space-y-2">
 									<div
-										class="m-5 flex items-center justify-between space-x-4 rounded-xl bg-neutral-800 p-3"
+										class="m-5 flex items-center justify-between space-x-4 rounded-xl bg-current/4 p-3"
 									>
 										<h4 class=" text-sm">
 											<b>{formatDistance(stream.publishedAt, new Date(), { addSuffix: true })}</b>
@@ -138,7 +138,7 @@
 		</Card>
 		<Card class="h-fit w-full overflow-clip p-0 pt-2">
 			<div class="space-y-2">
-				<div class="flex items-center justify-between">
+				<div class="flex flex-wrap items-center justify-between">
 					<h2 class="p-5 text-lg font-bold">Longest sub sunday segments</h2>
 					<div class="flex items-center justify-between gap-5 px-5">
 						<Button
@@ -149,7 +149,7 @@
 						>
 							<LeftArrow />
 						</Button>
-						<span class="font-mono text-xs">
+						<span class="font-mono text-xs whitespace-nowrap">
 							page {playedGamesPage}
 						</span>
 						<Button
@@ -171,23 +171,18 @@
 										<Badge variant="secondary" class="absolute left-1 text-lg"
 											>{'#' + (i + 1 + 10 * (playedGamesPage - 1))}</Badge
 										>
-										<div class="flex items-center gap-2">
-											<div class="min-h-15">
-												<ImageWithFallback game={playedGame.game} />
-											</div>
-											<div>
-												{playedGame.game.name}
-											</div>
+										<div class="mr-2 min-h-15">
+											<ImageWithFallback game={playedGame.game} />
 										</div>
-										<div>
-											{formatDuration(
+										<p class=" text-ellipsis">
+											{playedGame.game.name} - {formatDuration(
 												intervalToDuration({
 													start: 0,
 													end: playedGame.durationMilliseconds
 												}),
 												{ format: ['hours', 'minutes'] }
 											)}
-										</div>
+										</p>
 									</div>
 								</a>
 							{/each}

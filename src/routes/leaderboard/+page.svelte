@@ -54,12 +54,12 @@
 	/>
 </svelte:head>
 <div
-	class="mx-auto w-full max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:p-0 lg:pt-16"
+	class="mx-auto w-full max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:pt-16 xl:p-0"
 >
 	<div class="flex w-full flex-col justify-center gap-5 lg:flex-row">
 		<Card class="h-fit w-1/1 overflow-clip p-0 pt-2">
 			<div class="space-y-2">
-				<div class="flex items-center justify-between p-5">
+				<div class="flex flex-wrap items-center justify-start p-5 lg:justify-between">
 					<div>
 						<h2 class="text-lg font-bold text-nowrap">Top Games</h2>
 						<span>All Time</span>
@@ -141,9 +141,9 @@
 		<div class="flex w-full flex-col gap-5">
 			<Card class="w-12/12 overflow-clip p-0  pt-2">
 				<div class="space-y-2">
-					<div class="flex items-center justify-between p-5">
+					<div class="flex flex-wrap items-center justify-start gap-5 p-5 lg:justify-between">
 						<h2 class=" text-lg font-bold">Top Voters</h2>
-						<div class="flex items-center justify-between gap-5 px-5">
+						<div class="flex items-center justify-between gap-5">
 							<Button
 								title="prev page"
 								variant="secondary"
@@ -207,9 +207,9 @@
 
 			<Card class="w-12/12 overflow-clip p-0  pt-2">
 				<div class="space-y-2">
-					<div class="flex items-center justify-between p-5">
+					<div class="flex flex-wrap items-center justify-start gap-5 p-5 lg:justify-between">
 						<h2 class="text-lg font-bold">Top Streak</h2>
-						<div class="flex items-center justify-between gap-5 px-5">
+						<div class="flex items-center justify-between gap-5">
 							<Button
 								title="prev page"
 								variant="secondary"

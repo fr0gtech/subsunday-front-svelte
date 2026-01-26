@@ -110,7 +110,7 @@
 						{/if}
 						<div class="w-full space-y-2">
 							{#if data.gameData.description.length > 0}
-								<p class=" leading-relaxedPast sub sunday streams mb-5">
+								<p class=" mb-5 leading-relaxed">
 									{data.gameData.description}
 								</p>
 							{/if}
@@ -157,61 +157,63 @@
 						</video>
 					{/if}
 				</div>
-				{#if data.gameData.screenshots.length + data.gameData.movies.length > 0}
-					<div class="mx-15 pb-10">
-						<Carousel.Root
-							opts={{
-								align: 'start'
-							}}
-							class=" w-full"
-						>
-							<Carousel.Content class="-ml-1 w-full">
-								{#each data.gameData.screenshots as screenshot}
-									<Carousel.Item
-										onclick={() => (selectedItem = screenshot as any)}
-										class=" basis-1/3 pl-1 transition-all hover:brightness-125 sm:basis-1/3 md:basis-1/3 lg:basis-1/4"
-									>
-										<Card class="m-0 w-fit overflow-clip p-0">
-											<img class="w-50" alt="screenshot" src={screenshot.path_thumbnail} />
-										</Card>
-									</Carousel.Item>
-								{/each}
-								{#each data.gameData.movies as movie}
-									<Carousel.Item class="basis-1/3 pl-1 md:basis-1/2 lg:basis-1/4">
-										<Card
-											class="relative m-0 flex h-full items-center justify-center overflow-clip p-0 "
+				<div class="w-full">
+					{#if data.gameData.screenshots.length + data.gameData.movies.length > 0}
+						<div class="mx-15 pb-10">
+							<Carousel.Root
+								opts={{
+									align: 'start'
+								}}
+								class="w-full"
+							>
+								<Carousel.Content class="-ml-1 w-full">
+									{#each data.gameData.screenshots as screenshot}
+										<Carousel.Item
+											onclick={() => (selectedItem = screenshot as any)}
+											class=" flex basis-1/1 items-center pl-1 transition-all hover:brightness-125 sm:basis-1/3 md:basis-1/3 lg:basis-1/4"
 										>
-											<Button
-												onclick={() => (selectedItem = movie as any)}
-												variant="secondary"
-												class="z-1  "
-											>
-												<PlayIcon />
-											</Button>
-											<img
-												alt="movie thumbnail"
-												class="absolute top-0 left-0 z-0"
-												src={movie.thumbnail}
-											/>
-										</Card>
-									</Carousel.Item>
-								{/each}
-							</Carousel.Content>
-							<Carousel.Previous />
-							<Carousel.Next />
-						</Carousel.Root>
-					</div>
-				{/if}
+											<Card class="m-0 w-fit overflow-clip p-0">
+												<img alt="h-fit screenshot" src={screenshot.path_thumbnail} />
+											</Card>
+										</Carousel.Item>
+									{/each}
+									{#each data.gameData.movies as movie}
+										<Carousel.Item class="basis-1/3 pl-1 md:basis-1/2 lg:basis-1/4">
+											<Card class="relative m-0 overflow-hidden p-0">
+												<div class="relative h-24 w-full sm:h-32 md:h-40">
+													<img
+														alt="movie thumbnail"
+														class="absolute inset-0 h-full w-full object-cover"
+														src={movie.thumbnail}
+													/>
+													<Button
+														onclick={() => (selectedItem = movie as any)}
+														variant="secondary"
+														class="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
+													>
+														<PlayIcon />
+													</Button>
+												</div>
+											</Card>
+										</Carousel.Item>
+									{/each}
+								</Carousel.Content>
+								<Carousel.Previous />
+								<Carousel.Next />
+							</Carousel.Root>
+						</div>
+					{/if}
+				</div>
 			</Card>
 			<div class="mt-5">
 				{#if data.gameData.detailedDescription && (data.gameData.detailedDescription as any).html}
-					<Card class="detailContent m-3 grow p-5 lg:m-0 ">
+					<Card class="detailContent grow p-5 lg:m-0 ">
 						{@html (data.gameData.detailedDescription as any).html}
 					</Card>
 				{/if}
 			</div>
 		</div>
-		<div class="m-3 w-full space-y-5 md:min-w-80 lg:m-0 lg:w-4/12">
+		<div class="w-full space-y-5 md:min-w-80 lg:m-0 lg:w-4/12">
 			{#if data.gameData.moments.length > 0}
 				<Card class="p-3">
 					{#each data.gameData.moments as moment}
