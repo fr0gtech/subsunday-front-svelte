@@ -9,7 +9,8 @@ export async function GET() {
 	return response;
 }
 
-const sitemap = () => `<?xml version="1.0" encoding="UTF-8" ?>
+const sitemap = () =>
+	`<?xml version="1.0" encoding="UTF-8" ?>
 <urlset
   xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:news="https://www.google.com/schemas/sitemap-news/0.9"
@@ -38,4 +39,4 @@ const sitemap = () => `<?xml version="1.0" encoding="UTF-8" ?>
           <changefreq></changefreq>
           <priority>0.5</priority>
         </url>
-</urlset>`;
+</urlset>`.trim();
