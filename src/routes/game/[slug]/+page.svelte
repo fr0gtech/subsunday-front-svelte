@@ -22,8 +22,7 @@
 	import { env } from '$env/dynamic/public';
 	import Steamicon from '@/components/icons/steamicon.svelte';
 	import PlayIcon from '@lucide/svelte/icons/play';
-	import StarIcon from '@lucide/svelte/icons/star';
-
+	import ExternalLink from '@lucide/svelte/icons/external-link';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import Button from '@/components/ui/button/button.svelte';
 	import Number from '@/components/number/number.svelte';
@@ -129,6 +128,11 @@
 										<Steamicon size={20} />
 									</a>
 								{/if}
+								{#if data.gameData.website.length > 0}
+									<a href={data.gameData.website} target="_blank">
+										<ExternalLink size={15} />
+									</a>
+								{/if}
 							</div>
 						</div>
 					</div>
@@ -138,12 +142,12 @@
 						{#if (data.gameData.screenshots as any).length > 0}
 							<img
 								class="rounded-2xl p-2"
-								src={(data.gameData.screenshots as any)[0].path_thumbnail}
+								src={(data.gameData.screenshots as any)[0].path_full}
 								alt=""
 							/>
 						{/if}
 					{:else if selectedItem && !selectedItem.mp4}
-						<img class="rounded-2xl p-2" src={selectedItem.path_thumbnail} alt="" />
+						<img class="rounded-2xl p-2" src={selectedItem.path_full} alt="" />
 					{:else if selectedItem && selectedItem.mp4}
 						<video
 							class="rounded-2xl p-2"
@@ -151,7 +155,7 @@
 							controls
 							src={selectedItem
 								? selectedItem.mp4.max
-								: (data.gameData.screenshots as any)[0].path_thumbnail}
+								: (data.gameData.screenshots as any)[0].path_full}
 						>
 							<track kind="captions" />
 						</video>

@@ -240,19 +240,19 @@
 								)} -->
 
 								<div
-									class="rounded-large relative h-full !max-w-full rounded-xl shadow-none shadow-black/5"
+									class="rounded-large relative h-40 max-h-50! !max-w-full overflow-clip rounded-xl shadow-none shadow-black/5"
 									style="max-width: fit-content;"
 								>
 									{#if game.picture !== 'default'}
 										<img
-											class="transition-transform-opacity rounded-large border-success relative z-10 w-full !max-w-full rounded-xl border-0 opacity-0 shadow-none shadow-black/5 !duration-300 data-[loaded=true]:opacity-100 motion-reduce:transition-none"
-											alt="Backseat Drivers"
+											class="transition-transform-opacity rounded-large border-success absolute z-10 mx-auto w-full !max-w-full rounded-xl border-0 opacity-0 shadow-none shadow-black/5 !duration-300 data-[loaded=true]:opacity-100 motion-reduce:transition-none"
+											alt={game.name}
 											style="max-width: 100%;"
 											src={game.picture}
 											data-loaded="true"
 										/><img
 											class="rounded-large absolute inset-0 z-0 h-full w-full translate-y-1 object-cover opacity-30 blur-lg saturate-150 filter"
-											alt="Backseat Drivers"
+											alt={game.name}
 											style="max-width: 100%;"
 											aria-hidden="true"
 											src={game.picture}

@@ -1,0 +1,1 @@
+ALTER TABLE "Game" ADD COLUMN "igdbId" integer DEFAULT 0;

@@ -59,7 +59,8 @@ export const game = pgTable(
 		detailedDescription: jsonb().default({}).notNull(),
 		movies: jsonb().default({}).notNull(),
 		recommendations: integer().default(0).notNull(),
-		screenshots: jsonb().default({}).notNull()
+		screenshots: jsonb().default({}).notNull(),
+		igdbId: integer().default(0)
 	},
 	() => {
 		const string = `to_tsvector('english', 'Game.name')`;
