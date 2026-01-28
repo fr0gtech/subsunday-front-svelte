@@ -240,7 +240,7 @@
 								)} -->
 
 								<div
-									class="rounded-large relative h-40 max-h-50! !max-w-full overflow-clip rounded-xl shadow-none shadow-black/5"
+									class="rounded-large relative h-35 !max-w-full overflow-clip rounded-xl shadow-none shadow-black/5 lg:h-40"
 									style="max-width: fit-content;"
 								>
 									{#if game.picture !== 'default'}
