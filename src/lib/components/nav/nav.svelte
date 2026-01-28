@@ -154,7 +154,7 @@
 					<InputGroup.Root
 						onkeydown={(e) =>
 							e.key === 'Enter' && goto(`/search?q=${search}`, { replaceState: true })}
-						class="hidden h-8 min-w-[200px] border-0 outline-0 lg:flex"
+						class=" h-8 min-w-[200px] border-0 outline-0"
 					>
 						<InputGroup.Input bind:value={search} name="search" placeholder="Search..." />
 						<InputGroup.Addon>
