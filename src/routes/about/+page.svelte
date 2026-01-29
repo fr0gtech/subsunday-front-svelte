@@ -138,41 +138,40 @@
 				<h1 class="text-lg font-bold">Github</h1>
 				Open a github issue if you have any questions or want to contribute/share ideas.
 				<p class="text-base">
-					The code for the website you are on right now.
+					The code for the website you are on right now:
 					<a class="text-blue-500" href="https://github.com/fr0gtech/subsunday-front-svelte"
 						>fr0gtech/subsunday-front-svelte</a
 					><br />
-					The code for the server reading chat to track votes
+					The code for the server reading chat to track votes:
 					<a class="text-blue-500" href="https://github.com/fr0gtech/subsunday-back-drizzle"
 						>fr0gtech/subsunday-back-drizzle</a
 					>
 				</p>
 			</Card>
 			<div class="flex grow flex-col gap-5 lg:flex-row">
-				<Card class="p-5 lg:w-1/2">
+				<Card class="p-5 lg:w-2/3">
 					<h2 class="text-lg font-bold">Supported Games</h2>
-					Only steam games have images, price and so on but we also track non steam games just without
-					any metadata. We may look at another source of info in the future to support more games.
+					Most games are supported and should at least get an image and a website. Steam games will have
+					the most info.
 
 					<h2 class="text-lg font-bold">Credit</h2>
 					<p>
 						Here some sources used to create this website:<br />
+						<a class="text-blue-500" href="https://igdb.com">IGDB</a>: non steam game info<br />
 						<a class="text-blue-500" href="https://ragnapixel.itch.io/particle-fx">ragnapixel</a>:
 						images<br />
-						<a class="text-blue-500" href="https://steam.com/">Steam</a>: images, Prices,
-						Descriptions<br />
-						<a class="text-blue-500" href="https://lirikker.com/">lirikker.com</a>: Info about Sub
-						Sunday<br />
+						<a class="text-blue-500" href="https://steam.com/">Steam</a>: steam game info<br />
+						<a class="text-blue-500" href="https://lirikker.com/">lirikker.com</a>: Info about
+						sub-sunday<br />
 					</p>
 				</Card>
 				<Card class="w-full grow p-5">
 					<h2 class="text-lg font-bold">Recent Votes</h2>
 					{#if allVotes}
 						{#each allVotes as vote (vote.id)}
-							<span class="-ml-1 rounded text-sm" in:fly out:fade>
-								<Badge variant="outline" class="-ml-1" href={`/user/${vote.user.id}`}
-									>{vote.user.name}</Badge
-								> voted for
+							<span class=" rounded text-sm" in:fly out:fade>
+								<Badge variant="outline" href={`/user/${vote.user.id}`}>{vote.user.name}</Badge> voted
+								for
 								<Badge
 									variant="outline"
 									class="max-w-[200px] truncate"
@@ -261,7 +260,9 @@
 					</AreaChart>
 				</Chart.Container>
 			</Card>
-			<Customcalendar />
+			<div class="w-fit">
+				<Customcalendar />
+			</div>
 		</div>
 	</div>
 </div>
