@@ -232,15 +232,24 @@
 							matchingStream.data.stream.moments.find(
 								(moment: Moment) => moment.description === game.name
 							)}
-						<a href={`game/${game.id}`} in:fade class="z-0 mx-auto w-fit min-w-80 md:w-full">
-							<Card class="grid-item relative h-full max-w-[400px] border-0 !py-0">
+						<a href={`game/${game.id}`} in:fade class="z-0 mx-auto w-full min-w-80">
+							<Card class="grid-item relative  mx-auto max-w-[400px] border-0 !py-0">
 								<!-- {JSON.stringify(
 									matchingStream.data.stream.moments.filter((e) => e.description === game.name)
 										.length
 								)} -->
-
+								{#if game.picture !== 'default'}
+									<img
+										class="rounded-large absolute inset-0 z-0 h-full w-full translate-y-1 object-cover opacity-30 blur-lg saturate-150 filter"
+										alt={game.name}
+										style="max-width: 100%;"
+										aria-hidden="true"
+										src={game.picture}
+										data-loaded="true"
+									/>
+								{/if}
 								<div
-									class="rounded-large relative h-35 !max-w-full overflow-clip rounded-xl shadow-none shadow-black/5 lg:h-40"
+									class="rounded-large relative min-h-40 !max-w-full overflow-clip rounded-xl shadow-none shadow-black/5"
 									style="max-width: fit-content;"
 								>
 									{#if game.picture !== 'default'}
@@ -250,17 +259,10 @@
 											style="max-width: 100%;"
 											src={game.picture}
 											data-loaded="true"
-										/><img
-											class="rounded-large absolute inset-0 z-0 h-full w-full translate-y-1 object-cover opacity-30 blur-lg saturate-150 filter"
-											alt={game.name}
-											style="max-width: 100%;"
-											aria-hidden="true"
-											src={game.picture}
-											data-loaded="true"
 										/>
 									{:else}
 										<div
-											class="flex h-full min-h-45 w-full flex-col items-center justify-center md:min-h-auto"
+											class="flex h-35 w-full flex-col items-center justify-center md:min-h-auto"
 										>
 											<Logo />
 											<p class="w-full text-center text-xs">no image</p>
