@@ -32,7 +32,7 @@
 	{/if}
 </svelte:head>
 <QueryClientProvider client={queryClient}>
-	<Tooltip.Provider>
+	<Tooltip.Provider delayDuration={0}>
 		<div class="flex min-h-screen flex-col">
 			<ModeWatcher />
 			<Toaster />

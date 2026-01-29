@@ -29,14 +29,13 @@
 	import LeftArrow from '@lucide/svelte/icons/step-back';
 	import CustomCalendar from '$lib/components/customcalendar/customcalendar.svelte';
 	import RightArrow from '@lucide/svelte/icons/step-forward';
-	import CopyIcon from '@lucide/svelte/icons/copy';
+	import CheckIcon from '@lucide/svelte/icons/check';
 
 	import { createQuery } from '@tanstack/svelte-query';
 	import * as HoverCard from '$lib/components/ui/hover-card/index.js';
 	import { toast } from 'svelte-sonner';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import ToastComp from '$lib/components/ToastComp.svelte';
-	import { clickToCopy } from '@/clickToCopy';
 
 	let periodKey = $state(0);
 	let pageNumber = -1;
@@ -285,13 +284,18 @@
 										<Price price={(game.price as GamePrice).final} />
 									</Badge>
 								{/if}
-								<!-- {#if foundMoment}
-									<div class="absolute z-[100] flex h-full w-full items-center justify-end">
+								{#if foundMoment}
+									<div
+										class="  absolute top-0 z-[100]! flex h-full w-full cursor-help items-center justify-end"
+									>
 										<HoverCard.Root>
 											<HoverCard.Trigger>
-												<Badge variant="secondary" class="  rounded-tr-none rounded-br-none  "
-													>played</Badge
+												<Badge
+													variant="secondary"
+													class="pointer-events-auto rounded-tr-none  rounded-br-none p-2"
 												>
+													<CheckIcon color="lime" />
+												</Badge>
 											</HoverCard.Trigger>
 											<HoverCard.Content class="w-full">
 												<div class="flex gap-2">
@@ -321,7 +325,7 @@
 											</HoverCard.Content>
 										</HoverCard.Root>
 									</div>
-								{/if} -->
+								{/if}
 								<Badge
 									class="absolute -right-[0px] -bottom-[0px] z-50 flex rounded-tl-md rounded-tr-none rounded-bl-none   text-sm  "
 									variant="secondary"
