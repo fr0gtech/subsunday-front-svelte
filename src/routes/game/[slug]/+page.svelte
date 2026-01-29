@@ -8,13 +8,7 @@
 	import { curveBasis } from 'd3-shape';
 	import * as Chart from '$lib/components/ui/chart/index.js';
 	import Card from '$lib/components/ui/card/card.svelte';
-	import {
-		formatDistance,
-		formatDuration,
-		formatISO,
-		formatISO9075,
-		intervalToDuration
-	} from 'date-fns';
+	import { formatDistance, formatDuration, intervalToDuration } from 'date-fns';
 	import { wsVotes } from '$lib/shared.svelte';
 	import { fade, fly } from 'svelte/transition';
 	import VoteStats from '@/components/voteStats/voteStats.svelte';
@@ -27,6 +21,10 @@
 	import Button from '@/components/ui/button/button.svelte';
 	import Number from '@/components/number/number.svelte';
 	import { formatDurationCompact } from '@/utils';
+	import CopyIcon from '@lucide/svelte/icons/copy';
+	import { toast } from 'svelte-sonner';
+	import ToastComp from '$lib/components/ToastComp.svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
 	let {
 		data
@@ -92,7 +90,28 @@
 			<Card class="p-5">
 				<div class="space-y-5">
 					<div class=" flex items-center justify-between gap-5">
-						<h1 class="truncate text-2xl font-bold whitespace-pre-wrap">{data.gameData.name}</h1>
+						<div class="flex gap-5">
+							<h1 class="truncate text-2xl font-bold whitespace-pre-wrap">{data.gameData.name}</h1>
+							<Tooltip.Root>
+								<Tooltip.Trigger class="ml-2"></Tooltip.Trigger>
+								<Tooltip.Content>test</Tooltip.Content>
+							</Tooltip.Root>
+							<Button
+								class="cursor-pointer"
+								onclick={async () => {
+									toast.success(ToastComp, {
+										componentProps: {
+											message: `copied <b>!vote ${data.gameData.name}<b/> to clipboard`
+										}
+									});
+									await navigator.clipboard.writeText(`!vote ${data.gameData.name}`);
+								}}
+								size={'icon-sm'}
+								variant={'secondary'}
+							>
+								<CopyIcon size={5} class="h-3! w-3!" />
+							</Button>
+						</div>
 						<div class=" text-right">
 							<div class="gap-2 text-sm">
 								<b><Number number={data.gameData.recommendations} /> </b> reviews
