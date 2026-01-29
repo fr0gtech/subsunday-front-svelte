@@ -356,7 +356,7 @@
 								<div class="z-0! h-38 overflow-clip rounded-xl">
 									{#if game.picture !== 'default'}
 										<img
-											class="z-0! min-h-[inherit] object-cover"
+											class="z-0! min-h-full object-cover"
 											alt={game.name}
 											src={game.picture}
 											data-loaded="true"
