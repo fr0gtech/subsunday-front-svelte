@@ -167,3 +167,13 @@
   height: auto;
   max-width: 100%;
 }
+.tooltipNoArrow>div{
+	display: none;
+	/* background: #ff00ff !important; */
+}
+.tooltipNoArrow{
+	top: -22px;
+	position: absolute;
+	width: fit-content;
+	white-space: nowrap;
+}

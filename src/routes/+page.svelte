@@ -29,8 +29,14 @@
 	import LeftArrow from '@lucide/svelte/icons/step-back';
 	import CustomCalendar from '$lib/components/customcalendar/customcalendar.svelte';
 	import RightArrow from '@lucide/svelte/icons/step-forward';
+	import CopyIcon from '@lucide/svelte/icons/copy';
+
 	import { createQuery } from '@tanstack/svelte-query';
 	import * as HoverCard from '$lib/components/ui/hover-card/index.js';
+	import { toast } from 'svelte-sonner';
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
+	import ToastComp from '$lib/components/ToastComp.svelte';
+	import { clickToCopy } from '@/clickToCopy';
 
 	let periodKey = $state(0);
 	let pageNumber = -1;
@@ -204,7 +210,7 @@
 {/snippet}
 <div class=" flex max-h-screen flex-col overflow-hidden">
 	{#if $layout.type === 'icon'}
-		<div class=" w-full space-y-5 overflow-y-scroll px-5 lg:pt-20" bind:this={container}>
+		<div class=" w-full space-y-5 overflow-y-scroll px-4 lg:pt-20" bind:this={container}>
 			{@render mobileStats()}
 			<!-- {#if (allGamesWithWsVotes.length === 0 || loaderState.status === 'LOADING') && loaderState.status !== 'COMPLETE'}
 				<div class="infinite-loader-wrapper">
@@ -232,34 +238,132 @@
 							matchingStream.data.stream.moments.find(
 								(moment: Moment) => moment.description === game.name
 							)}
-						<a href={`game/${game.id}`} in:fade class="z-0 mx-auto w-full min-w-80">
-							<Card class="grid-item relative  mx-auto max-w-[400px] border-0 !py-0">
-								<!-- {JSON.stringify(
-									matchingStream.data.stream.moments.filter((e) => e.description === game.name)
-										.length
-								)} -->
-								{#if game.picture !== 'default'}
-									<img
-										class="rounded-large absolute inset-0 z-0 h-full w-full translate-y-1 object-cover opacity-30 blur-lg saturate-150 filter"
-										alt={game.name}
-										style="max-width: 100%;"
-										aria-hidden="true"
-										src={game.picture}
-										data-loaded="true"
-									/>
+
+						<!-- <a href={`game/${game.id}`} in:fade class=" z-0 mx-auto w-full min-w-80"> -->
+						<Card class="grid-item relative mx-auto h-38 w-full max-w-[400px] border-0 !py-0">
+							<div class=" pointer-events-none absolute top-0 left-0 z-10 h-full w-full">
+								<Tooltip.Root>
+									<Tooltip.Trigger class="ml-2">
+										<Badge
+											class={' pointer-events-auto absolute -top-[0px] -left-[0px] z-10 flex cursor-pointer!  rounded-tl-md rounded-tr-none rounded-bl-none'}
+											variant="secondary"
+										>
+											<button
+												onclick={async () => {
+													toast.success(ToastComp, {
+														componentProps: {
+															message: `copied <b>!vote ${game.name}<b/> to clipboard`
+														}
+													});
+													await navigator.clipboard.writeText(`!vote ${game.name}`);
+												}}
+												class="flex cursor-pointer! items-center gap-1 p-1 text-base leading-[17px]"
+											>
+												<!-- <span class="text-xs font-normal">#</span> -->
+												<div class="border-r-1 pr-2 text-xs">
+													{i + 1}
+												</div>
+												<div class="select-text">
+													{game.name.slice(0, 25)}
+												</div>
+											</button>
+										</Badge>
+									</Tooltip.Trigger>
+									<Tooltip.Content class="bg-background! text-foreground! tooltipNoArrow -mt-5!">
+										<p>
+											Click to copy <span class="font-mono! text-sky-500"
+												>!vote <span class="">{game.name}</span></span
+											>{' '}to clipboard
+										</p>
+									</Tooltip.Content>
+								</Tooltip.Root>
+								{#if (game.price as GamePrice).final}
+									<Badge
+										class="absolute -top-[0px] -right-[0px] z-10 flex  rounded-tl-none rounded-tr-md rounded-br-none p-1.5 text-xs font-normal"
+										variant="secondary"
+									>
+										<Price price={(game.price as GamePrice).final} />
+									</Badge>
 								{/if}
-								<div
-									class="rounded-large relative min-h-40 !max-w-full overflow-clip rounded-xl shadow-none shadow-black/5"
-									style="max-width: fit-content;"
+								<!-- {#if foundMoment}
+									<div class="absolute z-[100] flex h-full w-full items-center justify-end">
+										<HoverCard.Root>
+											<HoverCard.Trigger>
+												<Badge variant="secondary" class="  rounded-tr-none rounded-br-none  "
+													>played</Badge
+												>
+											</HoverCard.Trigger>
+											<HoverCard.Content class="w-full">
+												<div class="flex gap-2">
+													{#if foundMoment.game.picture === 'default'}
+														<div class="rounded-xl bg-neutral-700 p-4 text-xs">no image</div>
+													{:else}
+														<img
+															alt={foundMoment.game.title}
+															class=" h-10 rounded-xl"
+															src={foundMoment.game.picture}
+														/>
+														<div>
+															<div>{foundMoment.game.name}</div>
+															<div class=" text-sm">
+																played for
+																{formatDuration(
+																	intervalToDuration({
+																		start: 0,
+																		end: foundMoment.durationMilliseconds
+																	}),
+																	{ format: ['hours', 'minutes'] }
+																)}
+															</div>
+														</div>
+													{/if}
+												</div>
+											</HoverCard.Content>
+										</HoverCard.Root>
+									</div>
+								{/if} -->
+								<Badge
+									class="absolute -right-[0px] -bottom-[0px] z-50 flex rounded-tl-md rounded-tr-none rounded-bl-none   text-sm  "
+									variant="secondary"
 								>
+									<NumberFlow value={parseInt(game.voteCount)} /> votes
+								</Badge>
+								<div class="absolute bottom-1 left-1 z-20 flex gap-1 opacity-90">
+									{#if (game.categories as any).length > 0}
+										{#each (game.categories as any).slice(0, 3) as GameCategories[] as category}
+											<Badge variant="secondary">
+												{category.description}
+											</Badge>
+										{/each}
+									{/if}
+								</div>
+							</div>
+							{#if game.picture !== 'default'}
+								<img
+									class="rounded-large absolute inset-0 z-0 h-full w-full translate-y-1 opacity-20 blur-sm saturate-150 filter"
+									alt={game.name}
+									style="max-width: 100%;"
+									aria-hidden="true"
+									src={game.picture}
+									data-loaded="true"
+								/>
+							{/if}
+							<a href={`game/${game.id}`} in:fade class="  z-0! mx-auto w-full min-w-80">
+								<div class="z-0! h-38 overflow-clip rounded-xl">
 									{#if game.picture !== 'default'}
 										<img
-											class="transition-transform-opacity rounded-large border-success absolute z-10 mx-auto w-full !max-w-full rounded-xl border-0 opacity-0 shadow-none shadow-black/5 !duration-300 data-[loaded=true]:opacity-100 motion-reduce:transition-none"
+											class="z-0! min-h-[inherit] object-cover"
+											alt={game.name}
+											src={game.picture}
+											data-loaded="true"
+										/>
+										<!-- <img
+											class="transition-transform-opacity rounded-large border-success absolute z-10 mx-auto w-full !max-w-full rounded-xl border-0 object-cover opacity-0 shadow-none shadow-black/5 !duration-300 data-[loaded=true]:opacity-100 motion-reduce:transition-none"
 											alt={game.name}
 											style="max-width: 100%;"
 											src={game.picture}
 											data-loaded="true"
-										/>
+										/> -->
 									{:else}
 										<div
 											class="flex h-35 w-full flex-col items-center justify-center md:min-h-auto"
@@ -269,78 +373,9 @@
 										</div>
 									{/if}
 								</div>
-								<div class="absolute top-0 left-0 h-full w-full">
-									<Badge
-										class={' absolute -top-[0px] -left-[0px] z-10 flex rounded-tl-md  rounded-tr-none rounded-bl-none '}
-										variant="secondary"
-									>
-										<span class="text-base font-bold">
-											<span class="text-sm font-normal">#</span><span class="mr-1 text-lg"
-												>{i + 1}</span
-											>{game.name.slice(0, 25)}
-										</span>
-									</Badge>
-									<Badge
-										class="absolute -top-[0px] -right-[0px] z-10 flex rounded-tl-none rounded-tr-md rounded-br-none text-sm font-normal "
-										variant="secondary"
-									>
-										<Price price={(game.price as GamePrice).final} />
-									</Badge>
-									{#if foundMoment}
-										<div class="absolute z-[100] flex h-full w-full items-center justify-end">
-											<HoverCard.Root>
-												<HoverCard.Trigger>
-													<Badge variant="secondary" class="  rounded-tr-none rounded-br-none  "
-														>played</Badge
-													>
-												</HoverCard.Trigger>
-												<HoverCard.Content class="w-full">
-													<div class="flex gap-2">
-														{#if foundMoment.game.picture === 'default'}
-															<div class="rounded-xl bg-neutral-700 p-4 text-xs">no image</div>
-														{:else}
-															<img
-																alt={foundMoment.game.title}
-																class=" h-10 rounded-xl"
-																src={foundMoment.game.picture}
-															/>
-															<div>
-																<div>{foundMoment.game.name}</div>
-																<div class=" text-sm">
-																	played for
-																	{formatDuration(
-																		intervalToDuration({
-																			start: 0,
-																			end: foundMoment.durationMilliseconds
-																		}),
-																		{ format: ['hours', 'minutes'] }
-																	)}
-																</div>
-															</div>
-														{/if}
-													</div>
-												</HoverCard.Content>
-											</HoverCard.Root>
-										</div>
-									{/if}
-									<Badge
-										class="absolute -right-[0px] -bottom-[0px] z-50 flex rounded-tl-md rounded-tr-none rounded-bl-none   text-sm  "
-										variant="secondary"
-									>
-										<NumberFlow value={parseInt(game.voteCount)} /> votes
-									</Badge>
-									<div class="absolute bottom-1 left-1 z-20 flex gap-1 opacity-90">
-										{#if (game.categories as any).length > 0}
-											{#each (game.categories as any).slice(0, 3) as GameCategories[] as category}
-												<Badge variant="secondary">
-													{category.description}
-												</Badge>
-											{/each}
-										{/if}
-									</div>
-								</div>
-							</Card>
-						</a>
+							</a>
+						</Card>
+						<!-- </a> -->
 					{/each}
 
 					{#snippet loading()}{/snippet}

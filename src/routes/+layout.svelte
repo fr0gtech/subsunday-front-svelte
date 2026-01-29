@@ -8,6 +8,7 @@
 	import { Toaster } from '@/components/ui/sonner';
 	import { page } from '$app/state'; // use this
 	import Footer from '@/components/footer/footer.svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
 	let { children } = $props();
 	export const queryClient = new QueryClient({
@@ -31,12 +32,14 @@
 	{/if}
 </svelte:head>
 <QueryClientProvider client={queryClient}>
-	<div class="flex min-h-screen flex-col">
-		<ModeWatcher />
-		<Toaster />
-		<WebSockets />
-		<Nav />
-		{@render children?.()}
-		<Footer />
-	</div>
+	<Tooltip.Provider>
+		<div class="flex min-h-screen flex-col">
+			<ModeWatcher />
+			<Toaster />
+			<WebSockets />
+			<Nav />
+			{@render children?.()}
+			<Footer />
+		</div>
+	</Tooltip.Provider>
 </QueryClientProvider>
