@@ -269,19 +269,19 @@
 												<div class="flex items-center gap-2">
 													{#if i === 0}
 														<div class="text-amber-400 opacity-70">
-															#{i + 1 + 10 * (topUsersByVotePage - 1)}
+															#{i + 1 + 10 * (topUsersByStreakPage - 1)}
 														</div>
 													{:else if i === 1}
 														<div class="text-orange-400 opacity-70">
-															#{i + 1 + 10 * (topUsersByVotePage - 1)}
+															#{i + 1 + 10 * (topUsersByStreakPage - 1)}
 														</div>
 													{:else if i === 2}
 														<div class="text-gray-400 opacity-70">
-															#{i + 1 + 10 * (topUsersByVotePage - 1)}
+															#{i + 1 + 10 * (topUsersByStreakPage - 1)}
 														</div>
 													{:else}
 														<div class="opacity-70">
-															#{i + 1 + 10 * (topUsersByVotePage - 1)}
+															#{i + 1 + 10 * (topUsersByStreakPage - 1)}
 														</div>
 													{/if}
 												</div>
