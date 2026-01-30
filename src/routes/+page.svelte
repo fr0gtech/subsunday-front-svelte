@@ -48,17 +48,22 @@
 	$effect(() => {
 		allGamesWithWsVotes = allGames
 			.map((game) => {
-				const additionalVotes = $wsVotes.filter(
-					(e: any) => parseInt(e.game.id) === parseInt(game.id as any)
-				).length;
 				return {
 					...game,
-					voteCount: (parseInt(game.voteCount) + additionalVotes).toString()
+					voteCount: (
+						parseInt(game.voteCount) +
+						// i also need to filter out older votes for each user atm?
+						// this kinda sucks when period changes but that can be a bug for now
+						// so best would be to make wsVotes a set of votes with key of userId?
+						// otherwise ppl that update vote fast can spam up a number even tho its just visual we should fix it
+						$wsVotes.filter((e: any) => parseInt(e.forId) === parseInt(game.id as any)).length
+					).toString()
 				};
 			})
 			.sort((a, b) => parseInt(b.voteCount) - parseInt(a.voteCount) || a.id - b.id);
 	});
 
+	$inspect(wsVotes);
 	const matchingStream = createQuery(() => ({
 		queryKey: ['matchingStream', $selectedPeriod.currentPeriod.startDate],
 		queryFn: async () =>

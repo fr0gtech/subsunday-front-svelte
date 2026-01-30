@@ -21,6 +21,8 @@
 				message: `<a href="/user/${value.user.id}"><b>${value.user.name}<b/></a> voted for <a href="/game/${value.game.id}"><b>${value.game.name}<b/></a>`
 			}
 		});
+
+		// we need to make wsVote array unique by userId?
 		const valWithCreatedAT = {
 			...value,
 			forId: value.game.id,
@@ -30,6 +32,15 @@
 			updatedAt: now,
 			createdAt: now
 		} as WsVote & TempVoteDate;
-		$wsVotes = [valWithCreatedAT, ...$wsVotes.slice(0, 25)];
+
+		let finalArray = $wsVotes;
+		const updatedArray = $wsVotes.findIndex((e) => e.user.id === value.user.id);
+
+		if (updatedArray !== -1) {
+			finalArray[updatedArray] = valWithCreatedAT;
+		} else {
+			finalArray.push(valWithCreatedAT);
+		}
+		$wsVotes = finalArray;
 	}
 </script>

@@ -60,7 +60,10 @@
 
 	const allVotes = $derived(
 		votes.data &&
-			[...(votes.data.votes || []), ...($wsVotes || [])]
+			[
+				...(votes.data.votes || []),
+				...$wsVotes.filter((e: any) => parseInt(e.game.id) === parseInt(data.gameData.id as any))
+			]
 				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 				.filter(
 					(v, i, arr) => arr.findIndex((x) => x.fromId === v.fromId && x.forId === v.forId) === i
@@ -332,7 +335,7 @@
 			<Card class=" flex gap-6 p-5 py-6 text-sm md:min-w-80">
 				{#if allVotes}
 					{#each allVotes as vote (vote.id)}
-						<p in:fly out:fade>
+						<p in:fly>
 							<Badge variant="secondary" href={`/user/${vote.user.id}`} class="mr-2 "
 								>{vote.user.name}</Badge
 							> voted {formatDistance(vote.createdAt, new TZDate(new Date(), env.PUBLIC_TZ), {

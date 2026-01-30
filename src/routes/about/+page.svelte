@@ -169,7 +169,7 @@
 					<h2 class="text-lg font-bold">Recent Votes</h2>
 					{#if allVotes}
 						{#each allVotes as vote (vote.id)}
-							<span class=" rounded text-sm" in:fly out:fade>
+							<span class=" rounded text-sm" in:fly>
 								<Badge variant="outline" href={`/user/${vote.user.id}`}>{vote.user.name}</Badge> voted
 								for
 								<Badge

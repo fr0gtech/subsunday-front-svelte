@@ -14,12 +14,15 @@
 			user: User & { voteRank: string; streakRank: string; votes: (Vote & { game: Game })[] };
 		};
 	} = $props();
+
 	const allVotes = $derived(
 		data.user.votes &&
-			[
-				...(data.user.votes || []),
-				...$wsVotes.filter((e: any) => parseInt(e.user.id) === data.user.id)
-			].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+			[...data.user.votes, ...$wsVotes.filter((e: any) => parseInt(e.user.id) === data.user.id)]
+				.filter(
+					(v: any, i, arr) =>
+						arr.findIndex((x: any) => x.fromId === v.fromId && x.forId === v.forId) === i
+				)
+				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 	);
 </script>
 
