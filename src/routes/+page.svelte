@@ -212,7 +212,9 @@
 	</div>
 {/snippet}
 <div class=" flex max-h-screen flex-col overflow-hidden">
-	{#if $layout.type === 'icon'}
+	{#if true}
+		<div class="mt-20 h-full p-20 text-center text-2xl">under maintenance, brb</div>
+	{:else if $layout.type === 'icon'}
 		<div class=" w-full space-y-5 overflow-y-scroll px-4 lg:pt-20" bind:this={container}>
 			{@render mobileStats()}
 			<!-- {#if (allGamesWithWsVotes.length === 0 || loaderState.status === 'LOADING') && loaderState.status !== 'COMPLETE'}
