@@ -63,7 +63,6 @@
 			.sort((a, b) => parseInt(b.voteCount) - parseInt(a.voteCount) || a.id - b.id);
 	});
 
-	$inspect(wsVotes);
 	const matchingStream = createQuery(() => ({
 		queryKey: ['matchingStream', $selectedPeriod.currentPeriod.startDate],
 		queryFn: async () =>
