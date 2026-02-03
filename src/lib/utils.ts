@@ -59,7 +59,21 @@ export type PeriodSelection = {
 		nextStartDate: Date;
 	};
 };
+export function getRangeFromDate(date: Date) {
+	const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
+	const hours = date.getHours();
 
+	if (dayOfWeek === 0 && hours >= 22) {
+		return null;
+	}
+
+	if (dayOfWeek === 6 && hours < 22) {
+		return null;
+	}
+
+	const week = getWeek(date);
+	return [week, date.getFullYear()];
+}
 export function getDateRange(options?: DateRangeOptions) {
 	const { _fromDay, _fromTime, _toDay, _toTime, offset } = options || {};
 	const fromDay = (_fromDay || PUBLIC_FROM_DAY) as Day;
