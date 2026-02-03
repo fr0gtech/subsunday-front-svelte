@@ -5,7 +5,7 @@ import { json } from '@sveltejs/kit';
 import { and, asc, between, desc, eq, sql } from 'drizzle-orm';
 
 const amoutPerPage = 5;
-const maxItems = 50;
+const maxItems = 52;
 
 export async function GET({ url }: { url: URL }) {
 	const page = parseInt(url.searchParams.get('page') as string);
