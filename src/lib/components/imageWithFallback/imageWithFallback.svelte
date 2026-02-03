@@ -1,4 +1,6 @@
 <script>
+	import FadeInImage from '../fadeInImage/fadeInImage.svelte';
+
 	export let game;
 </script>
 
