@@ -60,16 +60,17 @@ export type PeriodSelection = {
 	};
 };
 export function getRangeFromDate(date: Date) {
-	const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
-	const hours = date.getHours();
+	// this would enforce time that cannot be voted but idk if this is actually true and kinda a lot of ppl vote then
+	// const dayOfWeek = date.getDay(); // 0 = Sunday, 6 = Saturday
+	// const hours = date.getHours();
 
-	if (dayOfWeek === 0 && hours >= 22) {
-		return null;
-	}
+	// if (dayOfWeek === 0 && hours >= 22) {
+	// 	return null;
+	// }
 
-	if (dayOfWeek === 6 && hours < 22) {
-		return null;
-	}
+	// if (dayOfWeek === 6 && hours < 22) {
+	// 	return null;
+	// }
 
 	const week = getWeek(date);
 	return [week, date.getFullYear()];

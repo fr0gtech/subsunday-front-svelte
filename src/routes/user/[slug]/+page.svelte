@@ -38,13 +38,12 @@
 				// we need to also check date?
 				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 	);
-	$inspect(value);
 </script>
 
 <div
 	class="mx-auto flex w-full max-w-screen-xl grow flex-wrap justify-center gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:pt-16"
 >
-	<Card class="flex gap-2 p-3 lg:w-1/2">
+	<Card class="flex h-fit gap-2 p-3 lg:w-1/2">
 		<div class="flex">
 			<div class="flex items-center gap-2">
 				<div class="relative h-20 w-20 overflow-clip rounded-full bg-neutral-800">
@@ -168,32 +167,40 @@
 		</div>
 
 		<Separator />
-		<div class="flex flex-col gap-3 text-sm">
+		<div class="relative flex flex-col gap-3 text-sm">
 			<h3 class="text-xs font-bold">All Votes</h3>
-			<div class="flex max-h-[calc(100vh-300px)] flex-col gap-3 overflow-scroll text-sm">
+			<div
+				class="flex h-fit max-h-[400px] flex-col gap-5 overflow-x-visible overflow-y-scroll text-sm"
+			>
 				{#each allVotes as vote}
 					{@const period = getRangeFromDate(vote.createdAt)}
 					{@const highlight =
 						vote.createdAt.getMonth() + 1 === placeholder.month &&
 						vote.createdAt.getFullYear() === placeholder.year}
-					<div>
-						<button
-							onclick={() => {
-								placeholder = new CalendarDateTime(
-									vote.createdAt.getFullYear(),
-									vote.createdAt.getMonth() + 1,
-									1
-								);
-								selectedPeriod.set(getDateRange({ offset: vote.createdAt }));
-							}}
-							class={['cursor-pointer text-sky-400', highlight && 'text-orange-500!']}
-						>
-							{#if period}
-								{period[0]} - {period[1]}
-							{/if}
-						</button>
-						{formatDistance(getNowTZ(), vote.createdAt)} ago for
-						<Badge class="max-w-[250px] truncate" variant="secondary" href={`/game/${vote.game.id}`}
+					<div class=" flex flex-col items-start gap-1 rounded-md bg-neutral-800/50 p-2">
+						<div class=" flex gap-2">
+							<div>
+								{formatDistance(getNowTZ(), vote.createdAt)} ago
+							</div>
+							<button
+								onclick={() => {
+									placeholder = new CalendarDateTime(
+										vote.createdAt.getFullYear(),
+										vote.createdAt.getMonth() + 1,
+										1
+									);
+									selectedPeriod.set(getDateRange({ offset: vote.createdAt }));
+								}}
+								class={['cursor-pointer text-sky-400', highlight && 'text-orange-500!']}
+							>
+								{#if period}
+									{period[0]} - {period[1]}
+								{/if}
+							</button>
+						</div>
+
+						<!-- {formatDistance(getNowTZ(), vote.createdAt)} ago for -->
+						<Badge variant="secondary" class="text-sm! text-ellipsis" href={`/game/${vote.game.id}`}
 							>{vote.game.name}</Badge
 						>
 					</div>
