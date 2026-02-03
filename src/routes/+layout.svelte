@@ -39,7 +39,7 @@
 			<WebSockets />
 			<Nav />
 			{@render children?.()}
-			<Footer />
+			<!-- <Footer /> -->
 		</div>
 	</Tooltip.Provider>
 </QueryClientProvider>

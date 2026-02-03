@@ -27,6 +27,8 @@ export let selectedPeriod = writable<PeriodSelection>({
 		nextStartDate: null
 	}
 } as any);
+
+export let onlineUsers = writable<number>(0);
 export let wsVotes = writable<Array<WsVote & TempVoteDate>>([]);
 export let votestats = writable<VoteStats>({
 	totalGames: 0,

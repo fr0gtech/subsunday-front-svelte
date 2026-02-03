@@ -5,7 +5,7 @@
 	import Logo from '$lib/components/logo/logo.svelte';
 	import { Badge } from '$lib/components/ui/badge';
 	import Price from '$lib/components/priceCalc/price.svelte';
-	import { layout, selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
+	import { layout, onlineUsers, selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
 	import type { Game, GameCategories, GamePrice, Moment } from '$lib/server/db/types';
 	import { InfiniteLoader, LoaderState } from 'svelte-infinite';
 	import { fade } from 'svelte/transition';
@@ -213,6 +213,11 @@
 	</div>
 {/snippet}
 <div class=" flex max-h-screen flex-col overflow-hidden">
+	<Badge
+		variant="secondary"
+		class=" absolute right-0 bottom-0 z-100! rounded-tr-none! rounded-br-none! select-none"
+		>Online: {$onlineUsers}</Badge
+	>
 	{#if $layout.type === 'icon'}
 		<div class=" w-full space-y-5 overflow-y-scroll px-4 lg:pt-20" bind:this={container}>
 			{@render mobileStats()}
