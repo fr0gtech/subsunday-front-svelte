@@ -238,7 +238,7 @@
 						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
 					/>
 				</b>
-				- ( {$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+				( {$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
 				) ends in <b>{formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}</b>
 			{/if}
 		</span>
