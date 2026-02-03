@@ -25,6 +25,7 @@
 	import { toast } from 'svelte-sonner';
 	import ToastComp from '$lib/components/ToastComp.svelte';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
+	import FadeInImage from '@/components/fadeInImage/fadeInImage.svelte';
 
 	let {
 		data
@@ -123,7 +124,7 @@
 					</div>
 					<div class="flex flex-wrap gap-5 lg:flex-nowrap">
 						{#if data.gameData.picture !== 'default'}
-							<img
+							<FadeInImage
 								alt={`Cover image for ${data.gameData.name}`}
 								src={data.gameData.picture}
 								class="max-w-[250px] rounded-2xl object-cover"
@@ -162,14 +163,14 @@
 				<div class="overflow-cli mx-auto py-10">
 					{#if selectedItem === null}
 						{#if (data.gameData.screenshots as any).length > 0}
-							<img
+							<FadeInImage
 								class="rounded-2xl p-2"
 								src={(data.gameData.screenshots as any)[0].path_full}
 								alt=""
 							/>
 						{/if}
 					{:else if selectedItem && !selectedItem.mp4}
-						<img class="rounded-2xl p-2" src={selectedItem.path_full} alt="" />
+						<FadeInImage class="rounded-2xl p-2" src={selectedItem.path_full} alt="" />
 					{:else if selectedItem && selectedItem.mp4}
 						<video
 							class="rounded-2xl p-2"
@@ -199,7 +200,7 @@
 											class=" flex basis-1/1 items-center pl-1 transition-all hover:brightness-125 sm:basis-1/3 md:basis-1/3 lg:basis-1/4"
 										>
 											<Card class="m-0 w-fit overflow-clip p-0">
-												<img alt="h-fit screenshot" src={screenshot.path_thumbnail} />
+												<FadeInImage alt="h-fit screenshot" src={screenshot.path_thumbnail} />
 											</Card>
 										</Carousel.Item>
 									{/each}
@@ -207,7 +208,7 @@
 										<Carousel.Item class="basis-1/3 pl-1 md:basis-1/2 lg:basis-1/4">
 											<Card class="relative m-0 overflow-hidden p-0">
 												<div class="relative h-24 w-full sm:h-32 md:h-40">
-													<img
+													<FadeInImage
 														alt="movie thumbnail"
 														class="absolute inset-0 h-full w-full object-cover"
 														src={movie.thumbnail}
@@ -234,7 +235,10 @@
 			<div class="mt-5">
 				{#if data.gameData.detailedDescription && (data.gameData.detailedDescription as any).html}
 					<Card class="detailContent grow p-5 lg:m-0 ">
-						{@html (data.gameData.detailedDescription as any).html}
+						{@html (data.gameData.detailedDescription as any).html.replace(
+							/<img([^>]*)>/g,
+							'<img$1 style="opacity: 0; transition: opacity 0.5s ease-in-out;" onload="this.style.opacity=1">'
+						)}
 					</Card>
 				{/if}
 			</div>

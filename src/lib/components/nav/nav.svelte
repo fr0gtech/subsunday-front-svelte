@@ -221,7 +221,7 @@
 		<VoteStats gameVotes={query.data} class=" hidden text-sm whitespace-nowrap lg:flex" />
 	</div>
 	<div>
-		<span class=" hidden text-sm whitespace-nowrap lg:block">
+		<span class=" mr-2 hidden text-sm whitespace-nowrap lg:block">
 			{#if $selectedPeriod && isAfter(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}
 				voting for week
 				<b>
@@ -238,9 +238,8 @@
 						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
 					/>
 				</b>
-				-
-				{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
-				ends in <b>{formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}</b>
+				- ( {$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+				) ends in <b>{formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}</b>
 			{/if}
 		</span>
 	</div>

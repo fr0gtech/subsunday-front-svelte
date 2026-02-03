@@ -9,7 +9,7 @@
 		No Image
 	</div>
 {:else}
-	<img
+	<FadeInImage
 		src={game.picture ? `${game.picture}` : '/no-image-184x69.png'}
 		alt={game.name}
 		class="ml-2 w-32 rounded-xl object-contain"

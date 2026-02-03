@@ -36,6 +36,7 @@
 	import { toast } from 'svelte-sonner';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import ToastComp from '$lib/components/ToastComp.svelte';
+	import FadeInImage from '@/components/fadeInImage/fadeInImage.svelte';
 
 	let periodKey = $state(0);
 	let pageNumber = -1;
@@ -306,7 +307,7 @@
 													{#if foundMoment.game.picture === 'default'}
 														<div class="rounded-xl bg-neutral-700 p-4 text-xs">no image</div>
 													{:else}
-														<img
+														<FadeInImage
 															alt={foundMoment.game.title}
 															class=" h-10 rounded-xl"
 															src={foundMoment.game.picture}
@@ -347,35 +348,29 @@
 								</div>
 							</div>
 							{#if game.picture !== 'default'}
-								<img
-									class="rounded-large absolute inset-0 z-0 h-full w-full translate-y-1 opacity-20 blur-sm saturate-150 filter"
-									alt={game.name}
-									style="max-width: 100%;"
-									aria-hidden="true"
-									src={game.picture}
-									data-loaded="true"
-								/>
-							{/if}
-							<a href={`game/${game.id}`} in:fade class="  z-0! mx-auto w-full min-w-80">
-								<div class="z-0! h-38 overflow-clip rounded-xl">
-									{#if game.picture !== 'default'}
+								<div in:fade class="absolute mx-auto w-full min-w-80">
+									<div class="h-38 rounded-xl">
 										<img
-											class="z-0! min-h-full object-cover"
+											class="absolute inset-0 h-full w-full object-cover object-center opacity-40! blur-md"
+											alt={game.name}
+											aria-hidden="true"
+											src={game.picture}
+											data-loaded="true"
+										/>
+									</div>
+								</div>
+							{/if}
+							<a href={`game/${game.id}`} in:fade class="z-0! mx-auto w-full min-w-80">
+								<div class="relative z-0! h-38 overflow-hidden rounded-xl">
+									{#if game.picture !== 'default'}
+										<FadeInImage
+											class="absolute inset-0 h-full w-full object-cover object-center opacity-100!"
 											alt={game.name}
 											src={game.picture}
 											data-loaded="true"
 										/>
-										<!-- <img
-											class="transition-transform-opacity rounded-large border-success absolute z-10 mx-auto w-full !max-w-full rounded-xl border-0 object-cover opacity-0 shadow-none shadow-black/5 !duration-300 data-[loaded=true]:opacity-100 motion-reduce:transition-none"
-											alt={game.name}
-											style="max-width: 100%;"
-											src={game.picture}
-											data-loaded="true"
-										/> -->
 									{:else}
-										<div
-											class="flex h-35 w-full flex-col items-center justify-center md:min-h-auto"
-										>
+										<div class="flex h-full w-full flex-col items-center justify-center">
 											<Logo />
 											<p class="w-full text-center text-xs">no image</p>
 										</div>
@@ -409,7 +404,7 @@
 						<div class="min-h-20 w-1/3">
 							{#if game.picture !== 'default'}
 								<div class="relative w-full">
-									<img
+									<FadeInImage
 										class="absolute top-0 object-cover"
 										alt={`${game.name} image`}
 										src={game.picture}

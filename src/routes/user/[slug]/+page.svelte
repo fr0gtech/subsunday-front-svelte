@@ -9,6 +9,7 @@
 	import { Calendar } from '$lib/components/ui/calendar/index.js';
 	import { CalendarDateTime, today } from '@internationalized/date';
 	import { CalendarDate } from '@internationalized/date';
+	import FadeInImage from '@/components/fadeInImage/fadeInImage.svelte';
 
 	let {
 		data
@@ -48,10 +49,10 @@
 			<div class="flex items-center gap-2">
 				<div class="relative h-20 w-20 overflow-clip rounded-full bg-neutral-800">
 					{#if data.user.streak < 5}
-						<img alt="fire and sparks" src="/particles/leaves.gif" class={cn('absolute')} />
+						<FadeInImage alt="fire and sparks" src="/particles/leaves.gif" class={cn('absolute')} />
 					{/if}
 					{#if data.user.streak > 0 && data.user.streak < 31}
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/fire_sparks.gif"
 							class={cn(
@@ -66,64 +67,64 @@
 					{/if}
 
 					{#if data.user.streak > 30 && data.user.streak < 50}
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/flamethrower.gif"
 							class="absolute bottom-0 z-1 scale-150 -rotate-[90deg] hue-rotate-180"
 						/>
 					{/if}
 					{#if data.user.streak > 35 && data.user.streak < 50}
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/flamethrower.gif"
 							class="absolute bottom-0 z-1 scale-150 -rotate-[45deg] hue-rotate-180"
 						/>
 					{/if}
 					{#if data.user.streak > 40 && data.user.streak < 50}
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/flamethrower.gif"
 							class="absolute bottom-0 z-1 scale-150 rotate-[230deg] hue-rotate-180"
 						/>
 					{/if}
 					{#if data.user.streak > 50 && data.user.streak < 60}
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/gravity.gif"
 							class="absolute bottom-0 z-0 scale-100 rotate-[230deg] -hue-rotate-60"
 						/>
 					{/if}
 					{#if data.user.streak > 55}
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/spark1.gif"
 							class="absolute top-0 z-0 scale-100 rotate-[10deg] -hue-rotate-60"
 						/>
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/spark1.gif"
 							class="absolute bottom-0 left-0 z-0 scale-200 -rotate-[10deg] -hue-rotate-60"
 						/>
 					{/if}
 					{#if data.user.streak > 65}
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/spark1.gif"
 							class="absolute top-0 z-0 scale-150 rotate-[80deg] -hue-rotate-60"
 						/>
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/spark1.gif"
 							class="absolute bottom-0 -left-1 z-0 scale-200 -rotate-[70deg] -hue-rotate-60"
 						/>
 					{/if}
 					{#if data.user.streak > 75}
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/spark1.gif"
 							class="absolute top-0 z-0 scale-150 rotate-[120deg] -hue-rotate-60"
 						/>
-						<img
+						<FadeInImage
 							alt="fire and sparks"
 							src="/particles/spark1.gif"
 							class="absolute bottom-0 -left-1 z-0 scale-200 -rotate-[130deg] -hue-rotate-60"
