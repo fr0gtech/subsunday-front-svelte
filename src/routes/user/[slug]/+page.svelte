@@ -170,40 +170,40 @@
 		<div class="relative flex flex-col gap-3 text-sm">
 			<h3 class="text-xs font-bold">All Votes</h3>
 			<div
-				class="flex h-fit max-h-[400px] flex-col gap-5 overflow-x-visible overflow-y-scroll text-sm"
+				class=" flex h-fit max-h-[400px] flex-col gap-2 overflow-x-visible overflow-y-scroll text-sm"
 			>
 				{#each allVotes as vote}
 					{@const period = getRangeFromDate(vote.createdAt)}
 					{@const highlight =
 						vote.createdAt.getMonth() + 1 === placeholder.month &&
 						vote.createdAt.getFullYear() === placeholder.year}
-					<div class=" flex flex-col items-start gap-1 rounded-md bg-neutral-800/50 p-2">
+					<button
+						onclick={() => {
+							placeholder = new CalendarDateTime(
+								vote.createdAt.getFullYear(),
+								vote.createdAt.getMonth() + 1,
+								1
+							);
+							selectedPeriod.set(getDateRange({ offset: vote.createdAt }));
+						}}
+						class="flex cursor-pointer! flex-col items-start gap-1 rounded-md bg-neutral-800/50 p-2 shadow-sm"
+					>
 						<div class=" flex gap-2">
 							<div>
 								{formatDistance(getNowTZ(), vote.createdAt)} ago
 							</div>
-							<button
-								onclick={() => {
-									placeholder = new CalendarDateTime(
-										vote.createdAt.getFullYear(),
-										vote.createdAt.getMonth() + 1,
-										1
-									);
-									selectedPeriod.set(getDateRange({ offset: vote.createdAt }));
-								}}
-								class={['cursor-pointer text-sky-400', highlight && 'text-orange-500!']}
-							>
+							<div class={['cursor-pointer text-sky-400', highlight && 'text-orange-500!']}>
 								{#if period}
 									{period[0]} - {period[1]}
 								{/if}
-							</button>
+							</div>
 						</div>
 
 						<!-- {formatDistance(getNowTZ(), vote.createdAt)} ago for -->
 						<Badge variant="secondary" class="text-sm! text-ellipsis" href={`/game/${vote.game.id}`}
 							>{vote.game.name}</Badge
 						>
-					</div>
+					</button>
 				{/each}
 			</div>
 		</div>
@@ -220,7 +220,7 @@
 							return true;
 						}
 					})
-					.sort((a, b) => a.createdAt.getDate() - b.createdAt.getDate()) as vote}
+					.sort((a, b) => a.createdAt.getDate() - b.createdAt.getDate()) as vote (vote.id)}
 					<div
 						class="bg-muted after:bg-primary/70 relative rounded-md p-2 ps-6 text-sm after:absolute after:inset-y-2 after:start-2 after:w-1 after:rounded-full"
 					>
@@ -228,6 +228,7 @@
 						<div class="text-muted-foreground text-xs">
 							{formatISO(vote.createdAt, { representation: 'date' })}
 						</div>
+						<div class="text-muted-foreground text-xs">{vote.voteText || ''}</div>
 					</div>
 				{/each}
 			</div>

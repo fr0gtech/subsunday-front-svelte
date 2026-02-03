@@ -18,5 +18,6 @@ export type TempVoteDate = {
 	createdAt: TZDate;
 	updatedAt: TZDate;
 	id: string;
+	voteText: string;
 	updated?: boolean;
 };

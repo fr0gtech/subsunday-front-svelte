@@ -8,6 +8,11 @@ export const load = async ({ params }) => {
 		where: eq(user?.id, parseInt(params.slug)),
 		with: {
 			votes: {
+				columns: {
+					voteText: true,
+					createdAt: true,
+					id: true
+				},
 				with: {
 					game: {
 						columns: {
