@@ -93,28 +93,37 @@
 		<div class="w-full space-y-5 md:min-w-125">
 			<Card class="p-5">
 				<div class="space-y-5">
-					<div class=" flex items-center justify-between gap-5">
-						<div class="flex gap-5">
-							<h1 class="truncate text-2xl font-bold whitespace-pre-wrap">{data.gameData.name}</h1>
+					<div class=" flex items-center justify-between gap-1">
+						<div class="relative flex gap-5">
+							<h1 class="truncate text-2xl leading-tight font-bold whitespace-pre-wrap">
+								{data.gameData.name}
+							</h1>
 							<Tooltip.Root>
-								<Tooltip.Trigger class="ml-2"></Tooltip.Trigger>
-								<Tooltip.Content>test</Tooltip.Content>
+								<Tooltip.Trigger>
+									<Button
+										class="relative cursor-pointer"
+										onclick={async () => {
+											toast.success(ToastComp, {
+												componentProps: {
+													message: `copied <b>!vote ${data.gameData.name}<b/> to clipboard`
+												}
+											});
+											await navigator.clipboard.writeText(`!vote ${data.gameData.name}`);
+										}}
+										size={'icon-sm'}
+										variant={'secondary'}
+									>
+										<CopyIcon size={5} class="h-3! w-3!" />
+									</Button>
+								</Tooltip.Trigger>
+								<Tooltip.Content class="bg-background! text-foreground! tooltipNoArrow ">
+									<p>
+										Click to copy <span class="font-mono! text-sky-500"
+											>!vote <span class="">{data.gameData.name}</span></span
+										>{' '}to clipboard
+									</p>
+								</Tooltip.Content>
 							</Tooltip.Root>
-							<Button
-								class="cursor-pointer"
-								onclick={async () => {
-									toast.success(ToastComp, {
-										componentProps: {
-											message: `copied <b>!vote ${data.gameData.name}<b/> to clipboard`
-										}
-									});
-									await navigator.clipboard.writeText(`!vote ${data.gameData.name}`);
-								}}
-								size={'icon-sm'}
-								variant={'secondary'}
-							>
-								<CopyIcon size={5} class="h-3! w-3!" />
-							</Button>
 						</div>
 						<div class=" text-right">
 							<div class="gap-2 text-sm">

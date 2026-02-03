@@ -273,7 +273,9 @@
 											</button>
 										</Badge>
 									</Tooltip.Trigger>
-									<Tooltip.Content class="bg-background! text-foreground! tooltipNoArrow -mt-5!">
+									<Tooltip.Content
+										class="bg-background! text-foreground! tooltipNoArrow reposToolTip -mt-5!"
+									>
 										<p>
 											Click to copy <span class="font-mono! text-sky-500"
 												>!vote <span class="">{game.name}</span></span
@@ -351,7 +353,7 @@
 								<div in:fade class="absolute mx-auto w-full min-w-80">
 									<div class="h-38 rounded-xl">
 										<img
-											class="absolute inset-0 h-full w-full object-cover object-center opacity-40! blur-md"
+											class="absolute inset-0 h-full w-full object-cover object-center opacity-20! blur-sm"
 											alt={game.name}
 											aria-hidden="true"
 											src={game.picture}
