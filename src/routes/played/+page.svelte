@@ -172,7 +172,7 @@
 											>{'#' + (i + 1 + 10 * (playedGamesPage - 1))}</Badge
 										>
 										<div class="mr-2 min-h-15">
-											<ImageWithFallback game={playedGame.game} />
+											<!-- <ImageWithFallback game={playedGame.game} /> -->
 										</div>
 										<p class=" text-ellipsis">
 											{playedGame.game.name} - {formatDuration(
