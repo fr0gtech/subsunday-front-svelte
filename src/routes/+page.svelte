@@ -345,7 +345,8 @@
 									class="absolute -right-[0px] -bottom-[0px] z-50 flex rounded-tl-md rounded-tr-none rounded-bl-none   text-sm  "
 									variant="secondary"
 								>
-									<NumberFlow value={parseInt(game.voteCount)} /> votes
+									<NumberFlow value={parseInt(game.voteCount)} />
+									{parseInt(game.voteCount) > 1 ? 'votes' : 'vote'}
 								</Badge>
 								<div class="absolute bottom-1 left-1 z-20 flex gap-1 opacity-90">
 									{#if (game.categories as any).length > 0}
