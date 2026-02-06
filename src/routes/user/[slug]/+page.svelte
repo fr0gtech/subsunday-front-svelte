@@ -32,16 +32,16 @@
 	const allVotes = $derived(
 		data.user.votes &&
 			[...data.user.votes, ...$wsVotes.filter((e: any) => parseInt(e.user.id) === data.user.id)]
-				.filter(
-					(v: any, i, arr) =>
-						arr.findIndex(
-							(x: any) =>
-								x.fromId === v.fromId &&
-								x.forId === v.forId &&
-								Math.abs(new Date(x.createdAt).getTime() - new Date(v.createdAt).getTime()) > 10000
-						) === i
-				) // this should fix ws votes duplicates but also removes dulplicate votes if user votes 2 times the same thing we need to also check date?
 				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+				.filter((v: any, i, arr) => {
+					if (i === 0) return true;
+					const prev: any = arr[i - 1];
+					return !(
+						prev.fromId === v.fromId &&
+						prev.forId === v.forId &&
+						Math.abs(new Date(prev.createdAt).getTime() - new Date(v.createdAt).getTime()) < 1000
+					);
+				})
 	);
 </script>
 
