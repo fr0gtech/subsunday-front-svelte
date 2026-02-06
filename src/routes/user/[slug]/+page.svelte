@@ -38,7 +38,7 @@
 							(x: any) =>
 								x.fromId === v.fromId &&
 								x.forId === v.forId &&
-								Math.abs(new Date(x.createdAt).getTime() - new Date(v.createdAt).getTime()) < 10000
+								Math.abs(new Date(x.createdAt).getTime() - new Date(v.createdAt).getTime()) > 10000
 						) === i
 				) // this should fix ws votes duplicates but also removes dulplicate votes if user votes 2 times the same thing we need to also check date?
 				.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
