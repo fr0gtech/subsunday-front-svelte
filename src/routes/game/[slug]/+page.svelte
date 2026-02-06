@@ -69,7 +69,6 @@
 				.filter(
 					(v, i, arr) => arr.findIndex((x) => x.fromId === v.fromId && x.forId === v.forId) === i
 				)
-				.slice(0, 10)
 	);
 
 	const chartConfig = {
@@ -345,16 +344,29 @@
 					</Chart.Container>
 				{/if}
 			</Card>
-			<Card class=" flex gap-6 p-5 py-6 text-sm md:min-w-80">
+			<Card class="max-h-1/2 justify-between gap-6 overflow-scroll p-5 py-6 text-sm md:min-w-80">
+				<h3 class="text-lg">Recent votes</h3>
 				{#if allVotes}
 					{#each allVotes as vote (vote.id)}
-						<p in:fly>
-							<Badge variant="secondary" href={`/user/${vote.user.id}`} class="mr-2 "
-								>{vote.user.name}</Badge
-							> voted {formatDistance(vote.createdAt, new TZDate(new Date(), env.PUBLIC_TZ), {
-								addSuffix: true
-							})}
-						</p>
+						<div in:fly class="flex justify-between">
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									<Badge variant="secondary" href={`/user/${vote.user.id}`} class="mr-2 ">
+										{vote.user.name}
+									</Badge>
+								</Tooltip.Trigger>
+								<Tooltip.Content class="bg-background! text-foreground! tooltipNoArrow  -mt-5!">
+									<p>
+										{vote.voteText}
+									</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
+							<p class="text-xs">
+								{formatDistance(vote.createdAt, new TZDate(new Date(), env.PUBLIC_TZ), {
+									addSuffix: true
+								})}
+							</p>
+						</div>
 					{/each}
 				{/if}
 			</Card>

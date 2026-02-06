@@ -23,7 +23,7 @@ export async function GET({ url }: { url: URL }) {
 					}
 				}
 			},
-			limit: 10,
+			limit: 20,
 			orderBy: desc(vote.createdAt)
 		});
 	} else {
@@ -42,7 +42,7 @@ export async function GET({ url }: { url: URL }) {
 					}
 				}
 			},
-			limit: 10,
+			limit: 20,
 			orderBy: desc(vote.createdAt)
 		});
 	}
