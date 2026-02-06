@@ -162,29 +162,31 @@
 				</div>
 				<div>
 					<div class="mt-5 space-y-5">
-						{#if playedGames.data}
+						{#if playedGames.data && !playedGames.isLoading}
 							{#each playedGames.data as playedGame, i (playedGame.id)}
-								<a href={`/game/${playedGame.game.id}`} class="group">
-									<div
-										class="relative flex items-center gap-2 border-b-2 p-3 group-last:border-0 hover:bg-neutral-500/20"
-									>
-										<Badge variant="secondary" class="absolute left-1 text-lg"
-											>{'#' + (i + 1 + 10 * (playedGamesPage - 1))}</Badge
+								{#if playedGame.game}
+									<a href={`/game/${playedGame.game.id}`} class="group">
+										<div
+											class="relative flex items-center gap-2 border-b-2 p-3 group-last:border-0 hover:bg-neutral-500/20"
 										>
-										<div class="mr-2 min-h-15">
-											<!-- <ImageWithFallback game={playedGame.game} /> -->
+											<Badge variant="secondary" class="absolute left-1 z-50! text-lg"
+												>{'#' + (i + 1 + 10 * (playedGamesPage - 1))}</Badge
+											>
+											<div class="mr-2 min-h-15">
+												<ImageWithFallback game={playedGame.game} />
+											</div>
+											<p class=" text-ellipsis">
+												{playedGame.game.name} - {formatDuration(
+													intervalToDuration({
+														start: 0,
+														end: playedGame.durationMilliseconds
+													}),
+													{ format: ['hours', 'minutes'] }
+												)}
+											</p>
 										</div>
-										<p class=" text-ellipsis">
-											{playedGame.game.name} - {formatDuration(
-												intervalToDuration({
-													start: 0,
-													end: playedGame.durationMilliseconds
-												}),
-												{ format: ['hours', 'minutes'] }
-											)}
-										</p>
-									</div>
-								</a>
+									</a>
+								{/if}
 							{/each}
 						{/if}
 					</div>
