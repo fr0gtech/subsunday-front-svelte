@@ -42,8 +42,8 @@
 	// });
 </script>
 
-<div class="mx-auto max-w-screen-xl gap-5 space-y-5 p-5 pt-16 leading-relaxed">
-	<Card>
+<div class="mx-auto w-full max-w-screen-xl grow gap-5 space-y-5 p-5 pt-16 leading-relaxed lg:pt-16">
+	<Card class="w-full">
 		<div class="w-full px-5">
 			<InputGroup.Root onkeydown={(e) => e.key === 'Enter' && searchStuff()}>
 				<InputGroup.Input bind:value={query} name="search" placeholder="Search..." />
