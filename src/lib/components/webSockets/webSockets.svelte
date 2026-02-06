@@ -32,7 +32,7 @@
 			id: uuidv4(),
 			updatedAt: now,
 			createdAt: now
-		} as WsVote & TempVoteDate;
+		} as unknown as WsVote & TempVoteDate;
 
 		let finalArray = $wsVotes;
 		const updatedArray = $wsVotes.findIndex((e) => e.user.id === value.user.id);

@@ -20,8 +20,10 @@
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { goto } from '$app/navigation';
 	import { cn, dateFromYearWeek, getDateRange, getNowTZ, setURLparams } from '@/utils';
-
-	import { formatDistance, getWeek, getYear, isAfter, isSunday, subDays } from 'date-fns';
+	import ChevronsRight from '@lucide/svelte/icons/chevrons-right';
+	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
+	import ChevronRight from '@lucide/svelte/icons/chevron-right';
+	import { formatDistance, getWeek, getYear, isAfter, isBefore, isSunday, subDays } from 'date-fns';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { onMount } from 'svelte';
 	let isOpen = $state(false);
@@ -43,6 +45,10 @@
 		$selectedPeriod = getDateRange({
 			offset: $selectedPeriod.currentPeriod.nextStartDate
 		});
+		await setURLparams(page, $selectedPeriod);
+	}
+	async function periodNow() {
+		$selectedPeriod = getDateRange();
 		await setURLparams(page, $selectedPeriod);
 	}
 	async function periodPrev() {
@@ -194,7 +200,7 @@
 
 			<ButtonGroup.Root>
 				<Button size={'sm'} onclick={periodPrev} variant="secondary"
-					><LeftArrow class="h-3.5! w-3.5!" /></Button
+					><ChevronLeft class="h-3.5! w-3.5!" /></Button
 				>
 				<Popover.Root>
 					<Popover.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}
@@ -214,8 +220,11 @@
 					onclick={periodNext}
 					variant="secondary"
 				>
-					<RightArrow class="h-3.5! w-3.5!" />
+					<ChevronRight class="h-3.5! w-3.5!" />
 				</Button>
+				{#if isBefore($selectedPeriod.currentPeriod.endDate, new Date())}
+					<Button size={'sm'} onclick={periodNow} variant="secondary"><ChevronsRight /></Button>
+				{/if}
 			</ButtonGroup.Root>
 		</div>
 		<VoteStats gameVotes={query.data} class=" hidden text-sm whitespace-nowrap lg:flex" />

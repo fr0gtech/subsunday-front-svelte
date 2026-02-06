@@ -27,6 +27,10 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
 	import LeftArrow from '@lucide/svelte/icons/step-back';
+	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
+	import ChevronRight from '@lucide/svelte/icons/chevron-right';
+	import ChevronsRight from '@lucide/svelte/icons/chevrons-right';
+
 	import CustomCalendar from '$lib/components/customcalendar/customcalendar.svelte';
 	import RightArrow from '@lucide/svelte/icons/step-forward';
 	import CheckIcon from '@lucide/svelte/icons/check';
@@ -168,20 +172,20 @@
 				{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
 			</span>
 			<ButtonGroup.Root>
-				<Button size={'sm'} onclick={periodPrev} variant="secondary"><LeftArrow /></Button>
+				<Button size={'sm'} onclick={periodPrev} variant="secondary"><ChevronLeft /></Button>
 				<Popover.Root>
-					<Popover.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}
-						><CalendarIcon /></Popover.Trigger
-					>
+					<Popover.Trigger class={buttonVariants({ variant: 'secondary', size: 'sm' })}>
+						<CalendarIcon />
+					</Popover.Trigger>
 					<Popover.Content
 						class=" m-0 flex !w-fit flex-col  items-center justify-center border-none p-0"
 					>
 						<!-- <Calendar type="single" bind:value class="rounded-md border" /> -->
-
 						<CustomCalendar />
 					</Popover.Content>
 				</Popover.Root>
-				<Button size={'sm'} onclick={periodNext} variant="secondary"><RightArrow /></Button>
+				<Button size={'sm'} onclick={periodNext} variant="secondary"><ChevronRight /></Button>
+				<Button size={'sm'} onclick={periodNext} variant="secondary"><ChevronsRight /></Button>
 			</ButtonGroup.Root>
 		</div>
 
@@ -212,11 +216,11 @@
 	</div>
 {/snippet}
 <div class=" flex max-h-screen flex-col overflow-hidden">
-	<Badge
+	<!-- <Badge
 		variant="secondary"
 		class=" absolute right-0 bottom-0 z-100! rounded-tr-none! rounded-br-none! select-none"
 		>Online: {$onlineUsers}</Badge
-	>
+	> -->
 	{#if $layout.type === 'icon'}
 		<div class=" w-full space-y-5 overflow-y-scroll px-4 lg:pt-20" bind:this={container}>
 			{@render mobileStats()}

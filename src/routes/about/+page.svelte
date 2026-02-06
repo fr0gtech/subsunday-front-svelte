@@ -7,7 +7,7 @@
 	import { curveNatural } from 'd3-shape';
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { formatDistance, getWeek } from 'date-fns';
-	import { onlineUsers, selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
+	import { selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { getDateRange, getNowTZ } from '@/utils.js';
 	import { createQuery } from '@tanstack/svelte-query';
