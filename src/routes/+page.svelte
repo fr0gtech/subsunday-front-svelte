@@ -275,7 +275,7 @@
 												<div class="border-r-1 pr-2 text-xs">
 													{i + 1}
 												</div>
-												<div class="select-text">
+												<div class="text-[18px] font-bold select-text">
 													{game.name.slice(0, 25)}
 												</div>
 											</button>

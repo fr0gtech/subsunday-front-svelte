@@ -92,7 +92,7 @@
 		<div class="w-full space-y-5 md:min-w-125">
 			<Card class="p-5">
 				<div class="space-y-5">
-					<div class=" flex items-center justify-between gap-1">
+					<div class=" flex flex-wrap items-center justify-between gap-1">
 						<div class="relative flex gap-5">
 							<h1 class="truncate text-2xl leading-tight font-bold whitespace-pre-wrap">
 								{data.gameData.name}
@@ -125,8 +125,18 @@
 							</Tooltip.Root>
 						</div>
 						<div class=" text-right">
-							<div class="gap-2 text-sm">
-								<b><Number number={data.gameData.recommendations} /> </b> reviews
+							<div class="flex items-center gap-2 text-right text-xs">
+								<a
+									class="text-sky-400!"
+									href={`https://store.steampowered.com/app/${data.gameData.steamId}/#app_reviews_hash`}
+									target="_blank"
+								>
+									reviews:
+								</a>
+
+								<Badge class="text-sm!" variant="secondary"
+									><Number number={data.gameData.recommendations} />
+								</Badge>
 							</div>
 						</div>
 					</div>
@@ -135,7 +145,7 @@
 							<FadeInImage
 								alt={`Cover image for ${data.gameData.name}`}
 								src={data.gameData.picture}
-								class="max-w-[250px] rounded-2xl object-cover"
+								class="rounded-2xl object-cover lg:max-w-[250px]"
 							/>
 						{/if}
 						<div class="w-full space-y-2">
