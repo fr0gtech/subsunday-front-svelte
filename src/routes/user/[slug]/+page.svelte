@@ -50,7 +50,7 @@
 >
 	<Card class="flex h-fit gap-2 overflow-clip p-3 lg:w-1/2">
 		<div class="flex items-center gap-2">
-			<div class="relative mr-2 h-20 w-25 overflow-clip rounded-full bg-neutral-800">
+			<div class="relative mr-2 h-[100px]! w-[100px]! overflow-clip rounded-full">
 				{#if data.user.streak < 5}
 					<FadeInImage alt="fire and sparks" src="/particles/leaves.gif" class={cn('absolute')} />
 				{/if}
@@ -208,8 +208,8 @@
 
 						<Badge
 							variant="secondary"
-							class=" max-w-1/2 truncate text-sm! text-ellipsis"
-							href={`/game/${vote.game.id}`}>{vote.game.name}</Badge
+							class="  truncate text-sm! text-ellipsis"
+							href={`/game/${vote.game.id}`}><p>{vote.game.name}</p></Badge
 						>
 					</button>
 				{/each}
