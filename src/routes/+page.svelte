@@ -417,38 +417,36 @@
 
 			{#each allGames as game, i}
 				<a href={`game/${game.id}`} class="w-full px-3">
-					<Card class="relative flex w-full flex-row items-start gap-0 overflow-clip !py-0">
-						<div class="min-h-20 w-1/3">
+					<Card class="relative flex w-full flex-row items-center  gap-5 overflow-clip !py-0">
+						<Badge
+							class="bg-primary-foreground text-primary-background absolute bottom-0 left-0 z-10 text-base "
+							variant="default"
+						>
+							votes: {game.voteCount}
+						</Badge>
+						<div class="relative z-0! min-h-20 min-w-40 overflow-hidden rounded-xl">
 							{#if game.picture !== 'default'}
-								<div class="relative w-full">
-									<FadeInImage
-										class="absolute top-0 object-cover"
-										alt={`${game.name} image`}
-										src={game.picture}
-									/>
-								</div>
+								<FadeInImage
+									class="absolute inset-0 h-full w-full object-cover object-center opacity-100!"
+									alt={game.name}
+									src={game.picture}
+									data-loaded="true"
+								/>
 							{:else}
 								<div class="flex h-full w-full flex-col items-center justify-center">
 									<Logo />
-									<p class="text-center text-xs">no image</p>
+									<p class="w-full text-center text-xs">no image</p>
 								</div>
 							{/if}
 						</div>
-						<div>
-							<Badge
-								class="bg-primary-foreground text-primary-background z-10 text-lg"
-								variant="default"
-							>
-								<span class="text-sm"># {i + 1}</span>
-								{game.name}
-							</Badge>
+						<div class="">
+							<span class="text-sm whitespace-nowrap"># {i + 1} {game.name}</span>
+
 							<Badge class="bg-primary-foreground text-primary-background  z-10 " variant="default">
 								<Price price={(game.price as GamePrice).final} />
 							</Badge>
-							<Badge class="bg-primary-foreground text-primary-background z-10 " variant="default">
-								votes: {game.voteCount}
-							</Badge>
-							<div class="z-20 flex gap-1 opacity-90">
+
+							<div class="z-20 flex flex-wrap gap-1 opacity-90">
 								{#each game.categories as GameCategories[] as category}
 									<Badge variant="default" class="bg-primary-foreground text-primary-background ">
 										{category.description}
