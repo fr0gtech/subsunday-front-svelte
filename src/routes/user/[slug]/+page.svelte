@@ -206,7 +206,9 @@
 							</div>
 						</div>
 
-						<a class="bg-accent cursor-pointer p-1 text-left" href={`/game/${vote.game.id}`}
+						<a
+							class="bg-accent cursor-pointer rounded-xl px-3 py-1 text-left"
+							href={`/game/${vote.game.id}`}
 							>{vote.game.name}
 						</a>
 					</button>
