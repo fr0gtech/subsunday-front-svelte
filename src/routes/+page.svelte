@@ -19,6 +19,7 @@
 		getYear,
 		intervalToDuration,
 		isAfter,
+		isBefore,
 		subDays
 	} from 'date-fns';
 	import VoteStats from '@/components/voteStats/voteStats.svelte';
@@ -139,7 +140,10 @@
 		await setURLparams(page, $selectedPeriod);
 		await fetchNewPeriod();
 	}
-
+	async function periodNow() {
+		$selectedPeriod = getDateRange();
+		await setURLparams(page, $selectedPeriod);
+	}
 	$effect(() => {
 		const test = async () => {
 			await onPeriodChange();
@@ -185,7 +189,9 @@
 					</Popover.Content>
 				</Popover.Root>
 				<Button size={'sm'} onclick={periodNext} variant="secondary"><ChevronRight /></Button>
-				<Button size={'sm'} onclick={periodNext} variant="secondary"><ChevronsRight /></Button>
+				{#if isBefore($selectedPeriod.currentPeriod.endDate, new Date())}
+					<Button size={'sm'} onclick={periodNow} variant="secondary"><ChevronsRight /></Button>
+				{/if}
 			</ButtonGroup.Root>
 		</div>
 
