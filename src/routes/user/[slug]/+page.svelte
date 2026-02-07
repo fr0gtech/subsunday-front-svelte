@@ -134,14 +134,14 @@
 					/>
 				{/if}
 			</div>
-			<div class="flex w-full justify-between gap-5">
-				<div class="flex items-center">
+			<div class="flex w-full flex-wrap justify-between gap-5">
+				<div class="flex items-center truncate text-ellipsis">
 					<a href={`https://twitch.tv/${data.user.name}`}>
 						<h2 class="text-2xl font-bold">{data.user.name}</h2>
 					</a>
 				</div>
 				<div class="flex flex-col justify-end space-y-3 font-mono! text-xs">
-					<span class="text-right text-sm"
+					<span class="text-sm lg:text-right"
 						>votes: <Badge class="text-sm!" variant="secondary"
 							>{data.user.votes.length}
 							{#if parseInt(data.user.voteRank) === 0}
@@ -155,7 +155,7 @@
 							{/if}
 						</Badge></span
 					>
-					<span class="text-right"
+					<span class="text-sm lg:text-right"
 						>streak: <Badge class="text-sm!" variant="secondary"
 							>{data.user.streak}
 							{#if parseInt(data.user.streakRank) === 0}
@@ -174,7 +174,7 @@
 		</div>
 
 		<Separator />
-		<div class="relative flex flex-col gap-3 text-sm">
+		<div class="relative flex w-full flex-col gap-3 text-sm">
 			<h3 class="text-xs font-bold">All Votes</h3>
 			<div
 				class=" flex h-fit max-h-[400px] flex-col gap-2 overflow-x-visible overflow-y-scroll text-sm"
@@ -193,7 +193,7 @@
 							);
 							selectedPeriod.set(getDateRange({ offset: vote.createdAt }));
 						}}
-						class="flex cursor-pointer! flex-col items-start gap-1 rounded-md bg-neutral-800/50 p-2 shadow-sm"
+						class="flex cursor-pointer! flex-col flex-wrap items-start gap-1 rounded-md bg-neutral-800/50 p-2 shadow-sm"
 					>
 						<div class=" flex gap-2">
 							<div>
@@ -206,9 +206,10 @@
 							</div>
 						</div>
 
-						<!-- {formatDistance(getNowTZ(), vote.createdAt)} ago for -->
-						<Badge variant="secondary" class="text-sm! text-ellipsis" href={`/game/${vote.game.id}`}
-							>{vote.game.name}</Badge
+						<Badge
+							variant="secondary"
+							class=" max-w-1/2 truncate text-sm! text-ellipsis"
+							href={`/game/${vote.game.id}`}>{vote.game.name}</Badge
 						>
 					</button>
 				{/each}
