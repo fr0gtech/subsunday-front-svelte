@@ -206,11 +206,9 @@
 							</div>
 						</div>
 
-						<Badge
-							variant="secondary"
-							class="  truncate text-sm! text-ellipsis"
-							href={`/game/${vote.game.id}`}><p>{vote.game.name}</p></Badge
-						>
+						<a class="bg-accent cursor-pointer p-1 text-left" href={`/game/${vote.game.id}`}
+							>{vote.game.name}
+						</a>
 					</button>
 				{/each}
 			</div>
