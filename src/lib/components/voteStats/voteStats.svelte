@@ -13,7 +13,7 @@
 </script>
 
 <div class={['flex flex-row gap-5 lowercase', props.class]}>
-	<p class="flex items-start gap-2">
+	<p class="flex items-start gap-2 whitespace-nowrap">
 		<span class="h-full leading-5.5">Votes this week:</span>
 		<span>
 			<Badge class="bg-[#4627646e] !text-current" variant="secondary">
@@ -25,7 +25,7 @@
 		</Badge> -->
 		<!-- <Badge variant="secondary">{gameVotes ? gameVotes.votesThisPeriod : 0}</Badge> -->
 	</p>
-	<div class="flex items-start gap-2">
+	<p class="flex items-start gap-2 whitespace-nowrap">
 		<span class="h-full leading-5.5">Votes today:</span>
 		<span>
 			<Badge class="bg-[#084d2671] !text-current" variant="secondary">
@@ -36,5 +36,5 @@
 			<NumberFlow value={gameVotes ? gameVotes.votesThisPeriod + $wsVotes.length : 0} />
 		</Badge> -->
 		<!-- <Badge variant="secondary">{gameVotes ? gameVotes.votesThisPeriod : 0}</Badge> -->
-	</div>
+	</p>
 </div>
