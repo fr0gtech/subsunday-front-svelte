@@ -3,7 +3,6 @@
 	import { Badge } from '$lib/components/ui/badge/index.js';
 	import { createQuery } from '@tanstack/svelte-query';
 	import ImageWithFallback from '@/components/imageWithFallback/imageWithFallback.svelte';
-	import { Skeleton } from '@/components/ui/skeleton';
 	import { Button, buttonVariants } from '@/components/ui/button';
 	import LeftArrow from '@lucide/svelte/icons/step-back';
 	import RightArrow from '@lucide/svelte/icons/step-forward';
