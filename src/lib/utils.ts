@@ -19,11 +19,11 @@ import {
 	nextDay,
 	subDays,
 	type Day,
-	getYear,
 	getWeek,
-	setYear,
-	setISOWeek,
-	startOfISOWeek,
+	getWeekYear,
+	setWeek,
+	setWeekYear,
+	startOfWeek,
 	intervalToDuration
 } from 'date-fns';
 import { tick } from 'svelte';
@@ -73,7 +73,7 @@ export function getRangeFromDate(date: Date) {
 	// }
 
 	const week = getWeek(date);
-	return [week, date.getFullYear()];
+	return [week, getWeekYear(date)];
 }
 export function getDateRange(options?: DateRangeOptions) {
 	const { _fromDay, _fromTime, _toDay, _toTime, offset } = options || {};
@@ -136,7 +136,7 @@ export const setURLparams = async (
 	page: Page<Record<string, string>>,
 	selectedPeriod: PeriodSelection
 ) => {
-	page.url.searchParams.set('y', getYear(selectedPeriod.currentPeriod.startDate).toString());
+	page.url.searchParams.set('y', getWeekYear(selectedPeriod.currentPeriod.startDate).toString());
 	page.url.searchParams.set('w', getWeek(selectedPeriod.currentPeriod.startDate).toString());
 	await tick();
 	replaceState(page.url, page.state);
@@ -144,9 +144,9 @@ export const setURLparams = async (
 
 export function dateFromYearWeek(year: number, week: number): Date {
 	let d = new Date();
-	d = setYear(d, year);
-	d = setISOWeek(d, week);
-	return startOfISOWeek(d);
+	d = setWeekYear(d, year);
+	d = setWeek(d, week);
+	return startOfWeek(d);
 }
 
 export function formatDurationCompact(seconds: number) {

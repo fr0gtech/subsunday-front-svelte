@@ -7,7 +7,13 @@
 	import { Button, buttonVariants } from '@/components/ui/button';
 	import LeftArrow from '@lucide/svelte/icons/step-back';
 	import RightArrow from '@lucide/svelte/icons/step-forward';
-	import { formatDistance, formatDuration, getWeek, getYear, intervalToDuration } from 'date-fns';
+	import {
+		formatDistance,
+		formatDuration,
+		getWeek,
+		getWeekYear,
+		intervalToDuration
+	} from 'date-fns';
 	import ChevronsUpDownIcon from '@lucide/svelte/icons/chevrons-up-down';
 	import * as Collapsible from '$lib/components/ui/collapsible/index.js';
 	import { formatDurationCompact, getDateRange } from '@/utils';
@@ -81,7 +87,7 @@
 												class="cursor-pointer text-sky-500 italic"
 											>
 												<NumberFlow value={getWeek(stream.publishedAt)} /> -
-												{getYear(stream.publishedAt)}
+												{getWeekYear(stream.publishedAt)}
 											</button>) streamed for
 											<b>
 												{formatDuration(

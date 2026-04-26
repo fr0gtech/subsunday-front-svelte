@@ -6,7 +6,7 @@
 	import { AreaChart } from 'layerchart';
 	import { curveNatural } from 'd3-shape';
 	import { Badge } from '$lib/components/ui/badge/index.js';
-	import { formatDistance, getWeek } from 'date-fns';
+	import { formatDistance, getWeek, getWeekYear } from 'date-fns';
 	import { selectedPeriod, votestats, wsVotes } from '$lib/shared.svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { getDateRange, getNowTZ } from '@/utils.js';
@@ -60,6 +60,7 @@
 			happens to your vote.</Alert.Description
 		>
 	</Alert.Root>
+
 	<div class="flex flex-wrap gap-5 lg:flex-nowrap">
 		<div class=" flex w-full flex-col space-y-5 lg:w-8/12">
 			<Card class="w-full p-5 ">
@@ -104,12 +105,7 @@
 							props={{
 								yAxis: { format: () => '' },
 								xAxis: {
-									format: (v) =>
-										getWeek(v) +
-										'-' +
-										v.toLocaleDateString('en-US', {
-											year: '2-digit'
-										})
+									format: (v) => getWeek(v) + '-' + String(getWeekYear(v)).slice(-2)
 								},
 
 								area: {
@@ -122,11 +118,7 @@
 							{#snippet tooltip()}
 								<Chart.Tooltip
 									labelFormatter={(v: Date) =>
-										getWeek(v) +
-										'-' +
-										v.toLocaleDateString('en-US', {
-											year: '2-digit'
-										})}
+										getWeek(v) + '-' + String(getWeekYear(v)).slice(-2)}
 									indicator="line"
 								/>
 							{/snippet}

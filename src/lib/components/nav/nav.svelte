@@ -23,7 +23,15 @@
 	import ChevronsRight from '@lucide/svelte/icons/chevrons-right';
 	import ChevronLeft from '@lucide/svelte/icons/chevron-left';
 	import ChevronRight from '@lucide/svelte/icons/chevron-right';
-	import { formatDistance, getWeek, getYear, isAfter, isBefore, isSunday, subDays } from 'date-fns';
+	import {
+		formatDistance,
+		getWeek,
+		getWeekYear,
+		isAfter,
+		isBefore,
+		isSunday,
+		subDays
+	} from 'date-fns';
 	import type { HTMLAttributes } from 'svelte/elements';
 	import { onMount } from 'svelte';
 	let isOpen = $state(false);
@@ -195,7 +203,7 @@
 				<NumberFlow
 					value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
 				/> -
-				{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+				{$selectedPeriod ? getWeekYear($selectedPeriod.currentPeriod.startDate) : 0}
 			</span>
 
 			<ButtonGroup.Root>
@@ -238,7 +246,7 @@
 						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
 					/>
 				</b>
-				({$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}) ended
+				({$selectedPeriod ? getWeekYear($selectedPeriod.currentPeriod.startDate) : 0}) ended
 				<b>{formatDistance($selectedPeriod.currentPeriod.endDate, getNowTZ())}</b> ago
 			{:else if $selectedPeriod && isAfter($selectedPeriod.currentPeriod.endDate, getNowTZ())}
 				voting for
@@ -247,7 +255,7 @@
 						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
 					/>
 				</b>
-				( {$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+				( {$selectedPeriod ? getWeekYear($selectedPeriod.currentPeriod.startDate) : 0}
 				) ends in <b>{formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}</b>
 			{/if}
 		</span>

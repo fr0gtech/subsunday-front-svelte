@@ -16,7 +16,7 @@
 		formatDistance,
 		formatDuration,
 		getWeek,
-		getYear,
+		getWeekYear,
 		intervalToDuration,
 		isAfter,
 		isBefore,
@@ -159,7 +159,7 @@
 
 <svelte:head>
 	<title
-		>{`${getWeek($selectedPeriod.currentPeriod.startDate)}-${getYear($selectedPeriod.currentPeriod.startDate)} @ ${$votestats.votesThisPeriod} votes`}</title
+		>{`${getWeek($selectedPeriod.currentPeriod.startDate)}-${getWeekYear($selectedPeriod.currentPeriod.startDate)} @ ${$votestats.votesThisPeriod} votes`}</title
 	>
 	<meta
 		name="description"
@@ -173,7 +173,7 @@
 				<NumberFlow
 					value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
 				/> -
-				{$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}
+				{$selectedPeriod ? getWeekYear($selectedPeriod.currentPeriod.startDate) : 0}
 			</span>
 			<ButtonGroup.Root>
 				<Button size={'sm'} onclick={periodPrev} variant="secondary"><ChevronLeft /></Button>
@@ -203,7 +203,7 @@
 						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
 					/>
 				</b>
-				({$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}) ended
+				({$selectedPeriod ? getWeekYear($selectedPeriod.currentPeriod.startDate) : 0}) ended
 				<b>{formatDistance($selectedPeriod.currentPeriod.endDate, getNowTZ())}</b> ago
 			{:else if $selectedPeriod && isAfter($selectedPeriod.currentPeriod.endDate, getNowTZ())}
 				voting for
@@ -212,7 +212,7 @@
 						value={$selectedPeriod ? getWeek($selectedPeriod.currentPeriod.startDate) : 0}
 					/>
 				</b>
-				({$selectedPeriod ? getYear($selectedPeriod.currentPeriod.startDate) : 0}) ends in
+				({$selectedPeriod ? getWeekYear($selectedPeriod.currentPeriod.startDate) : 0}) ends in
 				<b>{formatDistance(getNowTZ(), $selectedPeriod.currentPeriod.endDate)}</b>
 			{/if}
 		</div>
